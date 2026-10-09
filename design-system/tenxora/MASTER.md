@@ -24,7 +24,7 @@ Page-specific overrides go in `pages/<page>.md` and win over this file.
 | `--tx-blue` | Blue | `#1A73E9` | Secondary brand color, section backgrounds, highlight chips. |
 | `--tx-purple` | Purple | `#6B71CD` | Tertiary; message cards, chips. |
 | `--tx-yellow` | Yellow | `#FFDD53` | Accent only, sparingly. |
-| `--tx-lavender` | Lavender | `#BFC5FF` | Soft accent surfaces. *Hex sampled from the PDF artwork: the guidelines label it `#08E88C`, which is Treen's code, so confirm the real value.* |
+| `--tx-lavender` | Lavender | `#BFC5FF` | Soft accent surfaces. (The guidelines PDF mislabels it as `#08E88C`; #BFC5FF was confirmed by Muzaiyyen on 2026-10-09.) |
 
 **Approved pairings (from the guidelines):** Black + Treen, White + Purple, Blue + Yellow, Purple + Yellow, Blue + White, Black + Yellow, White + Black, Treen + Blue, Purple + White.
 
@@ -136,5 +136,4 @@ Real people at work in warm, natural light; product UI on devices; neon-blue abs
 
 ## Open questions
 
-1. The real Lavender hex (the PDF repeats Treen's code).
-2. Stack: React with Next.js or Vite (not yet confirmed).
+1. Stack: React with Next.js or Vite (not yet confirmed).

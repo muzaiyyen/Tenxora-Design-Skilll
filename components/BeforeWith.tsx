@@ -128,14 +128,6 @@ export default function BeforeWith() {
                   <img src={asset("/brand/wordmark-black.svg")} alt="" />
                   <span className="sr-only">{beforeWith.withBrand}</span>
                 </motion.div>
-                <motion.p
-                  className="bw__flow"
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.7, ease, delay: 0.55 }}
-                >
-                  {beforeWith.withFlow}
-                </motion.p>
                 <div className="bw__stages">
                   {beforeWith.withStages.map((st, i) => (
                     <StageCard key={st} name={st} i={i} />

@@ -1035,13 +1035,6 @@ a {
 .bw__brand img {
   width: 62%;
 }
-.bw__flow {
-  margin: calc(26 * var(--u)) 0 0;
-  font-size: max(14px, calc(22 * var(--u)));
-  letter-spacing: 0.01em;
-  color: rgba(0, 0, 0, 0.67);
-  text-align: center;
-}
 .bw__stages {
   display: flex;
   justify-content: center;
@@ -1090,10 +1083,6 @@ a {
   .bw__brand {
     width: 180px;
     height: 60px;
-  }
-  .bw__flow {
-    font-size: 14px;
-    margin-top: 16px;
   }
   .bw__stages {
     flex-wrap: wrap;

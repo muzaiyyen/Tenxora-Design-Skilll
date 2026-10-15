@@ -542,7 +542,7 @@ a {
   width: calc(1375.24 * var(--u));
   height: calc(428.27 * var(--u));
   margin-left: calc(-687.62 * var(--u) + 0px);
-  transform-style: preserve-3d;
+  transform-style: flat;
 }
 .hero__ctas {
   position: relative;
@@ -598,7 +598,7 @@ a {
   width: calc(277.493 * var(--u));
   height: calc(335.154 * var(--u));
   margin: calc(-167.577 * var(--u)) 0 0 calc(-138.746 * var(--u));
-  transform-style: preserve-3d;
+  transform-style: flat;
   cursor: default;
 }
 .hcard .wcard {

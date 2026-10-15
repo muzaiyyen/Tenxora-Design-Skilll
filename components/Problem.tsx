@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useSpring, useTransform, type MotionValue } from "motion/react";
+import { motion, useScroll, useTransform, type MotionValue } from "motion/react";
 import { useRef } from "react";
 import { problem } from "@/lib/content";
 import { asset } from "@/lib/asset";
@@ -19,7 +19,7 @@ export default function Problem() {
   const ref = useRef<HTMLDivElement>(null);
   const mobile = useMedia("(max-width: 760px)");
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "center center"] });
-  const p = useSpring(scrollYProgress, { stiffness: 80, damping: 20 });
+  const p = scrollYProgress;
 
   return (
     <section className="section on-white" data-header="light" aria-labelledby="problem-title">

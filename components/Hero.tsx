@@ -34,8 +34,8 @@ export default function Hero() {
   // pointer position over the hero, -1..1, smoothed
   const px = useMotionValue(0);
   const py = useMotionValue(0);
-  const sx = useSpring(px, { stiffness: 90, damping: 18, mass: 0.6 });
-  const sy = useSpring(py, { stiffness: 90, damping: 18, mass: 0.6 });
+  const sx = useSpring(px, { stiffness: 160, damping: 22, mass: 0.5 });
+  const sy = useSpring(py, { stiffness: 160, damping: 22, mass: 0.5 });
 
   const skyY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
   const skyScale = useTransform(scrollYProgress, [0, 1], [1.04, 1.14]);
@@ -207,7 +207,7 @@ function HeroCard({
       onPointerLeave={() => setHover(false)}
     >
       <motion.div
-        style={{ position: "absolute", inset: 0, transformStyle: "preserve-3d" }}
+        style={{ position: "absolute", inset: 0 }}
         initial={{ opacity: 0, x: `${((MID - card.cx) / 277.493) * 100}%`, y: 140, rotate: 0, scale: 0.82 }}
         animate={{
           opacity: 1,

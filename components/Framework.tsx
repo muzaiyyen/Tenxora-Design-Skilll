@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValueEvent, useScroll, useSpring, useTransform } from "motion/react";
+import { motion, useMotionValueEvent, useScroll, useTransform } from "motion/react";
 import { useRef, useState } from "react";
 import { framework } from "@/lib/content";
 import { useMedia } from "@/lib/hooks";
@@ -32,7 +32,7 @@ function Head() {
 function Pinned() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
-  const p = useSpring(scrollYProgress, { stiffness: 90, damping: 22, mass: 0.4 });
+  const p = scrollYProgress;
   const x = useTransform(p, [0.05, 0.95], ["0%", "-27%"]);
   const fill = useTransform(p, [0.05, 0.95], [0, 1]);
   const [active, setActive] = useState(0);

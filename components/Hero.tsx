@@ -17,13 +17,15 @@ import Magnetic from "./Magnetic";
 const ease = [0.22, 1, 0.36, 1] as const;
 const u = (n: number) => `calc(${n} * var(--u))`;
 
-/* Card centres and tilts inside the 1375 x 428 Figma stage ("Frame 3"). */
+/* Card centres and tilts inside the 1375 x 428 Figma stage ("Frame 3"). The tilts and heights are the
+   Figma's; the centres are spread a little wider than the artboard so neighbouring cards sit side by side
+   with a small gap instead of tucking under each other. */
 const CARDS = [
-  { key: "erp", cx: 165.74, cy: 239.14, rot: -10, z: 1 },
-  { key: "integrations", cx: 431.33, cy: 187.19, rot: -3, z: 2 },
+  { key: "erp", cx: 72, cy: 239.14, rot: -10, z: 1 },
+  { key: "integrations", cx: 390, cy: 187.19, rot: -3, z: 2 },
   { key: "automation", cx: 686.75, cy: 167.58, rot: 0, z: 3 },
-  { key: "team", cx: 941.33, cy: 187.19, rot: 3, z: 2 },
-  { key: "managed", cx: 1209.5, cy: 237.35, rot: 10, z: 1 },
+  { key: "team", cx: 983.5, cy: 187.19, rot: 3, z: 2 },
+  { key: "managed", cx: 1301.5, cy: 237.35, rot: 10, z: 1 },
 ] as const;
 const MID = 686.75;
 
@@ -42,8 +44,9 @@ export default function Hero() {
   const skyX = useTransform(sx, [-1, 1], [14, -14]);
   const copyY = useTransform(scrollYProgress, [0, 0.6], [0, -120]);
   const copyOpacity = useTransform(scrollYProgress, [0, 0.45], [1, 0]);
-  const stageRX = useTransform(sy, [-1, 1], [7, -7]);
-  const stageRY = useTransform(sx, [-1, 1], [-9, 9]);
+  // the fan leans a little toward the pointer; a flat 2D lean so cards can never slice through each other
+  const stageRot = useTransform(sx, [-1, 1], [-1.6, 1.6]);
+  const stageY = useTransform(sy, [-1, 1], [-8, 8]);
   const spread = useTransform(scrollYProgress, [0, 0.7], [0, 1]);
 
   const onMove = (e: React.PointerEvent) => {
@@ -99,7 +102,7 @@ export default function Hero() {
       </motion.div>
 
       <div className="hero__stage-wrap">
-        <motion.div className="hero__stage" style={{ rotateX: stageRX, rotateY: stageRY }}>
+        <motion.div className="hero__stage" style={{ rotate: stageRot, y: stageY }}>
           {CARDS.map((c, i) => (
             <HeroCard key={c.key} card={c} index={i} sx={sx} sy={sy} spread={spread} />
           ))}
@@ -177,8 +180,10 @@ function HeroCard({
   spread: MotionValue<number>;
 }) {
   const [hover, setHover] = useState(false);
+  // stays raised until the card has settled back, so a neighbour never cuts across it mid-return
+  const [raised, setRaised] = useState(false);
   const off = (card.cx - MID) / MID; // -1 (far left) .. 1 (far right)
-  const depth = 1 - Math.abs(off) * 0.6;
+  const depth = 1 - Math.abs(off) * 0.2;
 
   // parallax: nearer cards (centre) move more with the pointer
   const px = useTransform(sx, [-1, 1], [-18 * depth, 18 * depth]);
@@ -202,12 +207,18 @@ function HeroCard({
   return (
     <motion.div
       className="hcard"
-      style={{ left: u(card.cx), top: u(card.cy), zIndex: hover ? 10 : card.z, x, y, rotate: spreadR }}
-      onPointerEnter={() => setHover(true)}
+      style={{ left: u(card.cx), top: u(card.cy), zIndex: hover || raised ? 10 : card.z, x, y, rotate: spreadR }}
+      onPointerEnter={() => {
+        setHover(true);
+        setRaised(true);
+      }}
       onPointerLeave={() => setHover(false)}
     >
       <motion.div
         style={{ position: "absolute", inset: 0 }}
+        onAnimationComplete={() => {
+          if (!hover) setRaised(false);
+        }}
         initial={{ opacity: 0, x: `${((MID - card.cx) / 277.493) * 100}%`, y: 140, rotate: 0, scale: 0.82 }}
         animate={{
           opacity: 1,
@@ -217,7 +228,7 @@ function HeroCard({
           scale: hover ? 1.06 : 1,
         }}
         transition={{
-          opacity: { duration: 0.6, delay },
+          opacity: { duration: 0.3, delay },
           x: { type: "spring", stiffness: 70, damping: 15, delay },
           y: ready ? { type: "spring", stiffness: 260, damping: 20 } : { type: "spring", stiffness: 80, damping: 15, delay: d },
           rotate: { type: "spring", stiffness: ready ? 220 : 120, damping: ready ? 18 : 14, delay: d },

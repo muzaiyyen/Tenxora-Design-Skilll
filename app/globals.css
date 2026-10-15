@@ -533,6 +533,7 @@ a {
   z-index: 3;
   margin-top: calc(117 * var(--u));
   height: calc(440 * var(--u));
+  perspective: 1600px;
 }
 .hero__stage {
   position: absolute;
@@ -603,10 +604,6 @@ a {
 .hcard .wcard {
   position: absolute;
   inset: 0;
-  /* no backdrop blur here: blurred layers inside a moving fan can render with cut edges */
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
-  background: rgba(255, 255, 255, 0.82);
 }
 .hcard__label {
   position: absolute;

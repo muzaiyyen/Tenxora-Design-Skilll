@@ -130,7 +130,7 @@ export default function BeforeWith() {
                 </motion.div>
                 <div className="bw__stages">
                   {beforeWith.withStages.map((st, i) => (
-                    <StageCard key={st} name={st} i={i} />
+                    <StageCard key={st} name={st} i={i} mobile={mobile} />
                   ))}
                 </div>
               </motion.div>
@@ -162,12 +162,14 @@ function Switch({ on, set }: { on: boolean; set: (v: boolean) => void }) {
 }
 
 const ROTS = [-8, -3, 3, 8];
-function StageCard({ name, i }: { name: string; i: number }) {
+function StageCard({ name, i, mobile }: { name: string; i: number; mobile: boolean }) {
+  // phones: a calmer tilt and no drop, so the two-column grid keeps clear gaps
+  const rot = mobile ? ROTS[i] * 0.3 : ROTS[i];
   return (
     <motion.div
       className="bw__stage"
       initial={{ opacity: 0, y: 80, rotate: 0, scale: 0.8 }}
-      animate={{ opacity: 1, y: i === 0 || i === 3 ? 18 : 0, rotate: ROTS[i], scale: 1 }}
+      animate={{ opacity: 1, y: !mobile && (i === 0 || i === 3) ? 18 : 0, rotate: rot, scale: 1 }}
       exit={{ opacity: 0, y: 60, scale: 0.8 }}
       transition={{ type: "spring", stiffness: 110, damping: 14, delay: 0.7 + i * 0.09 }}
       whileHover={{ y: -14, rotate: ROTS[i] * 0.3, scale: 1.05, zIndex: 4 }}

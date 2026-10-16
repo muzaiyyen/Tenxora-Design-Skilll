@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { nav } from "@/lib/content";
 import { asset } from "@/lib/asset";
@@ -13,6 +13,20 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [light, setLight] = useState(false);
   const [hover, setHover] = useState<number | null>(null);
+  // phone-only menu (the button and panel are hidden on desktop)
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!open) return;
+    const close = () => setOpen(false);
+    const key = (e: KeyboardEvent) => e.key === "Escape" && close();
+    window.addEventListener("scroll", close, { passive: true });
+    window.addEventListener("keydown", key);
+    return () => {
+      window.removeEventListener("scroll", close);
+      window.removeEventListener("keydown", key);
+    };
+  }, [open]);
 
   useEffect(() => {
     let raf = 0;
@@ -76,7 +90,47 @@ export default function Header() {
         <a href={contact.href} className="pill pill--dark glass header__cta">
           <span style={{ position: "relative", zIndex: 2 }}>{contact.label}</span>
         </a>
+
+        <button
+          type="button"
+          className="glass header__menu-btn"
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+          aria-controls="mobile-menu"
+          onClick={() => setOpen((v) => !v)}
+        >
+          <motion.span className="header__menu-line" animate={open ? { y: 4, rotate: 45 } : { y: 0, rotate: 0 }} transition={{ type: "spring", stiffness: 400, damping: 28 }} />
+          <motion.span className="header__menu-line" animate={open ? { y: -4, rotate: -45 } : { y: 0, rotate: 0 }} transition={{ type: "spring", stiffness: 400, damping: 28 }} />
+        </button>
       </div>
+
+      <AnimatePresence>
+        {open && (
+          <motion.nav
+            id="mobile-menu"
+            className="header__menu glass"
+            aria-label="Menu"
+            initial={{ opacity: 0, y: -12, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.97 }}
+            transition={{ type: "spring", stiffness: 380, damping: 30 }}
+          >
+            {nav.map((l, i) => (
+              <motion.a
+                key={l.label}
+                href={l.href}
+                className={`header__menu-link${i === nav.length - 1 ? " is-cta" : ""}`}
+                onClick={() => setOpen(false)}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.04 + i * 0.04, duration: 0.3 }}
+              >
+                {l.label}
+              </motion.a>
+            ))}
+          </motion.nav>
+        )}
+      </AnimatePresence>
     </motion.header>
   );
 }

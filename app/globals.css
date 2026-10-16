@@ -1721,3 +1721,124 @@ a {
   height: calc(240 * var(--u));
   pointer-events: none;
 }
+
+/* ---------- Phone menu (hidden on desktop) ---------- */
+.header__menu-btn,
+.header__menu {
+  display: none;
+}
+@media (max-width: 760px) {
+  .header__cta {
+    display: none;
+  }
+  .header__menu-btn {
+    position: relative;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 6px;
+    width: 46px;
+    height: 46px;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.78);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .header__menu-line {
+    position: relative;
+    z-index: 2;
+    display: block;
+    width: 18px;
+    height: 2px;
+    border-radius: 2px;
+    background: #fff;
+  }
+  .header__menu {
+    position: absolute;
+    top: 68px;
+    left: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px;
+    border-radius: 28px;
+    background: linear-gradient(180deg, #ffffff 0%, #f6f8fb 100%);
+    box-shadow:
+      inset 0 1px 0 #fff,
+      inset 0 0 0 1px rgba(0, 0, 0, 0.05),
+      0 20px 50px rgba(0, 30, 80, 0.18);
+    pointer-events: auto;
+    transform-origin: 90% 0;
+  }
+  .header__menu-link {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    height: 52px;
+    padding: 0 18px;
+    border-radius: 18px;
+    font-size: 18px;
+    color: #000;
+  }
+  .header__menu-link:active {
+    background: rgba(0, 0, 0, 0.05);
+  }
+  .header__menu-link.is-cta {
+    justify-content: center;
+    margin-top: 6px;
+    background: #000;
+    color: #fff;
+    border-radius: 999px;
+  }
+
+  /* hero cards regroup so every card stays on screen */
+  .hero__mstage {
+    position: relative;
+    z-index: 3;
+    margin-top: 44px;
+    padding: 0 20px;
+    --gw: calc((100vw - 40px - 26px) / 2);
+  }
+  .hcard-m {
+    position: relative;
+    width: var(--gw);
+    height: calc(var(--gw) * 335.154 / 277.493);
+    --u: calc(var(--gw) / 277.493);
+  }
+  .hcard-m--featured {
+    --fw: min(60vw, 250px);
+    width: var(--fw);
+    height: calc(var(--fw) * 335.154 / 277.493);
+    --u: calc(var(--fw) / 277.493);
+    margin: 0 auto;
+  }
+  .hero__mgrid {
+    display: grid;
+    grid-template-columns: repeat(2, var(--gw));
+    justify-content: space-between;
+    row-gap: 22px;
+    margin-top: 26px;
+  }
+
+  /* With Tenxora: a roomier two-column grid */
+  .bw__with {
+    padding: 84px 0 0;
+  }
+  .bw__stages {
+    display: grid;
+    grid-template-columns: repeat(2, var(--sw));
+    gap: 28px 24px;
+    margin-top: 44px;
+    --sw: min(calc((100vw - 32px - 28px - 24px) / 2), 190px);
+  }
+  .bw__stage {
+    width: var(--sw);
+    height: calc(var(--sw) * 1.08);
+  }
+  .bw__stage-art {
+    --u: calc(var(--sw) / 252);
+  }
+}

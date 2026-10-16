@@ -13,6 +13,7 @@ import { hero, heroDesign } from "@/lib/content";
 import { asset } from "@/lib/asset";
 import { Bars, ChartArt, ChecklistArt, listBars } from "./Skeleton";
 import Magnetic from "./Magnetic";
+import { useMedia } from "@/lib/hooks";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 const u = (n: number) => `calc(${n} * var(--u))`;
@@ -45,6 +46,7 @@ export default function Hero() {
   const stageRX = useTransform(sy, [-1, 1], [7, -7]);
   const stageRY = useTransform(sx, [-1, 1], [-9, 9]);
   const spread = useTransform(scrollYProgress, [0, 0.7], [0, 1]);
+  const mobile = useMedia("(max-width: 760px)");
 
   const onMove = (e: React.PointerEvent) => {
     if (e.pointerType !== "mouse") return;
@@ -98,13 +100,17 @@ export default function Hero() {
         </motion.div>
       </motion.div>
 
-      <div className="hero__stage-wrap">
-        <motion.div className="hero__stage" style={{ rotateX: stageRX, rotateY: stageRY }}>
-          {CARDS.map((c, i) => (
-            <HeroCard key={c.key} card={c} index={i} sx={sx} sy={sy} spread={spread} />
-          ))}
-        </motion.div>
-      </div>
+      {mobile ? (
+        <MobileStage />
+      ) : (
+        <div className="hero__stage-wrap">
+          <motion.div className="hero__stage" style={{ rotateX: stageRX, rotateY: stageRY }}>
+            {CARDS.map((c, i) => (
+              <HeroCard key={c.key} card={c} index={i} sx={sx} sy={sy} spread={spread} />
+            ))}
+          </motion.div>
+        </div>
+      )}
 
       <motion.div
         className="hero__ctas"
@@ -226,6 +232,43 @@ function HeroCard({
       >
         <CardFace k={card.key} delay={delay} />
       </motion.div>
+    </motion.div>
+  );
+}
+
+/* Phones: the fan is far wider than the screen, so the cards regroup to fit. Automation & Ai leads,
+   the other four sit in a roomy two-column grid with a slight tilt. */
+const MOBILE_GRID = [
+  { key: "erp", rot: -2.5 },
+  { key: "integrations", rot: 2.5 },
+  { key: "team", rot: -2.5 },
+  { key: "managed", rot: 2.5 },
+] as const;
+
+function MobileStage() {
+  return (
+    <div className="hero__mstage">
+      <MobileCard k="automation" rot={0} i={0} featured />
+      <div className="hero__mgrid">
+        {MOBILE_GRID.map((c, i) => (
+          <MobileCard key={c.key} k={c.key} rot={c.rot} i={i + 1} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MobileCard({ k, rot, i, featured }: { k: Card["key"]; rot: number; i: number; featured?: boolean }) {
+  const delay = 1.2 + i * 0.09;
+  return (
+    <motion.div
+      className={`hcard-m${featured ? " hcard-m--featured" : ""}`}
+      initial={{ opacity: 0, y: 60, scale: 0.88, rotate: 0 }}
+      animate={{ opacity: 1, y: 0, scale: 1, rotate: rot }}
+      transition={{ opacity: { duration: 0.3, delay }, default: { type: "spring", stiffness: 120, damping: 15, delay } }}
+      whileTap={{ scale: 0.96, rotate: 0 }}
+    >
+      <CardFace k={k} delay={delay} />
     </motion.div>
   );
 }

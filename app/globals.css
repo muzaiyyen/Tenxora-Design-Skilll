@@ -1855,3 +1855,56 @@ a {
     box-shadow: inset 0 1px 0 #fff, inset 0 0 0 1px rgba(0, 0, 0, 0.05), 0 10px 30px rgba(0, 0, 0, 0.08);
   }
 }
+
+/* ---------- Phone scrolling performance ----------
+   Live backdrop blur on dozens of cards, and blur filters in the text reveals, are what made phone
+   scrolling stutter. On phones the cards use solid fills instead, and only the header keeps a live blur. */
+@media (max-width: 760px) {
+  .wcard,
+  .hcard__panel,
+  .pill,
+  .switch,
+  .audit__card,
+  .cookie,
+  .fw__lens,
+  .glass {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  .wcard {
+    background: rgba(255, 255, 255, 0.96);
+  }
+  .hero .wcard {
+    background: rgba(232, 241, 253, 0.97);
+  }
+  .hcard__panel {
+    background: rgba(255, 255, 255, 0.96);
+  }
+  .audit__card {
+    background: rgba(255, 255, 255, 0.18);
+  }
+  .cookie {
+    background: rgba(20, 20, 20, 0.9);
+  }
+  .header.is-scrolled .header__inner {
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+  }
+  /* text reveals keep their slide and fade, minus the costly blur */
+  main *:not(.problem__blur) {
+    filter: none !important;
+  }
+  .hero__sky {
+    will-change: auto;
+  }
+  /* sections off screen skip style and paint work until they scroll near */
+  main > section:not(.hero) {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 900px;
+  }
+  /* the shimmer sweep across every skeleton bar is decoration phones can do without */
+  .bar::after {
+    animation: none !important;
+    display: none;
+  }
+}

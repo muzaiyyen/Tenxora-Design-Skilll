@@ -61,7 +61,8 @@ export default function Hero() {
 
   return (
     <section ref={ref} className="hero on-sky" data-header="dark" onPointerMove={onMove} onPointerLeave={onLeave}>
-      <motion.div className="hero__sky" style={{ y: skyY, scale: skyScale, x: skyX }} aria-hidden>
+      {/* phones skip the sky parallax: repainting the tall sky layer on every scroll frame made scrolling stutter */}
+      <motion.div className="hero__sky" style={mobile ? undefined : { y: skyY, scale: skyScale, x: skyX }} aria-hidden>
         <img src={asset("/figma/sky.jpg")} alt="" fetchPriority="high" />
       </motion.div>
 

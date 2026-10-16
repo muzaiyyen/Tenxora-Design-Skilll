@@ -16,3 +16,7 @@ STATIC_EXPORT=1 NEXT_PUBLIC_ASSET_BASE=. npx next build   # static copy in out/
 ```
 
 Sizes are written in Figma pixels through `--u` (one artboard pixel, 1679px wide) so the page scales like the artboard. All copy lives in `lib/content.ts`.
+
+## WordPress
+
+The site ships as a WordPress theme in `wordpress/tenxora` (install steps in its README). Build the zip with `scripts/build-wp-theme.sh`.

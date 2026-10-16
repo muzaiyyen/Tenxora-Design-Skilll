@@ -61,7 +61,7 @@ export default function Header() {
 
   return (
     <motion.header
-      className={`header${scrolled ? " is-scrolled" : ""}${light ? " is-light" : ""}`}
+      className={`header${scrolled ? " is-scrolled" : ""}${light ? " is-light" : ""}${open ? " is-open" : ""}`}
       initial={{ y: -30, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}

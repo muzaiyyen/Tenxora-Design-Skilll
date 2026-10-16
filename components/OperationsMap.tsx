@@ -176,23 +176,20 @@ function StarIcon() {
 }
 
 function ReportIcon({ play }: { play: boolean }) {
+  // bars sized as a share of the badge so the group stays centred at any badge size
   return (
-    <>
-      {[
-        { x: 20, h: 28 },
-        { x: 30, h: 22 },
-        { x: 40, h: 17 },
-      ].map((b, i) => (
+    <span className="lbars" aria-hidden>
+      {[28, 22, 17].map((h, i) => (
         <motion.span
           key={i}
           className="lbar"
-          style={{ left: u(b.x), height: u(b.h), bottom: u(20) }}
+          style={{ height: `${(h / 28) * 100}%` }}
           initial={{ scaleY: 0 }}
           animate={play ? { scaleY: [0, 1, 0.75, 1] } : {}}
           transition={{ duration: 1.4, delay: 1.5 + i * 0.1, ease }}
         />
       ))}
-    </>
+    </span>
   );
 }
 

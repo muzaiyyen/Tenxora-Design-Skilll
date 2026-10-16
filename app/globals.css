@@ -747,12 +747,17 @@ a {
   letter-spacing: 0.01em;
   color: rgba(0, 0, 0, 0.67);
 }
+.lbars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2.94%;
+  width: 41.2%;
+  height: 41.2%;
+}
 .lbar {
-  position: absolute;
-  width: calc(8 * var(--u));
-  border-radius: calc(4 * var(--u));
+  flex: 1;
+  border-radius: 999px;
   background: linear-gradient(180deg, rgba(8, 232, 140, 0.84), rgba(254, 199, 0, 0.84));
-  bottom: calc(21 * var(--u));
   transform-origin: 50% 100%;
 }
 @media (max-width: 760px) {
@@ -952,9 +957,6 @@ a {
   .ops__out-sub {
     font-size: 13px;
     margin-top: 4px;
-  }
-  .ops-m .lbar {
-    width: 6px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1840,5 +1842,16 @@ a {
   }
   .bw__stage-art {
     --u: calc(var(--sw) / 252);
+  }
+}
+@media (max-width: 760px) {
+  /* menu open: the pill carries its own frosted fill, since phones can drop the backdrop blur while the panel animates */
+  .header.is-open .header__inner {
+    background: linear-gradient(180deg, rgba(22, 104, 214, 0.94), rgba(14, 86, 196, 0.94));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.12), 0 10px 30px rgba(0, 30, 80, 0.2);
+  }
+  .header.is-light.is-open .header__inner {
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: inset 0 1px 0 #fff, inset 0 0 0 1px rgba(0, 0, 0, 0.05), 0 10px 30px rgba(0, 0, 0, 0.08);
   }
 }

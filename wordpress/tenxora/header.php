@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <header class="tx-header">
 	<div class="tx-wrap tx-header__inner">
 		<a class="tx-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="Tenxora home">
-			<img src="<?php echo esc_url( get_theme_file_uri( 'site/brand/logo-black.svg' ) ); ?>" alt="" width="150" height="19">
+			<img src="<?php echo esc_url( get_theme_file_uri( 'site/brand/logo-black.svg' ) ); ?>" alt="" width="160" height="30">
 		</a>
 		<button class="tx-menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="tx-nav"
 			onclick="var n=document.getElementById('tx-nav');var o=n.classList.toggle('is-open');this.setAttribute('aria-expanded',o);this.setAttribute('aria-label',o?'Close menu':'Open menu');this.textContent=o?'✕':'☰';">&#9776;</button>

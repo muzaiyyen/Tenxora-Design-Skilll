@@ -374,8 +374,8 @@ a {
 }
 .header__logo {
   display: block;
-  width: max(130px, calc(176.9 * var(--u)));
-  aspect-ratio: 1011.6 / 130;
+  width: max(150px, calc(210 * var(--u)));
+  aspect-ratio: 413.97 / 76.96;
   position: relative;
 }
 .header__logo img {

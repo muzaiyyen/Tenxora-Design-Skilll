@@ -296,7 +296,7 @@ function MobileMap({ play }: { play: boolean }) {
 }
 
 /** Phone: lines from the tenxora pill to each output badge, drawn from measured positions so each one
- * lands on its badge. The second picks up below the AI badge and stops at Live Reporting, so no line shows under a badge. */
+ * lands on its badge. The second joins the AI badge to Live Reporting, hidden under both badges. */
 function OutLines({ host, play }: { host: React.RefObject<HTMLDivElement | null>; play: boolean }) {
   const [g, setG] = useState<{ w: number; h: number; d: string[] } | null>(null);
 
@@ -325,8 +325,10 @@ function OutLines({ host, play }: { host: React.RefObject<HTMLDivElement | null>
       const sy = c.y + c.h;
       const bx = b1.x + b1.w / 2;
       const top1 = b1.y;
-      const reach = `M${sx} ${sy} V${sy + 10} C${sx} ${sy + 34} ${bx} ${top1 - 26} ${bx} ${top1}`;
-      setG({ w: box.width, h: box.height, d: [reach, `M${bx} ${b1.y + b1.h} V${b2.y}`] });
+      // both lines run into the badge centres; the opaque badges sit on top and hide the ends, so a
+      // few pixels of measuring drift can never leave a gap
+      const reach = `M${sx} ${sy} V${sy + 10} C${sx} ${sy + 34} ${bx} ${top1 - 26} ${bx} ${top1} V${b1.y + b1.h / 2}`;
+      setG({ w: box.width, h: box.height, d: [reach, `M${bx} ${b1.y + b1.h / 2} V${b2.y + b2.h / 2}`] });
     };
     measure();
     const ro = new ResizeObserver(measure);

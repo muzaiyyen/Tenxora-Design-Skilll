@@ -1,0 +1,10 @@
+node_modules
+.next
+out
+next-env.d.ts
+*.tsbuildinfo
+.vercel
+.DS_Store
+dist
+wordpress/tenxora/site
+wordpress/tenxora/screenshot.png

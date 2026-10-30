@@ -897,7 +897,6 @@ a {
   stroke-dashoffset: 1;
   opacity: 0;
   animation: pulse-run 3.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
-  filter: drop-shadow(0 0 4px currentColor);
 }
 @keyframes pulse-run {
   0% {

@@ -13,7 +13,8 @@ const u = (n: number) => `calc(${n} * var(--u))`;
    tenxora pill sits on its centre line and the sources and outputs keep equal margins to the edges. */
 const LEFT = [
   { d: "M291 105.5 H452 C492 105.5 498 161 538 161 H626", stroke: "url(#ops-green)" },
-  { d: "M300 161 H632", stroke: "url(#ops-red)" },
+  // the tiny rise keeps the bounding box from being zero-height, which would stop the gradient rendering
+  { d: "M300 161 L632 161.01", stroke: "url(#ops-red)" },
   { d: "M351 211 H452 C492 211 498 161 538 161 H626", stroke: "url(#ops-green)" },
 ];
 const RIGHT = [
@@ -93,8 +94,9 @@ function Lines({ play, pulses }: { play: boolean; pulses: boolean }) {
               d={l.d}
               fill="none"
               stroke={l.stroke}
-              strokeWidth="2"
+              strokeWidth="3"
               strokeLinecap="round"
+              strokeLinejoin="round"
               initial={{ pathLength: 0 }}
               animate={play ? { pathLength: 1 } : { pathLength: 0 }}
               transition={{ duration: 1, ease: [0.65, 0, 0.35, 1], delay }}
@@ -103,7 +105,7 @@ function Lines({ play, pulses }: { play: boolean; pulses: boolean }) {
               <path
                 d={l.d}
                 fill="none"
-                stroke={right ? "#fec700" : "#08e88c"}
+                stroke={l.stroke}
                 strokeWidth="4"
                 strokeLinecap="round"
                 pathLength={1}

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useInView } from "motion/react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { opsMapDesign } from "@/lib/content";
 import { asset } from "@/lib/asset";
 import { useMedia } from "@/lib/hooks";
@@ -9,15 +9,16 @@ import { useMedia } from "@/lib/hooks";
 const ease = [0.22, 1, 0.36, 1] as const;
 const u = (n: number) => `calc(${n} * var(--u))`;
 
-/* Paths in capsule coordinates (Figma: capsule 1388 x 316 at x139 y1789). */
+/* Paths in canvas coordinates (Figma capsule 1388 x 316). The canvas is centred in the capsule; the
+   tenxora pill sits on its centre line and the sources and outputs keep equal margins to the edges. */
 const LEFT = [
-  { d: "M297 105.5 H406 C446 105.5 452 161 492 161 H580", stroke: "url(#ops-green)" },
-  { d: "M333 161 H586", stroke: "url(#ops-red)" },
-  { d: "M337.5 216.5 H406 C446 216.5 452 161 492 161 H580", stroke: "url(#ops-green)" },
+  { d: "M291 105.5 H452 C492 105.5 498 161 538 161 H626", stroke: "url(#ops-green)" },
+  { d: "M300 161 H632", stroke: "url(#ops-red)" },
+  { d: "M351 211 H452 C492 211 498 161 538 161 H626", stroke: "url(#ops-green)" },
 ];
 const RIGHT = [
-  { d: "M716 161 H821 C861 161 868 105.5 908 105.5 H1021.5", stroke: "url(#ops-yellow)" },
-  { d: "M716 161 H821 C861 161 868 216.5 908 216.5 H1021.5", stroke: "url(#ops-yellow)" },
+  { d: "M762 161 H795 C835 161 842 105.5 882 105.5 H1022", stroke: "url(#ops-yellow)" },
+  { d: "M762 161 H795 C835 161 842 204 882 204 H1022", stroke: "url(#ops-yellow)" },
 ];
 
 export default function OperationsMap() {
@@ -140,9 +141,9 @@ function Icon({ src, x, y, play, delay, bob }: { src: string; x: number; y: numb
 function Sources({ play }: { play: boolean }) {
   return (
     <>
-      <Icon src="/figma/whatsapp.png" x={135} y={51} play={play} delay={0.1} bob={5} />
-      <Icon src="/figma/gmail.png" x={76} y={156} play={play} delay={0.22} bob={4} />
-      <Icon src="/figma/excel.png" x={195} y={156} play={play} delay={0.3} bob={6} />
+      <Icon src="/figma/whatsapp.png" x={181} y={51} play={play} delay={0.1} bob={5} />
+      <Icon src="/figma/gmail.png" x={122} y={156} play={play} delay={0.22} bob={4} />
+      <Icon src="/figma/excel.png" x={241} y={156} play={play} delay={0.3} bob={6} />
     </>
   );
 }
@@ -245,8 +246,10 @@ function DesktopMap({ play }: { play: boolean }) {
 
 /* Phone: the same map stacked vertically so the labels stay readable. */
 function MobileMap({ play }: { play: boolean }) {
+  const host = useRef<HTMLDivElement>(null);
   return (
-    <div className="ops-m">
+    <div className="ops-m" ref={host}>
+      <OutLines host={host} play={play} />
       <div className="ops-m__sources">
         {["/figma/gmail.png", "/figma/whatsapp.png", "/figma/excel.png"].map((s, i) => (
           <motion.img
@@ -275,7 +278,7 @@ function MobileMap({ play }: { play: boolean }) {
         ))}
       </svg>
       <motion.div
-        className="ops__core ops-breathe"
+        className="ops__core ops-breathe ops-m__core"
         style={{ position: "relative", left: 0, top: 0, width: 150, height: 50 }}
         initial={{ scale: 0.4, opacity: 0 }}
         animate={play ? { scale: 1, opacity: 1 } : {}}
@@ -283,24 +286,72 @@ function MobileMap({ play }: { play: boolean }) {
       >
         <img src={asset("/brand/wordmark-black.svg")} alt="tenxora" style={{ width: 96 }} />
       </motion.div>
-      <svg viewBox="0 0 240 50" className="ops-m__lines" aria-hidden>
-        <Gradients />
-        {["M120 0 V12 C120 30 60 24 60 50", "M120 0 V12 C120 30 180 24 180 50"].map((d, i) => (
-          <motion.path
-            key={i}
-            d={d}
-            fill="none"
-            stroke="url(#ops-yellow)"
-            strokeWidth="2"
-            initial={{ pathLength: 0 }}
-            animate={play ? { pathLength: 1 } : {}}
-            transition={{ duration: 0.8, delay: 1.2 }}
-          />
-        ))}
-      </svg>
+      {/* spacer: the output lines are drawn by OutLines from measured positions */}
+      <div style={{ height: 50 }} aria-hidden />
       <div className="ops-m__outs">
         <Outputs play={play} mobile />
       </div>
     </div>
+  );
+}
+
+/** Phone: lines from the tenxora pill to each output badge, drawn from measured positions so each one
+ * lands on its badge. The second runs on behind the AI badge down to Live Reporting. */
+function OutLines({ host, play }: { host: React.RefObject<HTMLDivElement | null>; play: boolean }) {
+  const [g, setG] = useState<{ w: number; h: number; d: string[] } | null>(null);
+
+  useEffect(() => {
+    const el = host.current;
+    if (!el) return;
+    const measure = () => {
+      const core = el.querySelector<HTMLElement>(".ops-m__core");
+      const badges = el.querySelectorAll<HTMLElement>(".ops__badge");
+      if (!core || badges.length < 2) return;
+      const box = el.getBoundingClientRect();
+      // layout boxes, not transformed ones, so entrance animations don't skew the numbers
+      const at = (n: HTMLElement) => {
+        let x = 0;
+        let y = 0;
+        for (let c: HTMLElement | null = n; c && c !== el; c = c.offsetParent as HTMLElement | null) {
+          x += c.offsetLeft;
+          y += c.offsetTop;
+        }
+        return { x, y, w: n.offsetWidth, h: n.offsetHeight };
+      };
+      const c = at(core);
+      const b1 = at(badges[0]);
+      const b2 = at(badges[1]);
+      const sx = c.x + c.w / 2;
+      const sy = c.y + c.h;
+      const bx = b1.x + b1.w / 2;
+      const top1 = b1.y;
+      const reach = `M${sx} ${sy} V${sy + 10} C${sx} ${sy + 34} ${bx} ${top1 - 26} ${bx} ${top1}`;
+      setG({ w: box.width, h: box.height, d: [reach, `${reach} V${b2.y + 2}`] });
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    document.fonts?.ready.then(measure);
+    return () => ro.disconnect();
+  }, [host]);
+
+  if (!g) return null;
+  return (
+    <svg className="ops-m__out-lines" viewBox={`0 0 ${g.w} ${g.h}`} aria-hidden>
+      <Gradients />
+      {g.d.map((d, i) => (
+        <motion.path
+          key={i}
+          d={d}
+          fill="none"
+          stroke={i === 0 ? "#3ee07f" : "#fec700"}
+          strokeWidth="2"
+          strokeLinecap="round"
+          initial={{ pathLength: 0 }}
+          animate={play ? { pathLength: 1 } : {}}
+          transition={{ duration: 0.9, delay: 1.2 + i * 0.15 }}
+        />
+      ))}
+    </svg>
   );
 }

@@ -106,7 +106,21 @@ export default function Header() {
 
       <AnimatePresence>
         {open && (
+          // a tap anywhere outside the menu card closes it
+          <motion.div
+            key="scrim"
+            className="header__scrim"
+            aria-hidden
+            onClick={() => setOpen(false)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+          />
+        )}
+        {open && (
           <motion.nav
+            key="menu"
             id="mobile-menu"
             className="header__menu glass"
             aria-label="Menu"

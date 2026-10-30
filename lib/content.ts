@@ -14,7 +14,7 @@ export const links = {
 };
 
 export const nav = [
-  { label: "Appointment", href: links.contact },
+  { label: "Odoo Services", href: links.contact },
   { label: "Blog", href: links.blog },
   { label: "Why Tenxora", href: links.whyTenxora },
   { label: "Contact Us", href: links.contact },
@@ -173,7 +173,7 @@ export const footer = {
     { network: "Instagram", handle: "@tenxora", href: links.instagram },
   ],
   privacyHeading: "Privacy Policy",
-  privacyLink: { label: "/cookie-policy", href: links.cookiePolicy },
+  privacyLink: { label: "Cookie policy", href: links.cookiePolicy },
   copyright: "Copyright © Tenxora 2026",
 };
 

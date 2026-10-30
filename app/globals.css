@@ -195,6 +195,12 @@ a {
   background: var(--tx-treen);
   animation: ping 2.4s var(--ease) infinite;
 }
+.status__dot--red {
+  background: rgba(239, 75, 75, 0.7);
+}
+.status__dot--red::after {
+  background: #ef4b4b;
+}
 @keyframes ping {
   0% {
     transform: scale(0.6);
@@ -679,7 +685,11 @@ a {
 }
 .ops__canvas {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 50%;
+  width: calc(1388 * var(--u));
+  height: 100%;
+  margin-left: calc(-694 * var(--u));
 }
 .ops__ghost {
   position: absolute;
@@ -703,7 +713,7 @@ a {
 }
 .ops__core {
   position: absolute;
-  left: calc(568 * var(--u));
+  left: calc(614 * var(--u));
   top: calc(132 * var(--u));
   width: calc(160 * var(--u));
   height: calc(54 * var(--u));
@@ -719,7 +729,7 @@ a {
 }
 .ops__out {
   position: absolute;
-  left: calc(1065 * var(--u));
+  left: calc(1020 * var(--u));
   display: flex;
   align-items: center;
   gap: calc(26 * var(--u));
@@ -917,6 +927,7 @@ a {
   }
 }
 .ops-m {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -936,7 +947,15 @@ a {
   height: auto;
   display: block;
 }
+.ops-m__out-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
 .ops-m__outs {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 18px;
@@ -974,8 +993,8 @@ a {
 }
 .bw__state-label {
   position: absolute;
-  left: calc(80 * var(--u));
-  top: calc(52 * var(--u));
+  left: calc(112 * var(--u));
+  top: calc(72 * var(--u));
   z-index: 3;
 }
 .bw__tangle {
@@ -1067,8 +1086,8 @@ a {
     height: 720px;
   }
   .bw__state-label {
-    left: 20px;
-    top: 22px;
+    left: 24px;
+    top: 24px;
   }
   .bw__pain {
     max-width: 44%;
@@ -1568,6 +1587,16 @@ a {
   width: 18px;
   height: 18px;
 }
+.footer__legal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 24px;
+  row-gap: 8px;
+}
+.footer__legal .footer__h {
+  margin: 0;
+}
 .footer__link {
   font-size: 15px;
   text-decoration: underline;
@@ -1677,8 +1706,8 @@ a {
     position: relative;
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    padding: 70px 18px 28px;
+    gap: 7px 6px;
+    padding: 68px 18px 30px;
   }
   .bw__pain {
     position: relative !important;
@@ -1689,7 +1718,7 @@ a {
   }
   .bw__capsule {
     height: auto;
-    min-height: 780px;
+    min-height: 600px;
   }
 }
 @media (max-width: 760px) {
@@ -1755,6 +1784,13 @@ a {
     height: 2px;
     border-radius: 2px;
     background: #fff;
+  }
+  .header__scrim {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: rgba(0, 20, 50, 0.18);
+    pointer-events: auto;
   }
   .header__menu {
     position: absolute;
@@ -1825,9 +1861,10 @@ a {
     margin-top: 26px;
   }
 
-  /* With Tenxora: a roomier two-column grid */
+  /* With Tenxora: a roomier two-column grid, centred so the space above and below is even */
   .bw__with {
-    padding: 84px 0 0;
+    justify-content: center;
+    padding: 56px 0 24px;
   }
   .bw__stages {
     display: grid;

@@ -48,7 +48,7 @@ export default function Footer() {
             ))}
           </ul>
         </div>
-        <div>
+        <div className="footer__legal">
           <p className="footer__h">{footer.privacyHeading}</p>
           <a className="footer__link" href={footer.privacyLink.href}>
             {footer.privacyLink.label}

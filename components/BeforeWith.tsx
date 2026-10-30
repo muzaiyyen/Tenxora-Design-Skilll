@@ -21,15 +21,20 @@ const SCATTER = beforeWith.pains.map((_, i) => {
   const row = Math.floor(i / 5);
   const r2 = (n: number) => Math.round(n * 100) / 100;
   return {
-    left: r2(6 + col * 18.5 + (rand(i) - 0.5) * 6),
+    left: r2(5 + col * 18.8 + (rand(i) - 0.5) * 2.4),
     top: r2(22 + row * 18 + (rand(i + 40) - 0.5) * 8),
     rot: r2((rand(i + 80) - 0.5) * 16),
   };
 });
-// tangled links between random pains in the "before" state
-const TANGLE = Array.from({ length: 14 }, (_, i) => [Math.floor(rand(i + 7) * 20), Math.floor(rand(i + 23) * 20)] as const).filter(
-  ([a, b]) => a !== b,
-);
+// tangled links between pains: each pain is tied to one or two others across the card
+const TANGLE: (readonly [number, number])[] = [];
+for (let i = 0; i < 20; i++) {
+  const add = (b: number) => {
+    if (b !== i && !TANGLE.some(([x, y]) => (x === i && y === b) || (x === b && y === i))) TANGLE.push([i, b] as const);
+  };
+  add((i * 7 + 3) % 20);
+  if (i % 3 === 0) add((i + 9) % 20);
+}
 
 export default function BeforeWith() {
   const [on, setOn] = useState(false);
@@ -65,27 +70,13 @@ export default function BeforeWith() {
         <div ref={ref} className="capsule bw__capsule" aria-live="polite">
           <motion.div className="bw__state-label" key={on ? "with" : "before"} initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
             <span className="status">
-              <span className="status__dot" style={on ? undefined : { background: "rgba(239,75,75,.7)" }} />
+              <span className={`status__dot${on ? "" : " status__dot--red"}`} />
               {on ? beforeWith.withLabel : beforeWith.beforeLabel}
             </span>
           </motion.div>
 
-          {/* before: tangled lines */}
-          <svg className="bw__tangle" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden>
-            {TANGLE.map(([a, b], i) => (
-              <motion.path
-                key={i}
-                d={`M${SCATTER[a].left + 6} ${SCATTER[a].top + 3} Q 50 ${45 + (rand(i) - 0.5) * 50} ${SCATTER[b].left + 6} ${SCATTER[b].top + 3}`}
-                fill="none"
-                stroke="rgba(239,75,75,.35)"
-                strokeWidth="0.15"
-                vectorEffect="non-scaling-stroke"
-                style={{ strokeWidth: 1.2 }}
-                animate={{ pathLength: on ? 0 : 1, opacity: on ? 0 : 1 }}
-                transition={{ duration: on ? 0.5 : 1.2, ease, delay: on ? 0 : 0.5 + i * 0.04 }}
-              />
-            ))}
-          </svg>
+          {/* before: tangled threads running from pain to pain */}
+          {!mobile && <Tangle on={on} host={ref} />}
 
           {/* the 20 pains: scattered before, pulled into tenxora with */}
           <ul className="bw__pains">
@@ -162,6 +153,60 @@ function Switch({ on, set }: { on: boolean; set: (v: boolean) => void }) {
 }
 
 const ROTS = [-8, -3, 3, 8];
+/** Curves drawn between the real centres of the pain pills (measured from layout), so every thread
+ * starts and ends under a pill and the knot reads as connections, not loose strokes. */
+function Tangle({ on, host }: { on: boolean; host: React.RefObject<HTMLDivElement | null> }) {
+  const [box, setBox] = useState<{ w: number; h: number; pts: { x: number; y: number }[] } | null>(null);
+
+  useEffect(() => {
+    const el = host.current;
+    if (!el) return;
+    const measure = () => {
+      const pills = el.querySelectorAll<HTMLElement>(".bw__pain");
+      const pts = Array.from(pills, (p) => ({ x: p.offsetLeft + p.offsetWidth / 2, y: p.offsetTop + p.offsetHeight / 2 }));
+      setBox({ w: el.clientWidth, h: el.clientHeight, pts });
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    document.fonts?.ready.then(measure);
+    return () => ro.disconnect();
+  }, [host]);
+
+  if (!box || box.pts.length < 20) return null;
+  return (
+    <svg className="bw__tangle" viewBox={`0 0 ${box.w} ${box.h}`} aria-hidden>
+      {TANGLE.map(([a, b], i) => {
+        const A = box.pts[a];
+        const B = box.pts[b];
+        const dx = B.x - A.x;
+        const dy = B.y - A.y;
+        // perpendicular swing, opposite at each end, so threads bow, cross and loop past each other
+        const k1 = (rand(i + 3) - 0.5) * 0.9;
+        const k2 = (rand(i + 11) - 0.5) * 0.9;
+        // control points stay inside the card so no thread runs off the edge
+        const cx = (x: number) => Math.min(box.w - 40, Math.max(40, x));
+        const cy = (y: number) => Math.min(box.h - 30, Math.max(110, y));
+        const c1 = `${cx(A.x + dx * 0.3 - dy * k1)} ${cy(A.y + dy * 0.3 + dx * k1)}`;
+        const c2 = `${cx(A.x + dx * 0.7 + dy * k2)} ${cy(A.y + dy * 0.7 - dx * k2)}`;
+        return (
+          <motion.path
+            key={i}
+            d={`M${A.x} ${A.y} C${c1} ${c2} ${B.x} ${B.y}`}
+            fill="none"
+            stroke="rgba(239,75,75,.32)"
+            strokeWidth={1.4}
+            strokeLinecap="round"
+            initial={{ pathLength: 0, opacity: 0 }}
+            animate={{ pathLength: on ? 0 : 1, opacity: on ? 0 : 1 }}
+            transition={{ duration: on ? 0.5 : 1.4, ease, delay: on ? 0 : 0.6 + i * 0.04 }}
+          />
+        );
+      })}
+    </svg>
+  );
+}
+
 function StageCard({ name, i, mobile }: { name: string; i: number; mobile: boolean }) {
   // phones: a calmer tilt and no drop, so the two-column grid keeps clear gaps
   const rot = mobile ? ROTS[i] * 0.3 : ROTS[i];

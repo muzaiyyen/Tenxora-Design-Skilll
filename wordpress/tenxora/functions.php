@@ -22,7 +22,7 @@ add_action(
 /** The menu links, kept the same as the home page header. */
 function tenxora_nav_links() {
 	return array(
-		array( 'label' => 'Appointment', 'href' => 'https://www.tenxora.com/contactus' ),
+		array( 'label' => 'Odoo Services', 'href' => 'https://www.tenxora.com/contactus' ),
 		array( 'label' => 'Blog', 'href' => 'https://www.tenxora.com/blog' ),
 		array( 'label' => 'Why Tenxora', 'href' => 'https://www.tenxora.com/why-tenxora' ),
 		array( 'label' => 'Contact Us', 'href' => 'https://www.tenxora.com/contactus' ),

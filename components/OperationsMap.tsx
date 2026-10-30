@@ -17,9 +17,11 @@ const LEFT = [
   { d: "M351 211 H452 C492 211 498 161 538 161 H626", stroke: "url(#ops-green)" },
 ];
 const RIGHT = [
-  { d: "M762 161 H795 C835 161 842 105.5 882 105.5 H1022", stroke: "url(#ops-yellow)" },
-  { d: "M762 161 H795 C835 161 842 204 882 204 H1022", stroke: "url(#ops-yellow)" },
+  { d: "M762 161 H795 C835 161 842 105.5 882 105.5 H1020", stroke: "url(#ops-yellow)" },
+  { d: "M762 161 H795 C835 161 842 204 882 204 H1020", stroke: "url(#ops-yellow)" },
 ];
+
+const DESK_LENSES = [lens("enter-left", { x: 1054, y: 105.5, r: 34 }), lens("enter-left", { x: 1054, y: 204, r: 34 })];
 
 export default function OperationsMap() {
   const ref = useRef<HTMLDivElement>(null);
@@ -84,6 +86,7 @@ function Lines({ play, pulses }: { play: boolean; pulses: boolean }) {
   return (
     <svg viewBox="0 0 1388 316" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", overflow: "visible" }} aria-hidden>
       <Gradients />
+      <LensDefs id={pulses ? "d" : "dg"} lenses={DESK_LENSES} />
       {[...LEFT, ...RIGHT].map((l, i) => {
         const right = i >= LEFT.length;
         const delay = right ? 1.25 : 0.45 + i * 0.08;
@@ -114,6 +117,7 @@ function Lines({ play, pulses }: { play: boolean; pulses: boolean }) {
           </g>
         );
       })}
+      <Lenses id={pulses ? "d" : "dg"} lenses={DESK_LENSES} play={play} delay={2.1} color="#fff0a0" width={2} />
     </svg>
   );
 }
@@ -298,7 +302,7 @@ function MobileMap({ play }: { play: boolean }) {
 /** Phone: lines from the tenxora pill to each output badge, drawn from measured positions so each one
  * lands on its badge. The second runs on behind the AI badge down to Live Reporting. */
 function OutLines({ host, play }: { host: React.RefObject<HTMLDivElement | null>; play: boolean }) {
-  const [g, setG] = useState<{ w: number; h: number; d: string[] } | null>(null);
+  const [g, setG] = useState<{ w: number; h: number; d: string[]; lenses: LensShape[] } | null>(null);
 
   useEffect(() => {
     const el = host.current;
@@ -326,7 +330,16 @@ function OutLines({ host, play }: { host: React.RefObject<HTMLDivElement | null>
       const bx = b1.x + b1.w / 2;
       const top1 = b1.y;
       const reach = `M${sx} ${sy} V${sy + 10} C${sx} ${sy + 34} ${bx} ${top1 - 26} ${bx} ${top1}`;
-      setG({ w: box.width, h: box.height, d: [reach, `${reach} V${b2.y + 2}`] });
+      const r1 = b1.w / 2;
+      const r2 = b2.w / 2;
+      const c1 = { x: bx, y: b1.y + r1, r: r1 };
+      const c2 = { x: b2.x + r2, y: b2.y + r2, r: r2 };
+      setG({
+        w: box.width,
+        h: box.height,
+        d: [reach, `M${bx} ${b1.y + b1.h} V${b2.y}`],
+        lenses: [lens("through", c1), lens("enter-top", c2)],
+      });
     };
     measure();
     const ro = new ResizeObserver(measure);
@@ -338,20 +351,73 @@ function OutLines({ host, play }: { host: React.RefObject<HTMLDivElement | null>
   if (!g) return null;
   return (
     <svg className="ops-m__out-lines" viewBox={`0 0 ${g.w} ${g.h}`} aria-hidden>
-      <Gradients />
+      <LensDefs id="m" lenses={g.lenses} />
       {g.d.map((d, i) => (
         <motion.path
           key={i}
           d={d}
           fill="none"
-          stroke={i === 0 ? "#3ee07f" : "#fec700"}
+          stroke="#fec700"
           strokeWidth="2"
           strokeLinecap="round"
           initial={{ pathLength: 0 }}
           animate={play ? { pathLength: 1 } : {}}
-          transition={{ duration: 0.9, delay: 1.2 + i * 0.15 }}
+          transition={{ duration: 0.9, delay: 1.2 + i * 0.5 }}
         />
       ))}
+      <Lenses id="m" lenses={g.lenses} play={play} delay={1.6} color="#fff0a0" width={2} />
     </svg>
+  );
+}
+
+/* Light through the glass badges: where a line runs behind a badge it is drawn bent, a touch wider and
+   softly blurred, the way a liquid glass lens would refract it, and clipped to the circle. */
+type LensShape = { x: number; y: number; r: number; d: string };
+
+function lens(kind: "through" | "enter-top" | "enter-left", c: { x: number; y: number; r: number }): LensShape {
+  const { x, y, r } = c;
+  const d =
+    kind === "through"
+      ? `M${x} ${y - r} C${x + r * 0.5} ${y - r * 0.45} ${x + r * 0.5} ${y + r * 0.45} ${x} ${y + r}`
+      : kind === "enter-top"
+        ? `M${x} ${y - r} C${x + r * 0.45} ${y - r * 0.6} ${x + r * 0.35} ${y - r * 0.1} ${x + r * 0.05} ${y + r * 0.15}`
+        : `M${x - r} ${y} C${x - r * 0.6} ${y - r * 0.45} ${x - r * 0.1} ${y - r * 0.35} ${x + r * 0.15} ${y - r * 0.05}`;
+  return { x, y, r, d };
+}
+
+function LensDefs({ id, lenses }: { id: string; lenses: LensShape[] }) {
+  return (
+    <defs>
+      <filter id={`lens-blur-${id}`} x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="0.9" />
+      </filter>
+      {lenses.map((l, i) => (
+        <clipPath key={i} id={`lens-clip-${id}-${i}`}>
+          <circle cx={l.x} cy={l.y} r={l.r - 0.5} />
+        </clipPath>
+      ))}
+    </defs>
+  );
+}
+
+function Lenses({ id, lenses, play, delay, color, width }: { id: string; lenses: LensShape[]; play: boolean; delay: number; color: string; width: number }) {
+  return (
+    <>
+      {lenses.map((l, i) => (
+        <g key={i} clipPath={`url(#lens-clip-${id}-${i})`}>
+          <motion.path
+            d={l.d}
+            fill="none"
+            stroke={color}
+            strokeWidth={width * 1.6}
+            strokeLinecap="round"
+            filter={`url(#lens-blur-${id})`}
+            initial={{ pathLength: 0, opacity: 0 }}
+            animate={play ? { pathLength: 1, opacity: 1 } : {}}
+            transition={{ duration: 0.6, delay: delay + i * 0.5 }}
+          />
+        </g>
+      ))}
+    </>
   );
 }

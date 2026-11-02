@@ -15,7 +15,7 @@ import { asset } from "@/lib/asset";
 const MORPH = { type: "spring", bounce: 0.16, duration: 0.8 } as const;
 const SCENE = "/figma/bilal-scene.jpg";
 const CARD_PHOTO = "/figma/bilal-card.png";
-const SCENE_RATIO = 1024 / 662;
+const SCENE_RATIO = 1679 / 1085;
 // Figma card: the portrait window frames head and shoulders, a 16.65%-wide slice of the studio photo
 // from (53.9%, 12.24%). The sharp card render sits over that slice and fades out as the photo opens up.
 const CARD_IMG = { w: "600.587%", left: "-323.754%", top: "-40%" };
@@ -254,7 +254,13 @@ function Profile({ m, units, onClose }: { m: Member; units: { u: number; phone: 
         <motion.p className="profile__with" {...rise(4)}>
           {p.workedWith}
         </motion.p>
-        <motion.img className="profile__clients" src={asset("/figma/bilal-clients.png")} alt="Rosen Global, Norsk, Symmetric Energy, Novacare, Impetus, Machine Sens IoT, Henri" {...rise(5)} />
+        <motion.ul className="profile__clients" {...rise(5)}>
+          {p.clients.map((c) => (
+            <li key={c.logo} style={{ "--x": c.x, "--y": c.y, "--w": c.w } as React.CSSProperties}>
+              <img src={asset(`/figma/clients/${c.logo}.svg`)} alt={c.name} draggable={false} />
+            </li>
+          ))}
+        </motion.ul>
       </div>
 
       <motion.button

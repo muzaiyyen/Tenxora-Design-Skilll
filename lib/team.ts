@@ -10,6 +10,8 @@ export type Member = {
     intro: string;
     points: string[];
     workedWith: string;
+    // logos at their Figma spots on the 1679px profile frame (x, y, width)
+    clients: { name: string; logo: string; x: number; y: number; w: number }[];
   };
 };
 
@@ -29,6 +31,15 @@ export const team: Member[] = [
         "ERP · Automation · Team Augmentation",
       ],
       workedWith: "Worked With",
+      clients: [
+        { name: "MobilinkBank", logo: "mobilink-bank", x: 287, y: 773.63, w: 28.71 },
+        { name: "Norsk Global", logo: "norsk-global", x: 344.44, y: 773.63, w: 84.47 },
+        { name: "Symmetric Energy", logo: "symmetric-energy", x: 457.64, y: 773.63, w: 51.6 },
+        { name: "Novacare", logo: "novacare", x: 537.71, y: 773.63, w: 130.29 },
+        { name: "Impetus", logo: "impetus", x: 287.87, y: 825.86, w: 77.52 },
+        { name: "Machine Sens IoT", logo: "machine-sens-iot", x: 398.4, y: 826, w: 73.64 },
+        { name: "henri", logo: "henri", x: 505, y: 826, w: 88.7 },
+      ],
     },
   },
   { id: "ahsan", first: "Ahsan", last: "Mahmood", role: "CFO" },

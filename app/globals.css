@@ -2105,9 +2105,7 @@ a {
   background: linear-gradient(90deg, rgba(40, 52, 66, 0.55), rgba(255, 255, 255, 0.18));
   -webkit-backdrop-filter: blur(14px) saturate(1.6);
   backdrop-filter: blur(14px) saturate(1.6);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.45),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
   transition: transform 0.4s var(--ease);
 }
 .tcard__photo--empty + .tcard__meet {

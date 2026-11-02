@@ -2039,6 +2039,20 @@ a {
   background: #ebe0d1;
   border-radius: calc(185.5 * var(--c)) calc(185.5 * var(--c)) calc(42 * var(--c)) calc(42 * var(--c));
 }
+.scene {
+  position: absolute;
+  aspect-ratio: 1024 / 662;
+}
+.scene img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+}
+.scene img.scene__card {
+  inset: auto;
+}
 .tcard__photo--empty {
   background: #fff;
 }

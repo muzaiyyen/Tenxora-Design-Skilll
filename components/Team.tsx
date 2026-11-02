@@ -14,9 +14,12 @@ import { asset } from "@/lib/asset";
 // Apple-like: quick start, soft landing, a hint of overshoot
 const MORPH = { type: "spring", bounce: 0.16, duration: 0.8 } as const;
 const SCENE = "/figma/bilal-scene.jpg";
+const CARD_PHOTO = "/figma/bilal-card.png";
 const SCENE_RATIO = 1024 / 662;
-// Figma card: the portrait window shows the studio photo at 1.1454x, from (913, 71) in profile coordinates
-const CARD_IMG = { w: "518.33%", left: "-281.9%", top: "-18.44%" };
+// Figma card: the portrait window frames head and shoulders, a 16.65%-wide slice of the studio photo
+// from (53.9%, 12.24%). The sharp card render sits over that slice and fades out as the photo opens up.
+const CARD_IMG = { w: "600.587%", left: "-323.754%", top: "-40%" };
+const CARD_SLICE = { left: "53.906%", top: "12.236%", width: "16.65%", height: "30.589%" };
 
 /** px per Figma pixel for the page (--u) and for the cards (--c), mirrored from the CSS */
 function useUnits() {
@@ -167,7 +170,7 @@ function Card({ m, i, c, intro, open, onOpen }: { m: Member; i: number; c: numbe
           style={{ borderTopLeftRadius: 185.5 * c, borderTopRightRadius: 185.5 * c, borderBottomLeftRadius: 42 * c, borderBottomRightRadius: 42 * c }}
           transition={MORPH}
         >
-          <motion.img layoutId={`photo-img-${m.id}`} transition={MORPH} src={asset(SCENE)} alt="" draggable={false} style={{ position: "absolute", width: CARD_IMG.w, left: CARD_IMG.left, top: CARD_IMG.top, maxWidth: "none" }} />
+          <Scene id={m.id} alt="" style={{ width: CARD_IMG.w, left: CARD_IMG.left, top: CARD_IMG.top }} />
         </motion.div>
       ) : (
         <div className="tcard__photo tcard__photo--empty" aria-hidden>
@@ -228,7 +231,7 @@ function Profile({ m, units, onClose }: { m: Member; units: { u: number; phone: 
         style={{ height: box.winH, borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}
         transition={MORPH}
       >
-        <motion.img layoutId={`photo-img-${m.id}`} transition={MORPH} src={asset(SCENE)} alt={`${m.first} ${m.last}`} draggable={false} style={{ position: "absolute", width: box.imgW, left: box.left, top: box.top, maxWidth: "none" }} />
+        <Scene id={m.id} alt={`${m.first} ${m.last}`} open style={{ width: box.imgW, left: box.left, top: box.top }} />
       </motion.div>
 
       <div className="profile__page" style={units.phone ? { paddingTop: box.winH } : { minHeight: box.winH }}>
@@ -268,6 +271,25 @@ function Profile({ m, units, onClose }: { m: Member; units: { u: number; phone: 
           <path d="M4 4l12 12M16 4L4 16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
         </svg>
       </motion.button>
+    </motion.div>
+  );
+}
+
+/** The studio photo, with the card's sharper head-and-shoulders render laid over its matching slice. */
+function Scene({ id, alt, open = false, style }: { id: string; alt: string; open?: boolean; style: React.CSSProperties }) {
+  return (
+    <motion.div layoutId={`photo-img-${id}`} transition={MORPH} className="scene" style={style}>
+      <img src={asset(SCENE)} alt={alt} draggable={false} />
+      <motion.img
+        className="scene__card"
+        src={asset(CARD_PHOTO)}
+        alt=""
+        draggable={false}
+        style={CARD_SLICE}
+        initial={{ opacity: open ? 1 : 0 }}
+        animate={{ opacity: open ? 0 : 1 }}
+        transition={{ duration: open ? 0.45 : 0.3, delay: open ? 0.12 : 0.35 }}
+      />
     </motion.div>
   );
 }

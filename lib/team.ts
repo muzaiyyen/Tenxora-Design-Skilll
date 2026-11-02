@@ -18,7 +18,7 @@ export const team: Member[] = [
     id: "bilal",
     first: "Bilal",
     last: "Mashkoor",
-    role: "CEO",
+    role: "Founder & CEO",
     profile: {
       intro:
         "I’m Bilal Mashkoor, CEO of Tenxora. We’re a UK technology and business solutions firm with our delivery centre in Islamabad. I help companies streamline their operations through ERP, automation, AI and specialist teams, so they can grow without friction.",

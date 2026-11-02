@@ -1945,3 +1945,310 @@ a {
     display: none;
   }
 }
+
+/* ---------- Our Team (Figma "Our Team", 1679x1085) ---------- */
+.team {
+  position: relative;
+  min-height: max(100vh, calc(1085 * var(--u)));
+  overflow: clip;
+  color: #fff;
+  --c: var(--u);
+}
+.team__sky {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+/* Figma "Frame 2": the sky photo with a 50px blur */
+.team__sky img {
+  position: absolute;
+  inset: -60px;
+  width: calc(100% + 120px);
+  height: calc(100% + 120px);
+  object-fit: cover;
+  object-position: 50% 0;
+  filter: blur(50px);
+}
+.team__viewport {
+  position: relative;
+  z-index: 1;
+  padding-top: calc(277 * var(--u));
+  padding-bottom: calc(120 * var(--u));
+}
+.team__track {
+  display: flex;
+  gap: calc(5 * var(--c));
+  width: max-content;
+  padding: 0 calc(57 * var(--u)) 0 calc(123 * var(--u));
+  cursor: grab;
+  touch-action: pan-y;
+}
+.team__track:active {
+  cursor: grabbing;
+}
+.tcard {
+  position: relative;
+  flex: none;
+  width: calc(371 * var(--c));
+  height: calc(633 * var(--c));
+  border-radius: calc(42 * var(--c));
+  background: rgba(0, 0, 0, 0.73);
+  color: #fff;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.tcard--live {
+  background: var(--tx-treen);
+  color: #000;
+  cursor: pointer;
+}
+.tcard--gap {
+  background: none;
+}
+.tcard__name {
+  position: absolute;
+  left: calc(39 * var(--c));
+  top: calc(51 * var(--c));
+  margin: 0;
+  font-size: calc(45.779 * var(--c));
+  font-weight: 600;
+  font-variation-settings: "ROND" 100;
+  line-height: 0.89;
+  letter-spacing: calc(0.4578 * var(--c));
+  white-space: nowrap;
+}
+.tcard__role {
+  position: absolute;
+  left: calc(41 * var(--c));
+  top: calc(145 * var(--c));
+  margin: 0;
+  font-size: calc(19.022 * var(--c));
+  font-variation-settings: "ROND" 100;
+  line-height: 1.06;
+  letter-spacing: calc(0.1902 * var(--c));
+}
+.tcard__photo {
+  position: absolute;
+  left: 0;
+  top: calc(192 * var(--c));
+  width: calc(371 * var(--c));
+  height: calc(441 * var(--c));
+  overflow: hidden;
+  background: #ebe0d1;
+  border-radius: calc(185.5 * var(--c)) calc(185.5 * var(--c)) calc(42 * var(--c)) calc(42 * var(--c));
+}
+.tcard__photo--empty {
+  background: #fff;
+}
+.tcard__head,
+.tcard__body {
+  position: absolute;
+  background: #d9d9d9;
+  border-radius: calc(142.5 * var(--c));
+}
+.tcard__head {
+  left: calc(127.16 * var(--c));
+  top: calc(53 * var(--c));
+  width: calc(108.68 * var(--c));
+  height: calc(108.68 * var(--c));
+}
+.tcard__body {
+  left: calc(93 * var(--c));
+  top: calc(167.27 * var(--c));
+  width: calc(177 * var(--c));
+  height: calc(234.14 * var(--c));
+}
+/* Figma "Group 77": glass pill with a white arrow disc */
+.tcard__meet {
+  position: absolute;
+  left: calc(22 * var(--c));
+  top: calc(562 * var(--c));
+  display: inline-flex;
+  align-items: center;
+  gap: calc(15 * var(--c));
+  height: calc(50 * var(--c));
+  padding: 0 calc(5 * var(--c)) 0 calc(20 * var(--c));
+  border-radius: 999px;
+  color: #fff;
+  font-size: calc(19.022 * var(--c));
+  font-variation-settings: "ROND" 100;
+  letter-spacing: calc(0.1902 * var(--c));
+  white-space: nowrap;
+  background: linear-gradient(90deg, rgba(40, 52, 66, 0.55), rgba(255, 255, 255, 0.18));
+  -webkit-backdrop-filter: blur(14px) saturate(1.6);
+  backdrop-filter: blur(14px) saturate(1.6);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+  transition: transform 0.4s var(--ease);
+}
+.tcard__photo--empty + .tcard__meet {
+  background: linear-gradient(90deg, rgba(150, 170, 190, 0.5), rgba(220, 230, 240, 0.35));
+}
+.tcard__go {
+  display: grid;
+  place-items: center;
+  width: calc(40 * var(--c));
+  height: calc(40 * var(--c));
+  padding: calc(11 * var(--c));
+  border-radius: 50%;
+  background: #fff;
+  color: #000;
+  box-sizing: border-box;
+  transition: transform 0.4s var(--ease);
+}
+.tcard--live:hover .tcard__go {
+  transform: translateX(calc(3 * var(--c)));
+}
+
+/* Bilal's profile (Figma frame 36:400) */
+.profile {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  color: #000;
+}
+/* fixed, so the beige stays behind the copy however far the profile scrolls */
+.profile__bg {
+  position: fixed;
+  inset: 0;
+}
+.profile__photo {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  overflow: hidden;
+}
+.profile__page {
+  position: relative;
+  width: var(--page);
+  margin: 0 auto;
+  min-height: calc(1085 * var(--u));
+}
+.profile__page > * {
+  position: absolute;
+  margin: 0;
+}
+.profile__name {
+  left: calc(287 * var(--u));
+  top: calc(218 * var(--u));
+  font-size: calc(122.1 * var(--u));
+  font-weight: 600;
+  font-variation-settings: "wdth" 25, "ROND" 0;
+  text-transform: uppercase;
+  line-height: 0.78;
+  letter-spacing: calc(1.221 * var(--u));
+  white-space: nowrap;
+}
+.profile__role {
+  left: calc(287 * var(--u));
+  top: calc(421 * var(--u));
+  font-size: calc(24 * var(--u));
+  line-height: 1.06;
+}
+.profile__intro {
+  left: calc(287 * var(--u));
+  top: calc(483 * var(--u));
+  width: calc(466 * var(--u));
+  font-size: max(11px, calc(13.852 * var(--u)));
+  line-height: 1.53;
+  letter-spacing: calc(0.1385 * var(--u));
+}
+.profile__points {
+  left: calc(278 * var(--u));
+  top: calc(603 * var(--u));
+  padding-left: calc(20.778 * var(--u));
+  font-size: max(11px, calc(13.852 * var(--u)));
+  font-weight: 461;
+  line-height: 1.36;
+  letter-spacing: calc(0.1385 * var(--u));
+  list-style: disc;
+}
+.profile__with {
+  left: calc(287 * var(--u));
+  top: calc(723 * var(--u));
+  font-size: max(11px, calc(13.852 * var(--u)));
+  font-weight: 500;
+}
+.profile__clients {
+  left: calc(275.5 * var(--u));
+  top: calc(757.5 * var(--u));
+  width: calc(406.6 * var(--u));
+  height: auto;
+}
+.profile__close {
+  position: fixed;
+  right: max(16px, calc((100vw - var(--page)) / 2 + 56 * var(--u)));
+  top: calc(120 * var(--u));
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 0;
+  border-radius: 50%;
+  color: #000;
+  background: rgba(255, 255, 255, 0.4);
+  -webkit-backdrop-filter: blur(18px) saturate(1.6);
+  backdrop-filter: blur(18px) saturate(1.6);
+  cursor: pointer;
+}
+
+@media (max-width: 760px) {
+  .team {
+    --c: calc(280px / 371);
+    min-height: 100svh;
+  }
+  .team__viewport {
+    padding-top: 120px;
+    padding-bottom: 60px;
+  }
+  .team__track {
+    padding: 0 20px;
+  }
+  .profile__page {
+    width: auto;
+    min-height: 0;
+    padding: 28px 24px 56px;
+  }
+  .profile__page > * {
+    position: static;
+  }
+  .profile__name {
+    font-size: 64px;
+    letter-spacing: 0.6px;
+  }
+  .profile__role {
+    margin-top: 10px;
+    font-size: 18px;
+  }
+  .profile__intro {
+    width: auto;
+    margin-top: 22px;
+    font-size: 15px;
+  }
+  .profile__points {
+    margin-top: 18px;
+    padding-left: 20px;
+    font-size: 15px;
+  }
+  .profile__with {
+    margin-top: 28px;
+    font-size: 14px;
+  }
+  .profile__clients {
+    width: 100%;
+    max-width: 340px;
+    margin-top: 12px;
+  }
+  .profile__close {
+    top: 84px;
+    right: 16px;
+  }
+}

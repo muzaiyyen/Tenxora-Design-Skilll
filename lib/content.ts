@@ -3,7 +3,9 @@
 // presentation only. Order matches the live page.
 
 export const links = {
-  home: "/",
+  // the preview build overrides these two so its pages link to each other as files
+  home: process.env.NEXT_PUBLIC_HOME_HREF ?? "/",
+  ourTeam: process.env.NEXT_PUBLIC_TEAM_HREF ?? "/our-team/",
   contact: "https://www.tenxora.com/contactus",
   blog: "https://www.tenxora.com/blog",
   whyTenxora: "https://www.tenxora.com/why-tenxora",
@@ -16,6 +18,7 @@ export const links = {
 export const nav = [
   { label: "Odoo Services", href: links.contact },
   { label: "Blog", href: links.blog },
+  { label: "Our Team", href: links.ourTeam },
   { label: "Why Tenxora", href: links.whyTenxora },
   { label: "Contact Us", href: links.contact },
 ];

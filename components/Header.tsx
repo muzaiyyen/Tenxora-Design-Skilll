@@ -2,11 +2,11 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
-import { nav } from "@/lib/content";
+import { links as site, nav } from "@/lib/content";
 import { asset } from "@/lib/asset";
 
 /**
- * Figma "Frame 11": logo left, three links centred, dark "Contact Us" pill right.
+ * Figma "Frame 11": logo left, four links centred, dark "Contact Us" pill right.
  * Scrolling turns the link row into a glass capsule; over white sections the text goes dark.
  */
 export default function Header() {
@@ -56,8 +56,8 @@ export default function Header() {
     };
   }, []);
 
-  const links = nav.slice(0, 3);
-  const contact = nav[3];
+  const links = nav.slice(0, -1);
+  const contact = nav[nav.length - 1];
 
   return (
     <motion.header
@@ -67,7 +67,7 @@ export default function Header() {
       transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
     >
       <div className="header__inner">
-        <a href="/" className="header__logo" aria-label="Tenxora home">
+        <a href={site.home} className="header__logo" aria-label="Tenxora home">
           <img src={asset("/brand/logo-white.svg")} alt="" style={{ opacity: light ? 0 : 1 }} />
           <img src={asset("/brand/logo-black.svg")} alt="" style={{ opacity: light ? 1 : 0 }} />
         </a>

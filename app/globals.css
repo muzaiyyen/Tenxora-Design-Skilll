@@ -1959,13 +1959,16 @@ a {
   inset: 0;
   z-index: 0;
   overflow: hidden;
+  background: #0b5fc4;
 }
 /* Figma "Frame 2": the sky photo with a 50px blur */
 .team__sky img {
   position: absolute;
-  inset: -60px;
-  width: calc(100% + 120px);
-  height: calc(100% + 120px);
+  /* overhang well past the 50px blur's reach so its edges never fade to white */
+  inset: -180px;
+  width: calc(100% + 360px);
+  max-width: none;
+  height: calc(100% + 360px);
   object-fit: cover;
   object-position: 50% 0;
   filter: blur(50px);

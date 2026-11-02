@@ -1949,10 +1949,16 @@ a {
 /* ---------- Our Team (Figma "Our Team", 1679x1085) ---------- */
 .team {
   position: relative;
-  min-height: max(100vh, calc(1085 * var(--u)));
   overflow: clip;
   color: #fff;
   --c: var(--u);
+}
+/* stays on screen while the page scroll walks the cards sideways */
+.team__stage {
+  position: sticky;
+  top: 0;
+  min-height: max(100vh, calc(1085 * var(--u)));
+  overflow: clip;
 }
 .team__sky {
   position: absolute;
@@ -1986,9 +1992,12 @@ a {
   padding: 0 calc(57 * var(--u)) 0 calc(123 * var(--u));
   cursor: grab;
   touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
 }
-.team__track:active {
-  cursor: grabbing;
+.is-grabbing,
+.is-grabbing * {
+  cursor: grabbing !important;
 }
 .tcard {
   position: relative;
@@ -2246,6 +2255,8 @@ a {
 @media (max-width: 760px) {
   .team {
     --c: calc(280px / 371);
+  }
+  .team__stage {
     min-height: 100svh;
   }
   .team__viewport {

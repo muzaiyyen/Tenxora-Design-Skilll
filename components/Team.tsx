@@ -1,6 +1,6 @@
 "use client";
 
-import { animate, motion } from "motion/react";
+import { animate, motion, useMotionValue, type AnimationPlaybackControls } from "motion/react";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { team, type Member } from "@/lib/team";
 import { asset } from "@/lib/asset";
@@ -106,20 +106,123 @@ export default function Team() {
 
   const member = team.find((m) => m.id === open);
 
-  return (
-    <section className="team on-sky" data-header="dark">
-      <div className="team__sky" aria-hidden>
-        <img src={asset("/figma/sky.jpg")} alt="" fetchPriority="high" />
-      </div>
+  /*
+   * Scrolling the page walks the card row sideways: the section is as tall as the row is wide, its
+   * stage sticks to the screen, and the row's x follows how far the section has been scrolled.
+   * Dragging the row (mouse or a sideways swipe) moves the page scroll the same way, so both stay in step.
+   */
+  const section = useRef<HTMLElement>(null);
+  const stage = useRef<HTMLDivElement>(null);
+  const track = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  const span = useRef(0);
+  const dragged = useRef(false);
+  const fling = useRef<AnimationPlaybackControls | null>(null);
 
+  useLayoutEffect(() => {
+    const sec = section.current!;
+    const place = () => {
+      const top = sec.getBoundingClientRect().top;
+      x.set(-Math.min(span.current, Math.max(0, -top)));
+    };
+    const measure = () => {
+      const st = stage.current!;
+      const vw = document.documentElement.clientWidth;
+      span.current = Math.max(0, track.current!.scrollWidth - vw);
+      const h = st.offsetHeight;
+      st.style.top = `${Math.min(0, window.innerHeight - h)}px`;
+      sec.style.height = `${h + span.current}px`;
+      place();
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(stage.current!);
+    window.addEventListener("resize", measure);
+    window.addEventListener("scroll", place, { passive: true });
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+      window.removeEventListener("scroll", place);
+    };
+  }, [x]);
+
+  // a sideways trackpad swipe over the row scrolls it too
+  useEffect(() => {
+    const st = stage.current!;
+    const wheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+        e.preventDefault();
+        window.scrollBy(0, e.deltaX);
+      }
+    };
+    st.addEventListener("wheel", wheel, { passive: false });
+    return () => st.removeEventListener("wheel", wheel);
+  }, []);
+
+  const grab = useCallback((e: React.PointerEvent) => {
+    if (e.button !== 0) return;
+    // touch: a vertical swipe already scrolls the page; we only take over sideways swipes
+    const touch = e.pointerType === "touch";
+    fling.current?.stop();
+    dragged.current = false;
+    const x0 = e.clientX;
+    const y0 = e.clientY;
+    const s0 = window.scrollY;
+    let last = { t: performance.now(), x: x0 };
+    let v = 0;
+    let mode: "x" | "y" | null = touch ? null : "x";
+    const move = (ev: PointerEvent) => {
+      const dx = ev.clientX - x0;
+      if (!mode) {
+        if (Math.abs(dx) < 6 && Math.abs(ev.clientY - y0) < 6) return;
+        mode = Math.abs(dx) > Math.abs(ev.clientY - y0) ? "x" : "y";
+      }
+      if (mode !== "x") return;
+      if (Math.abs(dx) > 5) dragged.current = true;
+      if (!dragged.current) return;
+      ev.preventDefault();
+      window.scrollTo(0, s0 - dx);
+      const now = performance.now();
+      const dt = now - last.t;
+      if (dt > 0) v = 0.8 * ((ev.clientX - last.x) / dt) + 0.2 * v;
+      last = { t: now, x: ev.clientX };
+    };
+    const up = () => {
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+      window.removeEventListener("pointercancel", up);
+      document.documentElement.classList.remove("is-grabbing");
+      if (dragged.current && Math.abs(v) > 0.1 && performance.now() - last.t < 80) {
+        // carry the throw on, easing out like a native fling
+        const from = window.scrollY;
+        const to = from - v * 320;
+        fling.current = animate(from, to, { duration: 0.9, ease: [0.16, 1, 0.3, 1], onUpdate: (y) => window.scrollTo(0, y) });
+      }
+      // let the click that ends a drag fall through without opening a card
+      setTimeout(() => (dragged.current = false), 0);
+    };
+    if (!touch) document.documentElement.classList.add("is-grabbing");
+    window.addEventListener("pointermove", move, { passive: false });
+    window.addEventListener("pointerup", up);
+    window.addEventListener("pointercancel", up);
+  }, []);
+
+  return (
+    <section ref={section} className="team on-sky" data-header="dark">
       <h1 className="sr-only">Our Team</h1>
 
-      <div ref={viewport} className="team__viewport">
-        <motion.div className="team__track" drag="x" dragConstraints={viewport} dragElastic={0.08} dragMomentum>
-          {team.map((m, i) => (
-            <Card key={m.id} m={m} i={i} c={units.c} intro={intro} open={open === m.id} onOpen={() => show(m.id)} />
-          ))}
-        </motion.div>
+      <div ref={stage} className="team__stage">
+        <div className="team__sky" aria-hidden>
+          <img src={asset("/figma/sky.jpg")} alt="" fetchPriority="high" />
+        </div>
+
+        <div ref={viewport} className="team__viewport">
+          <motion.div ref={track} className="team__track" style={{ x }} onPointerDown={grab} onDragStart={(e) => e.preventDefault()}>
+            {team.map((m, i) => (
+              <Card key={m.id} m={m} i={i} c={units.c} intro={intro} open={open === m.id} onOpen={() => !dragged.current && show(m.id)} />
+            ))}
+          </motion.div>
+        </div>
       </div>
 
       {member?.profile && <Profile key={member.id} m={member} units={units} leaving={leaving} onClose={hide} onGone={gone} />}

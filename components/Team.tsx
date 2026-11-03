@@ -19,7 +19,7 @@ const SCENE_RATIO = 1679 / 1085;
 const SLICE_W = 0.1665;
 // the window is 371x441 card px, so the slice is this tall as a share of the photo
 const SLICE_H = (SLICE_W * SCENE_RATIO * 441) / 371;
-type Photo = NonNullable<Member["profile"]>["photo"];
+type Photo = NonNullable<NonNullable<Member["profile"]>["photo"]>;
 /** the photo inside the card window, in the window's own units (fractions of its width) */
 const inWindow = (ph: Photo) => ({ left: -ph.left / SLICE_W, top: -ph.top / (SLICE_W * SCENE_RATIO), width: 1 / SLICE_W });
 const pct = (v: number) => `${(v * 100).toFixed(3)}%`;
@@ -62,7 +62,7 @@ export default function Team() {
   useEffect(() => {
     const sync = () => {
       const id = location.hash.slice(1);
-      const want = team.some((m) => m.id === id && m.profile) ? id : null;
+      const want = team.some((m) => m.id === id && m.profile?.photo) ? id : null;
       setOpen((cur) => {
         if (cur && !want) {
           setLeaving(true);
@@ -231,14 +231,14 @@ export default function Team() {
       </div>
 
       {/* portalled to <body>: the tall scroll section contains layout, which would trap a fixed overlay */}
-      {member?.profile &&
+      {member?.profile?.photo &&
         createPortal(<Profile key={member.id} m={member} units={units} leaving={leaving} onClose={hide} onGone={gone} />, document.body)}
     </section>
   );
 }
 
 function Card({ m, i, c, intro, open, onOpen }: { m: Member; i: number; c: number; intro: boolean; open: boolean; onOpen: () => void }) {
-  const live = Boolean(m.profile);
+  const live = Boolean(m.profile?.photo);
   const ref = useRef<HTMLDivElement>(null);
 
   // hand focus back to the card when its profile closes
@@ -287,15 +287,15 @@ function Card({ m, i, c, intro, open, onOpen }: { m: Member; i: number; c: numbe
       </motion.p>
 
       {live ? (
-        <div className="tcard__photo" style={{ background: m.profile!.photo.bg }}>
+        <div className="tcard__photo" style={{ background: m.profile!.photo!.bg }}>
           <Scene
-            photo={m.profile!.photo}
+            photo={m.profile!.photo!}
             alt=""
             style={{
-              width: pct(inWindow(m.profile!.photo).width),
-              left: pct(inWindow(m.profile!.photo).left),
+              width: pct(inWindow(m.profile!.photo!).width),
+              left: pct(inWindow(m.profile!.photo!).left),
               // top % is of the window's height, which is 441/371 of its width
-              top: pct((inWindow(m.profile!.photo).top * 371) / 441),
+              top: pct((inWindow(m.profile!.photo!).top * 371) / 441),
             }}
           />
         </div>
@@ -341,7 +341,7 @@ function Profile({
   const pic = useRef<HTMLDivElement>(null);
   const tint = useRef<HTMLDivElement>(null);
   const close = useRef<HTMLButtonElement>(null);
-  const ph = p.photo;
+  const ph = p.photo!;
   const [box, setBox] = useState(() => frame(units.phone, ph));
   const [shown, setShown] = useState(false);
 

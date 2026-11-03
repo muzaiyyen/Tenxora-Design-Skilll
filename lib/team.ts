@@ -14,7 +14,7 @@ export type Member = {
     // studio photo (1679x1085) and where the card's portrait window sits in it (fractions of the photo);
     // focus = how far across the photo the person stands and phoneTop = how far it shifts down (share of its
     // height), for the phone crop; card = optional sharp overlay
-    photo: { scene: string; card?: string; left: number; top: number; focus: number; phoneTop?: number; bg: string };
+    photo?: { scene: string; card?: string; left: number; top: number; focus: number; phoneTop?: number; bg: string };
     // Bilal: logos at their Figma spots on the 1679px profile frame (x, y, width).
     // Others: no spot given, so the list wraps in a row under "Worked With"; a name without a logo
     // file shows as text until we have its logo.
@@ -222,6 +222,29 @@ export const team: Member[] = [
         { name: "Synchronous Services" },
         { name: "Tradify E-Commerce" },
         { name: "GiantTech Solutions" },
+      ],
+    },
+  },
+  {
+    id: "usama",
+    first: "Usama",
+    last: "Zahid",
+    role: "Odoo Developer",
+    // no photo yet: the card stays a placeholder and the profile opens once a photo is added
+    profile: {
+      intro:
+        "I’m Usama Zahid, Odoo Developer at Tenxora. I build and customize business solutions in Odoo, from website front ends to backend modules, reports, access rights and workflows. I turn client requirements into clean, practical systems that solve real business problems.",
+      points: [
+        "Odoo 17 / 18 / 19",
+        "Website & Backend Customization",
+        "Custom Modules · Reports · Automation",
+        "Python · XML · QWeb · JavaScript",
+      ],
+      workedWith: "Worked With",
+      linkedin: "https://www.linkedin.com/in/syed-usama-zahid-786296365/",
+      clients: [
+        { name: "Tenxora", logo: "tenxora" },
+        { name: "Synchronous Services" },
       ],
     },
   },

@@ -39,7 +39,7 @@ export const team: Member[] = [
       ],
       workedWith: "Worked With",
       linkedin: "https://www.linkedin.com/in/bilalmashkoor/",
-      photo: { scene: "/figma/bilal-scene.jpg", card: "/figma/bilal-card.png", left: 0.53906, top: 0.12236, focus: 0.675, bg: "#ebe0d1" },
+      photo: { scene: "/figma/bilal-scene.jpg", card: "/figma/bilal-card.jpg", left: 0.53906, top: 0.12236, focus: 0.675, bg: "#ebe0d1" },
       clients: [
         { name: "MobilinkBank", logo: "mobilink-bank", x: 287, y: 773.63, w: 28.71 },
         { name: "Norsk Global", logo: "norsk-global", x: 344.44, y: 773.63, w: 84.47 },
@@ -230,7 +230,6 @@ export const team: Member[] = [
     first: "Usama",
     last: "Zahid",
     role: "Odoo Developer",
-    // no photo yet: the card stays a placeholder and the profile opens once a photo is added
     profile: {
       intro:
         "I’m Usama Zahid, Odoo Developer at Tenxora. I build and customize business solutions in Odoo, from website front ends to backend modules, reports, access rights and workflows. I turn client requirements into clean, practical systems that solve real business problems.",
@@ -242,6 +241,7 @@ export const team: Member[] = [
       ],
       workedWith: "Worked With",
       linkedin: "https://www.linkedin.com/in/syed-usama-zahid-786296365/",
+      photo: { scene: "/figma/usama-scene.jpg", card: "/figma/usama-card.jpg", left: 0.647, top: 0.087, focus: 0.73, phoneTop: 0.04, bg: "#fefefe" },
       clients: [
         { name: "Tenxora", logo: "tenxora" },
         { name: "Synchronous Services" },
@@ -253,7 +253,6 @@ export const team: Member[] = [
     first: "Zain",
     last: "Ali",
     role: "Assistant Accountant",
-    // no photo yet: the card stays a placeholder and the profile opens once a photo is added
     profile: {
       intro:
         "I’m Zain Ali, Assistant Accountant at Tenxora. I keep the numbers clean and accurate, handling bookkeeping, bank reconciliations, invoicing and financial reporting in Odoo. As an ACCA student, I focus on precision and compliance so finance runs smoothly.",
@@ -265,6 +264,7 @@ export const team: Member[] = [
       ],
       workedWith: "Worked With",
       linkedin: "https://www.linkedin.com/in/zainali67/",
+      photo: { scene: "/figma/zain-scene.jpg", card: "/figma/zain-card.jpg", left: 0.668, top: 0.064, focus: 0.7515, phoneTop: 0.035, bg: "#fefefe" },
       clients: [
         { name: "Tenxora", logo: "tenxora" },
         { name: "Synchronous Services" },

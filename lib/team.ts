@@ -80,6 +80,53 @@ export const team: Member[] = [
       ],
     },
   },
+  {
+    id: "fatima",
+    first: "Fatima",
+    last: "Rehman",
+    role: "Odoo Developer",
+    profile: {
+      intro:
+        "I’m Fatima Rehman, Odoo Developer at Tenxora. I build and configure Odoo systems around how a business actually works, turning everyday processes into clean, automated workflows. With a background in software engineering, I connect the technical side with what teams really need.",
+      points: [
+        "Odoo Development",
+        "BS Software Engineering · Hazara University",
+        "Software Developer background",
+        "Python · Odoo Configuration",
+      ],
+      workedWith: "Worked With",
+      linkedin: "https://www.linkedin.com/in/fatima-rehman-937548226/",
+      photo: { scene: "/figma/fatima-scene.jpg", card: "/figma/fatima-card.jpg", left: 0.672, top: 0.083, focus: 0.755, phoneTop: 0.045, bg: "#f9f9fa" },
+      clients: [
+        { name: "Tenxora", logo: "tenxora" },
+        { name: "Synchronous Services" },
+      ],
+    },
+  },
+  {
+    id: "gulraiz",
+    first: "Gulraiz",
+    last: "Khan",
+    role: "Senior UI/UX Designer",
+    profile: {
+      intro:
+        "I’m Gulraiz Khan, Senior UI/UX Designer at Tenxora. I design web apps, mobile apps and dashboards that are intuitive, efficient and look good. With a background in frontend development, I design interfaces that are built to ship, not just to impress.",
+      points: [
+        "3+ years designing digital products",
+        "Certified UI/UX Designer",
+        "Web · Mobile · Dashboard Design",
+        "Figma · Prototyping · Design Systems",
+      ],
+      workedWith: "Worked With",
+      linkedin: "https://www.linkedin.com/in/gulraiz-khan-b802b7257/",
+      photo: { scene: "/figma/gulraiz-scene.jpg", card: "/figma/gulraiz-card.jpg", left: 0.691, top: 0.062, focus: 0.774, phoneTop: 0.03, bg: "#fcfcfc" },
+      clients: [
+        { name: "Tenxora", logo: "tenxora" },
+        { name: "Synchronous Services" },
+        { name: "Encoracode" },
+      ],
+    },
+  },
   { id: "muzaiyyen", first: "Muzaiyyen", last: "Khan", role: "Creative Lead" },
   { id: "zain", first: "Zain", last: "Ali", role: "Accountant" },
   { id: "maryam", first: "Maryam", last: "Hameed", role: "Odoo Developer" },

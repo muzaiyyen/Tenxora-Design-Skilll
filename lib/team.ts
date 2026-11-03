@@ -64,7 +64,7 @@ export const team: Member[] = [
         "ERP · CFO Advisory · Finance Transformation",
       ],
       workedWith: "Worked With",
-      photo: { scene: "/figma/ahsan-scene.jpg", left: 0.596, top: 0.08, focus: 0.68, phoneTop: 0.045, bg: "#f6f4f5" },
+      photo: { scene: "/figma/ahsan-scene.jpg", card: "/figma/ahsan-card.jpg", left: 0.596, top: 0.08, focus: 0.68, phoneTop: 0.045, bg: "#f6f4f5" },
       clients: [
         { name: "PwC", logo: "pwc" },
         { name: "IMC Worldwide" },

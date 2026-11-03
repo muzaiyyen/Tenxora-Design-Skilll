@@ -2232,6 +2232,34 @@ a {
   width: 100%;
   height: auto;
 }
+/* a list without Figma spots wraps in a row under "Worked With", every logo the same height */
+.profile__clients--row {
+  inset: auto;
+  left: calc(287 * var(--u));
+  top: calc(764 * var(--u));
+  width: calc(466 * var(--u));
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: calc(22 * var(--u)) calc(28 * var(--u));
+}
+.profile__clients--row li {
+  position: static;
+  width: auto;
+}
+.profile__clients--row img {
+  width: auto;
+  height: calc(26 * var(--u));
+}
+.profile__clients--row span {
+  display: block;
+  font-size: max(11px, calc(15 * var(--u)));
+  font-weight: 700;
+  font-variation-settings: "wdth" 85;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  color: #000;
+}
 .profile__close {
   position: fixed;
   right: max(16px, calc((100vw - var(--page)) / 2 + 56 * var(--u)));

@@ -466,10 +466,10 @@ function Profile({
         <motion.p className="profile__with" {...rise(4)}>
           {p.workedWith}
         </motion.p>
-        <motion.ul className="profile__clients" {...rise(5)}>
+        <motion.ul className={`profile__clients${p.clients.some((c) => c.x == null) ? " profile__clients--row" : ""}`} {...rise(5)}>
           {p.clients.map((c) => (
-            <li key={c.logo} style={{ "--x": c.x, "--y": c.y, "--w": c.w } as React.CSSProperties}>
-              <img src={asset(`/figma/clients/${c.logo}.svg`)} alt={c.name} draggable={false} />
+            <li key={c.name} style={c.x != null ? ({ "--x": c.x, "--y": c.y, "--w": c.w } as React.CSSProperties) : undefined}>
+              {c.logo ? <img src={asset(`/figma/clients/${c.logo}.svg`)} alt={c.name} draggable={false} /> : <span>{c.name}</span>}
             </li>
           ))}
         </motion.ul>

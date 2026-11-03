@@ -14,8 +14,10 @@ export type Member = {
     // focus = how far across the photo the person stands and phoneTop = how far it shifts down (share of its
     // height), for the phone crop; card = optional sharp overlay
     photo: { scene: string; card?: string; left: number; top: number; focus: number; phoneTop?: number; bg: string };
-    // logos at their Figma spots on the 1679px profile frame (x, y, width)
-    clients: { name: string; logo: string; x: number; y: number; w: number }[];
+    // Bilal: logos at their Figma spots on the 1679px profile frame (x, y, width).
+    // Others: no spot given, so the list wraps in a row under "Worked With"; a name without a logo
+    // file shows as text until we have its logo.
+    clients: { name: string; logo?: string; x?: number; y?: number; w?: number }[];
   };
 };
 
@@ -63,7 +65,16 @@ export const team: Member[] = [
       ],
       workedWith: "Worked With",
       photo: { scene: "/figma/ahsan-scene.jpg", left: 0.596, top: 0.08, focus: 0.68, phoneTop: 0.045, bg: "#f6f4f5" },
-      clients: [],
+      clients: [
+        { name: "PwC", logo: "pwc" },
+        { name: "IMC Worldwide" },
+        { name: "DFID" },
+        { name: "OGDCL" },
+        { name: "Jazz", logo: "jazz" },
+        { name: "Attock Gen" },
+        { name: "Pakistan Oilfields" },
+        { name: "TNB Liberty Power" },
+      ],
     },
   },
   { id: "muzaiyyen", first: "Muzaiyyen", last: "Khan", role: "Creative Lead" },

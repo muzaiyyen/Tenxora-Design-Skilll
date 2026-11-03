@@ -127,6 +127,55 @@ export const team: Member[] = [
       ],
     },
   },
+  {
+    id: "imran",
+    first: "Imran",
+    last: "Sarwar",
+    role: "Senior Techno-Functional Consultant",
+    profile: {
+      intro:
+        "I’m Imran Sarwar, Senior Techno-Functional Consultant at Tenxora. I help businesses replace spreadsheets and disconnected tools with one Odoo ERP their teams actually use. I handle the whole journey, from business analysis and architecture to custom modules, go-live and support.",
+      points: [
+        "9+ years in ERP implementation",
+        "Odoo Functional Certified",
+        "Projects across USA, KSA, UAE & Pakistan",
+        "Odoo · Python · PostgreSQL · Integrations",
+      ],
+      workedWith: "Worked With",
+      linkedin: "https://www.linkedin.com/in/mrmimran/",
+      photo: { scene: "/figma/imran-scene.jpg", card: "/figma/imran-card.jpg", left: 0.636, top: 0.05, focus: 0.7195, phoneTop: 0.02, bg: "#f5f4f6" },
+      clients: [
+        { name: "Sprinters Advertising" },
+        { name: "InvoZone" },
+        { name: "Ovex Technologies" },
+        { name: "iTech Resources" },
+      ],
+    },
+  },
+  {
+    id: "maab",
+    first: "Maab",
+    last: "Hassan",
+    role: "Graphic Designer",
+    profile: {
+      intro:
+        "I’m Maab Hassan, Graphic Designer at Tenxora. I create logos, brand identities and marketing designs that make businesses stand out. From social media posts to full branding, I design visuals that are clean, bold and built to make an impact.",
+      points: [
+        "Nearly 3 years in graphic design",
+        "Logo & Brand Identity",
+        "Social Media & Marketing Design",
+        "Image Design · Artworking",
+      ],
+      workedWith: "Worked With",
+      linkedin: "https://www.linkedin.com/in/maab-hassan-baa412329/",
+      photo: { scene: "/figma/maab-scene.jpg", card: "/figma/maab-card.jpg", left: 0.68, top: 0.071, focus: 0.7635, phoneTop: 0.035, bg: "#fefefe" },
+      clients: [
+        { name: "Tenxora", logo: "tenxora" },
+        { name: "Synchronous Services" },
+        { name: "Tradify E-Commerce" },
+      ],
+    },
+  },
   { id: "muzaiyyen", first: "Muzaiyyen", last: "Khan", role: "Creative Lead" },
   { id: "zain", first: "Zain", last: "Ali", role: "Accountant" },
   { id: "maryam", first: "Maryam", last: "Hameed", role: "Odoo Developer" },

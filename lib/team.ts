@@ -248,5 +248,27 @@ export const team: Member[] = [
       ],
     },
   },
-  { id: "zain", first: "Zain", last: "Ali", role: "Accountant" },
+  {
+    id: "zain",
+    first: "Zain",
+    last: "Ali",
+    role: "Assistant Accountant",
+    // no photo yet: the card stays a placeholder and the profile opens once a photo is added
+    profile: {
+      intro:
+        "I’m Zain Ali, Assistant Accountant at Tenxora. I keep the numbers clean and accurate, handling bookkeeping, bank reconciliations, invoicing and financial reporting in Odoo. As an ACCA student, I focus on precision and compliance so finance runs smoothly.",
+      points: [
+        "2+ years in accounting",
+        "ACCA Student · SKANS School of Accountancy",
+        "Xero & QuickBooks Certified",
+        "Bookkeeping · Reconciliation · Reporting",
+      ],
+      workedWith: "Worked With",
+      linkedin: "https://www.linkedin.com/in/zainali67/",
+      clients: [
+        { name: "Tenxora", logo: "tenxora" },
+        { name: "Synchronous Services" },
+      ],
+    },
+  },
 ];

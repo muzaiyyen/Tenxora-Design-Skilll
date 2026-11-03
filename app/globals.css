@@ -2208,10 +2208,10 @@ a {
   letter-spacing: calc(0.1385 * var(--u));
   list-style: disc;
 }
-/* LinkedIn pill under the experience points; "Worked With" and the logos sit 34px lower to make room */
+/* LinkedIn pill under the client logos */
 .profile__linkedin {
   left: calc(287 * var(--u));
-  top: calc(690 * var(--u));
+  top: calc(884 * var(--u));
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -2240,13 +2240,13 @@ a {
 }
 .profile__with {
   left: calc(287 * var(--u));
-  top: calc(757 * var(--u));
+  top: calc(723 * var(--u));
   font-size: max(11px, calc(13.852 * var(--u)));
   font-weight: 500;
 }
 /* the list box spans the frame; each logo sits at its own Figma position */
 .profile__clients {
-  inset: calc(34 * var(--u)) 0 0 0;
+  inset: 0;
   padding: 0;
   list-style: none;
   pointer-events: none;
@@ -2266,7 +2266,7 @@ a {
 .profile__clients--row {
   inset: auto;
   left: calc(287 * var(--u));
-  top: calc(798 * var(--u));
+  top: calc(764 * var(--u));
   width: calc(466 * var(--u));
   display: flex;
   flex-wrap: wrap;
@@ -2349,7 +2349,7 @@ a {
     font-size: 15px;
   }
   .profile__linkedin {
-    margin-top: 22px;
+    margin-top: 28px;
     height: 40px;
     padding: 0 18px 0 15px;
     font-size: 14px;

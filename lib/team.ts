@@ -176,7 +176,30 @@ export const team: Member[] = [
       ],
     },
   },
+  {
+    id: "maryam",
+    first: "Maryam",
+    last: "Hameed",
+    role: "Odoo Developer",
+    profile: {
+      intro:
+        "I’m Maryam Hameed, Odoo Developer at Tenxora. I build and customize ERP solutions, from custom modules and reports to data migration and system integrations. I turn business requirements into clean, reliable systems that keep operations running smoothly.",
+      points: [
+        "4 years in Python & Odoo development",
+        "Custom Modules · Reports · Data Migration",
+        "System Integration",
+        "Python · JavaScript · PHP · React",
+      ],
+      workedWith: "Worked With",
+      linkedin: "https://www.linkedin.com/in/maryam-hameed-4958b0188/",
+      photo: { scene: "/figma/maryam-scene.jpg", card: "/figma/maryam-card.jpg", left: 0.684, top: 0.062, focus: 0.767, phoneTop: 0.03, bg: "#fcfbfc" },
+      clients: [
+        { name: "Tenxora", logo: "tenxora" },
+        { name: "Synchronous Services" },
+        { name: "FFBL Power Company" },
+      ],
+    },
+  },
   { id: "muzaiyyen", first: "Muzaiyyen", last: "Khan", role: "Creative Lead" },
   { id: "zain", first: "Zain", last: "Ali", role: "Accountant" },
-  { id: "maryam", first: "Maryam", last: "Hameed", role: "Odoo Developer" },
 ];

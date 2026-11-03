@@ -2156,6 +2156,7 @@ a {
   opacity: 0;
 }
 .profile__photo {
+  isolation: isolate;
   position: absolute;
   left: 0;
   top: 0;
@@ -2378,5 +2379,58 @@ a {
   .profile__close {
     top: 84px;
     right: 16px;
+  }
+}
+
+/* profile arrows: step to the previous / next team member */
+.profile__bg {
+  transition: background-color 0.9s cubic-bezier(0.77, 0, 0.18, 1);
+}
+.profile__slide,
+.profile__depth {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  will-change: transform;
+}
+.profile__depth {
+  overflow: visible;
+}
+.profile__arrow {
+  position: fixed;
+  top: 50%;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin-top: -28px;
+  border: 0;
+  border-radius: 50%;
+  color: #000;
+  background: rgba(255, 255, 255, 0.4);
+  -webkit-backdrop-filter: blur(18px) saturate(1.6);
+  backdrop-filter: blur(18px) saturate(1.6);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+}
+.profile__arrow--prev {
+  left: max(16px, calc((100vw - var(--page)) / 2 + 56 * var(--u)));
+}
+.profile__arrow--next {
+  right: max(16px, calc((100vw - var(--page)) / 2 + 56 * var(--u)));
+}
+@media (max-width: 760px) {
+  .profile__arrow {
+    position: absolute;
+    width: 44px;
+    height: 44px;
+    margin-top: -22px;
+  }
+  .profile__arrow--prev {
+    left: 12px;
+  }
+  .profile__arrow--next {
+    right: 12px;
   }
 }

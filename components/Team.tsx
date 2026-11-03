@@ -1,6 +1,6 @@
 "use client";
 
-import { animate, motion, useMotionValue, type AnimationPlaybackControls } from "motion/react";
+import { animate, AnimatePresence, motion, useMotionValue, type AnimationPlaybackControls, type Variants } from "motion/react";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { team, type Member } from "@/lib/team";
@@ -48,6 +48,8 @@ export default function Team() {
   const [open, setOpen] = useState<string | null>(null);
   // the profile plays its closing morph before it unmounts
   const [leaving, setLeaving] = useState(false);
+  // which way the last arrow press slid the profile (1 = next, -1 = previous)
+  const [dir, setDir] = useState<1 | -1>(1);
   const units = useUnits();
   const viewport = useRef<HTMLDivElement>(null);
   const pushed = useRef(false);
@@ -73,7 +75,13 @@ export default function Team() {
     };
     sync();
     window.addEventListener("popstate", sync);
-    return () => window.removeEventListener("popstate", sync);
+    // going back to close a profile must not jump the page (and the card row) back to where it was opened
+    const restore = history.scrollRestoration;
+    history.scrollRestoration = "manual";
+    return () => {
+      window.removeEventListener("popstate", sync);
+      history.scrollRestoration = restore;
+    };
   }, []);
 
   useEffect(() => {
@@ -110,6 +118,30 @@ export default function Team() {
   }, []);
 
   const member = team.find((m) => m.id === open);
+
+  // the profile's arrows step through everyone who has a profile, wrapping round at the ends
+  const go = useCallback(
+    (d: 1 | -1) => {
+      const live = team.filter((t) => t.profile?.photo);
+      const i = live.findIndex((t) => t.id === open);
+      if (i < 0 || live.length < 2) return;
+      const next = live[(i + d + live.length) % live.length];
+      history.replaceState(history.state, "", `#${next.id}`);
+      setDir(d);
+      setOpen(next.id);
+      // walk the row behind the overlay so the new member's card sits mid-screen, ready for the close morph
+      requestAnimationFrame(() => {
+        const sec = section.current;
+        const slot = document.querySelector<HTMLElement>(`[data-card="${next.id}"]`);
+        if (!sec || !slot) return;
+        const r = slot.getBoundingClientRect();
+        const top = sec.getBoundingClientRect().top;
+        const want = Math.min(span.current, Math.max(0, -top + r.left + r.width / 2 - document.documentElement.clientWidth / 2));
+        window.scrollTo({ top: top + window.scrollY + want, behavior: "instant" as ScrollBehavior });
+      });
+    },
+    [open],
+  );
 
   /*
    * Scrolling the page walks the card row sideways: the section is as tall as the row is wide, its
@@ -232,7 +264,7 @@ export default function Team() {
 
       {/* portalled to <body>: the tall scroll section contains layout, which would trap a fixed overlay */}
       {member?.profile?.photo &&
-        createPortal(<Profile key={member.id} m={member} units={units} leaving={leaving} onClose={hide} onGone={gone} />, document.body)}
+        createPortal(<Profile key="profile" m={member} dir={dir} units={units} leaving={leaving} onClose={hide} onGone={gone} onNav={go} />, document.body)}
     </section>
   );
 }
@@ -323,12 +355,16 @@ function Card({ m, i, c, intro, open, onOpen }: { m: Member; i: number; c: numbe
  */
 function Profile({
   m,
+  dir,
   units,
   leaving,
   onClose,
   onGone,
+  onNav,
 }: {
   m: Member;
+  dir: 1 | -1;
+  onNav: (d: 1 | -1) => void;
   units: { u: number; phone: boolean };
   leaving: boolean;
   onClose: () => void;
@@ -338,12 +374,24 @@ function Profile({
   const root = useRef<HTMLDivElement>(null);
   const bg = useRef<HTMLDivElement>(null);
   const win = useRef<HTMLDivElement>(null);
-  const pic = useRef<HTMLDivElement>(null);
+  const pic = useRef<HTMLDivElement | null>(null);
   const tint = useRef<HTMLDivElement>(null);
   const close = useRef<HTMLButtonElement>(null);
   const ph = p.photo!;
   const [box, setBox] = useState(() => frame(units.phone, ph));
   const [shown, setShown] = useState(false);
+  // each arrow press mounts a fresh slide; slide 0 is the one that grew out of the card
+  const lastId = useRef(m.id);
+  const slideN = useRef(0);
+  if (lastId.current !== m.id) {
+    lastId.current = m.id;
+    slideN.current += 1;
+  }
+  const n = slideN.current;
+  const slideKey = `${m.id}-${n}`;
+  const setPic = useCallback((el: HTMLDivElement | null) => {
+    if (el) pic.current = el;
+  }, []);
 
   /** card geometry, measured from its slot in the row (viewport coordinates) */
   const fromCard = useCallback(() => {
@@ -423,33 +471,97 @@ function Profile({
       Object.assign(pic.current!.style, px(z.pic));
     };
     window.addEventListener("resize", on);
-    const key = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    const key = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      else if (!leaving && e.key === "ArrowRight") onNav(1);
+      else if (!leaving && e.key === "ArrowLeft") onNav(-1);
+    };
     window.addEventListener("keydown", key);
     return () => {
       window.removeEventListener("resize", on);
       window.removeEventListener("keydown", key);
     };
-  }, [onClose, leaving, toOpen]);
+  }, [onClose, onNav, leaving, toOpen]);
+
+  // a new member slides in at the top of their profile
+  useEffect(() => {
+    if (n > 0) root.current?.scrollTo({ top: 0, behavior: "smooth" });
+  }, [n]);
+
+  // a sideways swipe on a phone steps to the next or previous member
+  const touch = useRef<{ x: number; y: number } | null>(null);
+  const onTouchStart = (e: React.TouchEvent) => {
+    const t = e.touches[0];
+    touch.current = { x: t.clientX, y: t.clientY };
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    const s0 = touch.current;
+    touch.current = null;
+    if (!s0 || leaving) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - s0.x;
+    const dy = t.clientY - s0.y;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) onNav(dx < 0 ? 1 : -1);
+  };
 
   const settle = { type: "spring", bounce: 0.1, duration: 0.7 } as const;
+  // the copy is the near layer: after an arrow press it travels further and faster than the photo
   const rise = (d: number) => ({
-    initial: { opacity: 0, y: 28, filter: "blur(6px)" },
+    initial: n > 0 ? { opacity: 0, x: dir * 120, y: 0, filter: "blur(8px)" } : { opacity: 0, y: 28, filter: "blur(6px)" },
     animate: leaving
       ? { opacity: 0, y: 12, filter: "blur(4px)", transition: { duration: 0.16 } }
-      : { opacity: 1, y: 0, filter: "blur(0px)", transition: { ...settle, delay: 0.32 + d * 0.06 } },
+      : {
+          opacity: 1,
+          x: 0,
+          y: 0,
+          filter: "blur(0px)",
+          transition: n > 0 ? { type: "spring" as const, bounce: 0.12, duration: 0.85, delay: 0.18 + d * 0.05 } : { ...settle, delay: 0.32 + d * 0.06 },
+        },
   });
 
   return (
-    <div ref={root} className="profile" style={{ "--scene-bg": ph.bg } as React.CSSProperties} data-header="light" role="dialog" aria-modal="true" aria-label={`${m.first} ${m.last}`}>
+    <div
+      ref={root}
+      className="profile"
+      style={{ "--scene-bg": ph.bg } as React.CSSProperties}
+      data-header="light"
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${m.first} ${m.last}`}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+    >
       <div ref={bg} className="profile__bg">
         <div ref={tint} className="profile__tint" />
       </div>
 
       <div ref={win} className="profile__photo">
-        <Scene ref={pic} photo={ph} alt={`${m.first} ${m.last}`} cardOpacity={leaving ? 1 : shown ? 0 : 1} leaving={leaving} />
+        {/* the new photo wipes in over the old one while sliding against it, so the person drifts slower than the frame */}
+        <AnimatePresence initial={false} custom={dir}>
+          <motion.div key={slideKey} className="profile__slide" custom={dir} variants={WIPE} initial="enter" animate="center" exit="exit">
+            <motion.div className="profile__depth" custom={dir} variants={DEPTH} initial="enter" animate="center" exit="exit">
+              <Scene
+                ref={setPic}
+                photo={ph}
+                alt={`${m.first} ${m.last}`}
+                style={n > 0 ? (px(toOpen(frame(units.phone, ph)).pic) as React.CSSProperties) : undefined}
+                cardOpacity={leaving ? 1 : shown ? 0 : 1}
+                leaving={leaving}
+              />
+            </motion.div>
+          </motion.div>
+        </AnimatePresence>
       </div>
 
-      <div className="profile__page" style={units.phone ? { paddingTop: box.winH } : { minHeight: box.winH }}>
+      <AnimatePresence mode="wait" initial={false} custom={dir}>
+      <motion.div
+        key={slideKey}
+        className="profile__page"
+        style={units.phone ? { paddingTop: box.winH } : { minHeight: box.winH }}
+        custom={dir}
+        variants={COPY_OUT}
+        exit="exit"
+      >
         <motion.h2 className="profile__name" {...rise(0)}>
           {m.first}
           <br />
@@ -494,7 +606,32 @@ function Profile({
           Connect on LinkedIn
         </motion.a>
         )}
-      </div>
+      </motion.div>
+      </AnimatePresence>
+
+      {(
+        [
+          [-1, "prev", "Previous team member"],
+          [1, "next", "Next team member"],
+        ] as const
+      ).map(([d, side, label]) => (
+        <motion.button
+          key={side}
+          type="button"
+          className={`profile__arrow profile__arrow--${side} glass`}
+          style={units.phone ? { top: box.winH / 2 } : undefined}
+          aria-label={label}
+          onClick={() => onNav(d)}
+          initial={{ opacity: 0, x: d * -16 }}
+          animate={leaving ? { opacity: 0, x: d * -16, transition: { duration: 0.15 } } : { opacity: 1, x: 0, transition: { ...settle, delay: 0.5 } }}
+          whileHover={{ scale: 1.08 }}
+          whileTap={{ scale: 0.92 }}
+        >
+          <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden style={side === "prev" ? { transform: "scaleX(-1)" } : undefined}>
+            <path d="M7 4l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </motion.button>
+      ))}
 
       <motion.button
         ref={close}
@@ -512,6 +649,23 @@ function Profile({
     </div>
   );
 }
+
+// arrow slides: the incoming frame wipes across while its photo counter-slides (parallax), the outgoing one
+// drifts a little the other way and dims, so the new member reads as passing in front
+const SLIDE_EASE = [0.77, 0, 0.18, 1] as const;
+const WIPE: Variants = {
+  enter: (d: number) => ({ x: `${d * 100}%`, zIndex: 2 }),
+  center: { x: "0%", zIndex: 2, transition: { duration: 0.95, ease: SLIDE_EASE } },
+  exit: (d: number) => ({ x: `${d * -30}%`, zIndex: 1, transition: { duration: 0.95, ease: SLIDE_EASE } }),
+};
+const DEPTH: Variants = {
+  enter: (d: number) => ({ x: `${d * -72}%`, scale: 1.12 }),
+  center: { x: "0%", scale: 1, filter: "brightness(1)", transition: { duration: 1.05, ease: SLIDE_EASE } },
+  exit: { scale: 1.05, filter: "brightness(0.82)", transition: { duration: 0.95, ease: SLIDE_EASE } },
+};
+const COPY_OUT: Variants = {
+  exit: (d: number) => ({ opacity: 0, x: d * -70, filter: "blur(6px)", transition: { duration: 0.26, ease: [0.4, 0, 1, 1] as const } }),
+};
 
 // box geometry rides the spring; corner rounding eases alongside it (springs don't carry those)
 const SHAPE = new Set(["borderRadius", "borderTopLeftRadius", "borderTopRightRadius", "borderBottomLeftRadius", "borderBottomRightRadius"]);

@@ -2208,15 +2208,45 @@ a {
   letter-spacing: calc(0.1385 * var(--u));
   list-style: disc;
 }
+/* LinkedIn pill under the experience points; "Worked With" and the logos sit 34px lower to make room */
+.profile__linkedin {
+  left: calc(287 * var(--u));
+  top: calc(690 * var(--u));
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: max(32px, calc(36 * var(--u)));
+  padding: 0 calc(16 * var(--u)) 0 calc(13 * var(--u));
+  border-radius: 999px;
+  color: #fff;
+  /* dark liquid glass over the photo backdrop */
+  background: rgba(0, 0, 0, 0.82);
+  -webkit-backdrop-filter: blur(14px) saturate(1.6);
+  backdrop-filter: blur(14px) saturate(1.6);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14), 0 6px 18px rgba(0, 0, 0, 0.12);
+  font-size: max(12px, calc(13.852 * var(--u)));
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform 0.3s var(--ease), background-color 0.2s;
+}
+.profile__linkedin:hover {
+  background: #0a66c2;
+  transform: translateY(-1px);
+}
+.profile__linkedin:focus-visible {
+  outline: 2px solid #0a66c2;
+  outline-offset: 3px;
+}
 .profile__with {
   left: calc(287 * var(--u));
-  top: calc(723 * var(--u));
+  top: calc(757 * var(--u));
   font-size: max(11px, calc(13.852 * var(--u)));
   font-weight: 500;
 }
 /* the list box spans the frame; each logo sits at its own Figma position */
 .profile__clients {
-  inset: 0;
+  inset: calc(34 * var(--u)) 0 0 0;
   padding: 0;
   list-style: none;
   pointer-events: none;
@@ -2236,7 +2266,7 @@ a {
 .profile__clients--row {
   inset: auto;
   left: calc(287 * var(--u));
-  top: calc(764 * var(--u));
+  top: calc(798 * var(--u));
   width: calc(466 * var(--u));
   display: flex;
   flex-wrap: wrap;
@@ -2318,6 +2348,12 @@ a {
     padding-left: 20px;
     font-size: 15px;
   }
+  .profile__linkedin {
+    margin-top: 22px;
+    height: 40px;
+    padding: 0 18px 0 15px;
+    font-size: 14px;
+  }
   .profile__with {
     margin-top: 28px;
     font-size: 14px;
@@ -2332,6 +2368,12 @@ a {
   .profile__clients li {
     position: static;
     width: calc(var(--w) * 1.3px);
+  }
+  .profile__clients--row img {
+    height: 24px;
+  }
+  .profile__clients--row span {
+    font-size: 14px;
   }
   .profile__close {
     top: 84px;

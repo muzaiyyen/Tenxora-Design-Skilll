@@ -10,6 +10,7 @@ export type Member = {
     intro: string;
     points: string[];
     workedWith: string;
+    linkedin: string;
     // studio photo (1679x1085) and where the card's portrait window sits in it (fractions of the photo);
     // focus = how far across the photo the person stands and phoneTop = how far it shifts down (share of its
     // height), for the phone crop; card = optional sharp overlay
@@ -37,6 +38,7 @@ export const team: Member[] = [
         "ERP · Automation · Team Augmentation",
       ],
       workedWith: "Worked With",
+      linkedin: "https://www.linkedin.com/in/bilalmashkoor/",
       photo: { scene: "/figma/bilal-scene.jpg", card: "/figma/bilal-card.png", left: 0.53906, top: 0.12236, focus: 0.675, bg: "#ebe0d1" },
       clients: [
         { name: "MobilinkBank", logo: "mobilink-bank", x: 287, y: 773.63, w: 28.71 },
@@ -64,6 +66,7 @@ export const team: Member[] = [
         "ERP · CFO Advisory · Finance Transformation",
       ],
       workedWith: "Worked With",
+      linkedin: "https://www.linkedin.com/in/ahsan-mahmood-9b6a76b0/",
       photo: { scene: "/figma/ahsan-scene.jpg", card: "/figma/ahsan-card.jpg", left: 0.596, top: 0.08, focus: 0.68, phoneTop: 0.045, bg: "#f6f4f5" },
       clients: [
         { name: "PwC", logo: "pwc" },

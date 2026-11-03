@@ -30,7 +30,7 @@ const pct = (v: number) => `${(v * 100).toFixed(3)}%`;
  * `deg` per place away from the middle, so the row bends into an arch; `step` px of scroll or drag turns
  * the wheel one card.
  */
-const ARC = { w: 176, deg: 16, R: 660, step: 184 };
+const ARC = { w: 211, deg: 16, R: 792, step: 221 };
 
 function useUnits() {
   const [k, setK] = useState({ u: 1, c: 1, phone: false });

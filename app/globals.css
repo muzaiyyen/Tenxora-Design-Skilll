@@ -2311,7 +2311,7 @@ a {
 
 @media (max-width: 760px) {
   .team {
-    --c: calc(176px / 371);
+    --c: calc(211px / 371);
   }
   .team__stage {
     min-height: 100svh;
@@ -2446,7 +2446,7 @@ a {
 .team--arc .team__track {
   position: relative;
   width: 100%;
-  height: calc(633 * var(--c) + 150px);
+  height: calc(633 * var(--c) + 180px);
   padding: 0;
   touch-action: pan-y;
 }
@@ -2455,8 +2455,8 @@ a {
   left: 50%;
   top: 0;
   margin-left: calc(-185.5 * var(--c));
-  /* the wheel's hub: 660px below the card's centre (ARC.R) */
-  transform-origin: 50% calc(316.5 * var(--c) + 660px);
+  /* the wheel's hub: 792px below the card's centre (ARC.R) */
+  transform-origin: 50% calc(316.5 * var(--c) + 792px);
   box-shadow: 0 18px 40px rgba(4, 30, 70, 0.28);
   will-change: transform;
 }

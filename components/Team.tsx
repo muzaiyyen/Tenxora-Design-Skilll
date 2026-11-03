@@ -1,6 +1,6 @@
 "use client";
 
-import { animate, AnimatePresence, motion, useMotionValue, type AnimationPlaybackControls, type Variants } from "motion/react";
+import { animate, AnimatePresence, motion, useMotionValue, useTransform, type AnimationPlaybackControls, type MotionValue, type Variants } from "motion/react";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { team, type Member } from "@/lib/team";
@@ -25,6 +25,13 @@ const inWindow = (ph: Photo) => ({ left: -ph.left / SLICE_W, top: -ph.top / (SLI
 const pct = (v: number) => `${(v * 100).toFixed(3)}%`;
 
 /** px per Figma pixel for the page (--u) and for the cards (--c), mirrored from the CSS */
+/*
+ * Phones: the cards ride a wheel. Each one is pinned to a point R px below its own centre and turned by
+ * `deg` per place away from the middle, so the row bends into an arch; `step` px of scroll or drag turns
+ * the wheel one card.
+ */
+const ARC = { w: 176, deg: 16, R: 660, step: 184 };
+
 function useUnits() {
   const [k, setK] = useState({ u: 1, c: 1, phone: false });
   useLayoutEffect(() => {
@@ -32,7 +39,7 @@ function useUnits() {
       const vw = window.innerWidth;
       const phone = vw <= 760;
       const u = phone ? vw / 760 : Math.min(1, vw / 1679);
-      setK({ u, c: phone ? 280 / 371 : u, phone });
+      setK({ u, c: phone ? ARC.w / 371 : u, phone });
     };
     read();
     window.addEventListener("resize", read);
@@ -136,11 +143,14 @@ export default function Team() {
         if (!sec || !slot) return;
         const r = slot.getBoundingClientRect();
         const top = sec.getBoundingClientRect().top;
-        const want = Math.min(span.current, Math.max(0, -top + r.left + r.width / 2 - document.documentElement.clientWidth / 2));
+        const idx = team.findIndex((t) => t.id === next.id);
+        const want = units.phone
+          ? Math.min(span.current, idx * ARC.step)
+          : Math.min(span.current, Math.max(0, -top + r.left + r.width / 2 - document.documentElement.clientWidth / 2));
         window.scrollTo({ top: top + window.scrollY + want, behavior: "instant" as ScrollBehavior });
       });
     },
-    [open],
+    [open, units.phone],
   );
 
   /*
@@ -155,17 +165,47 @@ export default function Team() {
   const span = useRef(0);
   const dragged = useRef(false);
   const fling = useRef<AnimationPlaybackControls | null>(null);
+  // phones: how far round the wheel has turned, in cards (0 = Bilal in the middle)
+  const turn = useTransform(x, (v) => -v / ARC.step);
+  const phone = useRef(units.phone);
+  phone.current = units.phone;
+  const holding = useRef(false);
+
+  /** phones: ease the page scroll so the nearest card (or card i) settles in the middle of the arch */
+  const settleTo = useCallback((i?: number) => {
+    const sec = section.current;
+    if (!sec) return;
+    const top = sec.getBoundingClientRect().top + window.scrollY;
+    const cur = window.scrollY - top;
+    const k = Math.max(0, Math.min(team.length - 1, i ?? Math.round(cur / ARC.step)));
+    const to = top + k * ARC.step;
+    if (Math.abs(to - window.scrollY) < 1) return Promise.resolve();
+    fling.current?.stop();
+    const run = animate(window.scrollY, to, { type: "spring", bounce: 0.18, duration: 0.7, onUpdate: (y) => window.scrollTo(0, y) });
+    fling.current = run;
+    return run.finished.then(() => {
+      if (fling.current === run) fling.current = null;
+    });
+  }, []);
 
   useLayoutEffect(() => {
     const sec = section.current!;
+    let rest: ReturnType<typeof setTimeout> | undefined;
     const place = () => {
       const top = sec.getBoundingClientRect().top;
       x.set(-Math.min(span.current, Math.max(0, -top)));
+      // phones: once a scroll or throw comes to rest inside the arch, click the nearest card into the middle
+      clearTimeout(rest);
+      if (phone.current && top <= 1 && -top <= span.current + 1) {
+        rest = setTimeout(() => {
+          if (!holding.current && !fling.current) settleTo();
+        }, 140);
+      }
     };
     const measure = () => {
       const st = stage.current!;
       const vw = document.documentElement.clientWidth;
-      span.current = Math.max(0, track.current!.scrollWidth - vw);
+      span.current = phone.current ? (team.length - 1) * ARC.step : Math.max(0, track.current!.scrollWidth - vw);
       const h = st.offsetHeight;
       st.style.top = `${Math.min(0, window.innerHeight - h)}px`;
       sec.style.height = `${h + span.current}px`;
@@ -176,12 +216,23 @@ export default function Team() {
     ro.observe(stage.current!);
     window.addEventListener("resize", measure);
     window.addEventListener("scroll", place, { passive: true });
+    // a new touch or wheel takes the page back from a settle that is still easing in
+    const interrupt = () => {
+      if (!phone.current || !fling.current) return;
+      fling.current.stop();
+      fling.current = null;
+    };
+    window.addEventListener("touchstart", interrupt, { passive: true });
+    window.addEventListener("wheel", interrupt, { passive: true });
     return () => {
+      window.removeEventListener("touchstart", interrupt);
+      window.removeEventListener("wheel", interrupt);
+      clearTimeout(rest);
       ro.disconnect();
       window.removeEventListener("resize", measure);
       window.removeEventListener("scroll", place);
     };
-  }, [x]);
+  }, [x, units.phone, settleTo]);
 
   // a sideways trackpad swipe over the row scrolls it too
   useEffect(() => {
@@ -201,7 +252,9 @@ export default function Team() {
     // touch: a vertical swipe already scrolls the page; we only take over sideways swipes
     const touch = e.pointerType === "touch";
     fling.current?.stop();
+    fling.current = null;
     dragged.current = false;
+    holding.current = true;
     const x0 = e.clientX;
     const y0 = e.clientY;
     const s0 = window.scrollY;
@@ -229,7 +282,14 @@ export default function Team() {
       window.removeEventListener("pointerup", up);
       window.removeEventListener("pointercancel", up);
       document.documentElement.classList.remove("is-grabbing");
-      if (dragged.current && Math.abs(v) > 0.1 && performance.now() - last.t < 80) {
+      holding.current = false;
+      if (phone.current && dragged.current) {
+        // phones: a throw spins the wheel on, then it lands on the nearest card
+        const sec = section.current!;
+        const top = sec.getBoundingClientRect().top + window.scrollY;
+        const flick = performance.now() - last.t < 80 ? v * 260 : 0;
+        settleTo(Math.round((window.scrollY - flick - top) / ARC.step));
+      } else if (dragged.current && Math.abs(v) > 0.1 && performance.now() - last.t < 80) {
         // carry the throw on, easing out like a native fling
         const from = window.scrollY;
         const to = from - v * 320;
@@ -242,10 +302,10 @@ export default function Team() {
     window.addEventListener("pointermove", move, { passive: false });
     window.addEventListener("pointerup", up);
     window.addEventListener("pointercancel", up);
-  }, []);
+  }, [settleTo]);
 
   return (
-    <section ref={section} className="team on-sky" data-header="dark">
+    <section ref={section} className={`team on-sky${units.phone ? " team--arc" : ""}`} data-header="dark">
       <h1 className="sr-only">Our Team</h1>
 
       <div ref={stage} className="team__stage">
@@ -254,9 +314,24 @@ export default function Team() {
         </div>
 
         <div ref={viewport} className="team__viewport">
-          <motion.div ref={track} className="team__track" style={{ x }} onPointerDown={grab} onDragStart={(e) => e.preventDefault()}>
+          <motion.div ref={track} className="team__track" style={units.phone ? undefined : { x }} onPointerDown={grab} onDragStart={(e) => e.preventDefault()}>
             {team.map((m, i) => (
-              <Card key={m.id} m={m} i={i} c={units.c} intro={intro} open={open === m.id} onOpen={() => !dragged.current && show(m.id)} />
+              <Card
+                key={m.id}
+                m={m}
+                i={i}
+                c={units.c}
+                intro={intro}
+                open={open === m.id}
+                turn={units.phone ? turn : null}
+                onOpen={() => {
+                  if (dragged.current) return;
+                  // phones: a card off to the side swings into the middle first, then opens from there
+                  if (units.phone && Math.abs(turn.get() - i) > 0.25) {
+                    settleTo(i)?.then(() => show(m.id));
+                  } else show(m.id);
+                }}
+              />
             ))}
           </motion.div>
         </div>
@@ -269,8 +344,31 @@ export default function Team() {
   );
 }
 
-function Card({ m, i, c, intro, open, onOpen }: { m: Member; i: number; c: number; intro: boolean; open: boolean; onOpen: () => void }) {
+function Card({
+  m,
+  i,
+  c,
+  intro,
+  open,
+  turn,
+  onOpen,
+}: {
+  m: Member;
+  i: number;
+  c: number;
+  intro: boolean;
+  open: boolean;
+  turn: MotionValue<number> | null;
+  onOpen: () => void;
+}) {
   const live = Boolean(m.profile?.photo);
+  // phones: this card's place on the wheel, from how far it is from the middle
+  const zero = useMotionValue(0);
+  const off = useTransform(turn ?? zero, (t) => i - t);
+  const rotate = useTransform(off, (o) => o * ARC.deg);
+  const scale = useTransform(off, (o) => 1 - Math.min(Math.abs(o), 3) * 0.045);
+  const zIndex = useTransform(off, (o) => 50 - Math.round(Math.abs(o) * 10));
+  const arc = turn ? { rotate, scale, zIndex } : undefined;
   const ref = useRef<HTMLDivElement>(null);
 
   // hand focus back to the card when its profile closes
@@ -282,7 +380,7 @@ function Card({ m, i, c, intro, open, onOpen }: { m: Member; i: number; c: numbe
 
   // while its profile is open the card leaves a same-sized gap, which is also where the profile
   // measures from when it morphs back
-  if (open) return <div className="tcard tcard--gap" data-card={m.id} aria-hidden />;
+  if (open) return <motion.div className="tcard tcard--gap" data-card={m.id} aria-hidden style={arc} />;
 
   const fadeIn = { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.3 } };
 
@@ -291,6 +389,7 @@ function Card({ m, i, c, intro, open, onOpen }: { m: Member; i: number; c: numbe
       ref={ref}
       data-card={m.id}
       className={`tcard${live ? " tcard--live" : ""}`}
+      style={arc ? { rotate, scale, zIndex } : undefined}
       initial={intro ? { opacity: 0, y: 40 } : false}
       animate={{ opacity: 1, y: 0 }}
       transition={{ opacity: { duration: 0.5, delay: 0.15 + i * 0.07 }, y: { type: "spring", bounce: 0.2, duration: 0.9, delay: 0.15 + i * 0.07 } }}

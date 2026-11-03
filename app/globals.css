@@ -2311,7 +2311,7 @@ a {
 
 @media (max-width: 760px) {
   .team {
-    --c: calc(280px / 371);
+    --c: calc(176px / 371);
   }
   .team__stage {
     min-height: 100svh;
@@ -2433,4 +2433,33 @@ a {
   .profile__arrow--next {
     right: 12px;
   }
+}
+
+/* phones: the cards stand on a wheel and the row bends into an arch (see ARC in Team.tsx) */
+.team--arc .team__viewport {
+  display: flex;
+  align-items: center;
+  min-height: 100svh;
+  padding: 96px 0 40px;
+  box-sizing: border-box;
+}
+.team--arc .team__track {
+  position: relative;
+  width: 100%;
+  height: calc(633 * var(--c) + 150px);
+  padding: 0;
+  touch-action: pan-y;
+}
+.team--arc .tcard {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  margin-left: calc(-185.5 * var(--c));
+  /* the wheel's hub: 660px below the card's centre (ARC.R) */
+  transform-origin: 50% calc(316.5 * var(--c) + 660px);
+  box-shadow: 0 18px 40px rgba(4, 30, 70, 0.28);
+  will-change: transform;
+}
+.team--arc .tcard--gap {
+  box-shadow: none;
 }

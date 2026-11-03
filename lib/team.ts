@@ -10,7 +10,7 @@ export type Member = {
     intro: string;
     points: string[];
     workedWith: string;
-    linkedin: string;
+    linkedin?: string;
     // studio photo (1679x1085) and where the card's portrait window sits in it (fractions of the photo);
     // focus = how far across the photo the person stands and phoneTop = how far it shifts down (share of its
     // height), for the phone crop; card = optional sharp overlay
@@ -200,6 +200,30 @@ export const team: Member[] = [
       ],
     },
   },
-  { id: "muzaiyyen", first: "Muzaiyyen", last: "Khan", role: "Creative Lead" },
+  {
+    id: "muzaiyyen",
+    first: "Muzaiyyen",
+    last: "Khan",
+    role: "Creative Lead",
+    profile: {
+      intro:
+        "I’m Muzaiyyen Khan, Creative Lead at Tenxora. I shape how brands look, feel and speak, from brand identity and marketing design to motion graphics and video. I’ve led design teams for years, turning ideas into visuals that are both striking and effective.",
+      points: [
+        "7+ years in design",
+        "Founding Member at Tenxora",
+        "Former Head of Design & Creative Departments",
+        "Branding · Motion · UI/UX · Marketing Design",
+      ],
+      workedWith: "Worked With",
+      linkedin: "https://www.linkedin.com/in/muzaiyyen-khan-931a3921a/",
+      photo: { scene: "/figma/muzaiyyen-scene.jpg", card: "/figma/muzaiyyen-card.jpg", left: 0.68, top: 0.074, focus: 0.7635, phoneTop: 0.035, bg: "#fefefe" },
+      clients: [
+        { name: "Tenxora", logo: "tenxora" },
+        { name: "Synchronous Services" },
+        { name: "Tradify E-Commerce" },
+        { name: "GiantTech Solutions" },
+      ],
+    },
+  },
   { id: "zain", first: "Zain", last: "Ali", role: "Accountant" },
 ];

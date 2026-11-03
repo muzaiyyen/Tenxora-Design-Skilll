@@ -476,6 +476,7 @@ function Profile({
             </li>
           ))}
         </motion.ul>
+        {p.linkedin && (
         <motion.a
           className="profile__linkedin"
           href={p.linkedin}
@@ -492,6 +493,7 @@ function Profile({
           </svg>
           Connect on LinkedIn
         </motion.a>
+        )}
       </div>
 
       <motion.button

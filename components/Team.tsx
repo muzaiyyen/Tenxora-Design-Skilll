@@ -656,7 +656,7 @@ function Profile({
       <motion.div
         key={slideKey}
         className="profile__page"
-        style={units.phone ? { paddingTop: box.winH } : { minHeight: box.winH }}
+        style={units.phone ? { paddingTop: box.winH + 36 } : { minHeight: box.winH }}
         custom={dir}
         variants={COPY_OUT}
         exit="exit"

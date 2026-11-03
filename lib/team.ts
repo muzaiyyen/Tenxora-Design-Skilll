@@ -39,7 +39,7 @@ export const team: Member[] = [
       ],
       workedWith: "Worked With",
       linkedin: "https://www.linkedin.com/in/bilalmashkoor/",
-      photo: { scene: "/figma/bilal-scene.jpg", card: "/figma/bilal-card.jpg", left: 0.53906, top: 0.12236, focus: 0.675, bg: "#ebe0d1" },
+      photo: { scene: "/figma/bilal-scene.jpg", card: "/figma/bilal-card.jpg", left: 0.53906, top: 0.12236, focus: 0.675, phoneTop: 0.01, bg: "#ebe0d1" },
       clients: [
         { name: "MobilinkBank", logo: "mobilink-bank", x: 287, y: 773.63, w: 28.71 },
         { name: "Norsk Global", logo: "norsk-global", x: 344.44, y: 773.63, w: 84.47 },

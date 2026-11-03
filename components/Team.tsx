@@ -11,13 +11,17 @@ import { asset } from "@/lib/asset";
  * the portrait window opens out into the full studio photo, then the copy settles in.
  */
 
-const SCENE = "/figma/bilal-scene.jpg";
-const CARD_PHOTO = "/figma/bilal-card.png";
 const SCENE_RATIO = 1679 / 1085;
 // Figma card: the portrait window frames head and shoulders, a 16.65%-wide slice of the studio photo
-// from (53.9%, 12.24%). The sharp card render sits over that slice and fades out as the photo opens up.
-const CARD_IMG = { w: "600.587%", left: "-323.754%", top: "-40%" };
-const CARD_SLICE = { left: "53.906%", top: "12.236%", width: "16.65%", height: "30.589%" };
+// starting at the member's photo.left/top. Bilal's sharp card render sits over that slice and fades out
+// as the photo opens up.
+const SLICE_W = 0.1665;
+// the window is 371x441 card px, so the slice is this tall as a share of the photo
+const SLICE_H = (SLICE_W * SCENE_RATIO * 441) / 371;
+type Photo = NonNullable<Member["profile"]>["photo"];
+/** the photo inside the card window, in the window's own units (fractions of its width) */
+const inWindow = (ph: Photo) => ({ left: -ph.left / SLICE_W, top: -ph.top / (SLICE_W * SCENE_RATIO), width: 1 / SLICE_W });
+const pct = (v: number) => `${(v * 100).toFixed(3)}%`;
 
 /** px per Figma pixel for the page (--u) and for the cards (--c), mirrored from the CSS */
 function useUnits() {
@@ -280,8 +284,17 @@ function Card({ m, i, c, intro, open, onOpen }: { m: Member; i: number; c: numbe
       </motion.p>
 
       {live ? (
-        <div className="tcard__photo">
-          <Scene alt="" style={{ width: CARD_IMG.w, left: CARD_IMG.left, top: CARD_IMG.top }} />
+        <div className="tcard__photo" style={{ background: m.profile!.photo.bg }}>
+          <Scene
+            photo={m.profile!.photo}
+            alt=""
+            style={{
+              width: pct(inWindow(m.profile!.photo).width),
+              left: pct(inWindow(m.profile!.photo).left),
+              // top % is of the window's height, which is 441/371 of its width
+              top: pct((inWindow(m.profile!.photo).top * 371) / 441),
+            }}
+          />
         </div>
       ) : (
         <div className="tcard__photo tcard__photo--empty" aria-hidden>
@@ -325,7 +338,8 @@ function Profile({
   const pic = useRef<HTMLDivElement>(null);
   const tint = useRef<HTMLDivElement>(null);
   const close = useRef<HTMLButtonElement>(null);
-  const [box, setBox] = useState(() => frame(units.phone));
+  const ph = p.photo;
+  const [box, setBox] = useState(() => frame(units.phone, ph));
   const [shown, setShown] = useState(false);
 
   /** card geometry, measured from its slot in the row (viewport coordinates) */
@@ -338,9 +352,9 @@ function Profile({
     return {
       bg: { left: r.left, top: r.top, width: w, height: r.height, borderRadius: 42 * c },
       win: { left: r.left, top: r.top + 192 * c, width: w, height: h, borderTopLeftRadius: 185.5 * c, borderTopRightRadius: 185.5 * c, borderBottomLeftRadius: 42 * c, borderBottomRightRadius: 42 * c },
-      pic: { left: -3.23754 * w, top: -0.4 * h, width: 6.00587 * w },
+      pic: { left: inWindow(ph).left * w, top: inWindow(ph).top * w, width: inWindow(ph).width * w },
     };
-  }, [m.id]);
+  }, [m.id, ph]);
 
   const toOpen = useCallback((b: ReturnType<typeof frame>) => {
     const vw = document.documentElement.clientWidth;
@@ -398,7 +412,7 @@ function Profile({
   useEffect(() => {
     const on = () => {
       if (leaving) return;
-      const b = frame(window.innerWidth <= 760);
+      const b = frame(window.innerWidth <= 760, ph);
       setBox(b);
       const z = toOpen(b);
       Object.assign(bg.current!.style, px(z.bg));
@@ -423,13 +437,13 @@ function Profile({
   });
 
   return (
-    <div ref={root} className="profile" data-header="light" role="dialog" aria-modal="true" aria-label={`${m.first} ${m.last}`}>
+    <div ref={root} className="profile" style={{ "--scene-bg": ph.bg } as React.CSSProperties} data-header="light" role="dialog" aria-modal="true" aria-label={`${m.first} ${m.last}`}>
       <div ref={bg} className="profile__bg">
         <div ref={tint} className="profile__tint" />
       </div>
 
       <div ref={win} className="profile__photo">
-        <Scene ref={pic} alt={`${m.first} ${m.last}`} cardOpacity={leaving ? 1 : shown ? 0 : 1} leaving={leaving} />
+        <Scene ref={pic} photo={ph} alt={`${m.first} ${m.last}`} cardOpacity={leaving ? 1 : shown ? 0 : 1} leaving={leaving} />
       </div>
 
       <div className="profile__page" style={units.phone ? { paddingTop: box.winH } : { minHeight: box.winH }}>
@@ -498,12 +512,14 @@ const px = (o: Record<string, string | number>) =>
 /** The studio photo, with the card's sharper head-and-shoulders render laid over its matching slice. */
 function Scene({
   ref,
+  photo,
   alt,
   style,
   cardOpacity = 1,
   leaving = false,
 }: {
   ref?: React.Ref<HTMLDivElement>;
+  photo: Photo;
   alt: string;
   style?: React.CSSProperties;
   cardOpacity?: number;
@@ -511,31 +527,33 @@ function Scene({
 }) {
   return (
     <div ref={ref} className="scene" style={style}>
-      <img src={asset(SCENE)} alt={alt} draggable={false} />
-      <motion.img
-        className="scene__card"
-        src={asset(CARD_PHOTO)}
-        alt=""
-        draggable={false}
-        style={CARD_SLICE}
-        initial={false}
-        animate={{ opacity: cardOpacity }}
-        transition={leaving ? { duration: 0.25, delay: 0.38 } : { duration: 0.45, delay: 0.12 }}
-      />
+      <img src={asset(photo.scene)} alt={alt} draggable={false} />
+      {photo.card && (
+        <motion.img
+          className="scene__card"
+          src={asset(photo.card)}
+          alt=""
+          draggable={false}
+          style={{ left: pct(photo.left), top: pct(photo.top), width: pct(SLICE_W), height: pct(SLICE_H) }}
+          initial={false}
+          animate={{ opacity: cardOpacity }}
+          transition={leaving ? { duration: 0.25, delay: 0.38 } : { duration: 0.45, delay: 0.12 }}
+        />
+      )}
     </div>
   );
 }
 
 /** Where the studio photo sits when open: filling the screen on desktop, a framed top band on phones. */
-function frame(phone: boolean) {
+function frame(phone: boolean, ph: Photo) {
   const vw = window.innerWidth;
   const vh = window.innerHeight;
   if (phone) {
     const winH = Math.round(vh * 0.6);
     const imgH = winH / 0.8;
     const imgW = imgH * SCENE_RATIO;
-    // keep Bilal (about 67% across the photo) in the middle of the band
-    return { winH, imgW, left: vw / 2 - 0.675 * imgW, top: -0.1 * imgH };
+    // keep the person (focus = how far across the photo they stand) in the middle of the band
+    return { winH, imgW, left: vw / 2 - ph.focus * imgW, top: (ph.phoneTop ?? -0.1) * imgH };
   }
   if (vw / vh >= SCENE_RATIO) return { winH: vw / SCENE_RATIO, imgW: vw, left: 0, top: 0 };
   const imgW = vh * SCENE_RATIO;

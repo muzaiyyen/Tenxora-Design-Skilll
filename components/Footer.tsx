@@ -18,7 +18,7 @@ export default function Footer() {
         </div>
 
         <form
-          className="footer__news glass"
+          className="footer__news"
           onSubmit={(e) => {
             // the live WordPress site handles sign-ups; this static build only shows the form
             e.preventDefault();

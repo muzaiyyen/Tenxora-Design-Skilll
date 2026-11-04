@@ -2467,7 +2467,7 @@ a {
 
 /* profile arrows: step to the previous / next team member */
 .profile__bg {
-  transition: background-color 0.9s cubic-bezier(0.77, 0, 0.18, 1);
+  transition: background-color 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
 /* follows the finger during a sideways swipe on phones */
 .profile__drag {

@@ -666,7 +666,7 @@ function Profile({
           x: 0,
           y: 0,
           filter: units.phone ? "none" : "blur(0px)",
-          transition: n > 0 ? { duration: units.phone ? 0.85 : 1.1, ease: units.phone ? PHONE_EASE : SLIDE_EASE, delay: (units.phone ? 0.02 : 0.1) + d * 0.045 } : { ...settle, delay: 0.32 + d * 0.06 },
+          transition: n > 0 ? { duration: units.phone ? 0.85 : 1.1, ease: units.phone ? PHONE_EASE : SLIDE_EASE, delay: (units.phone ? 0.12 : 0.16) + d * 0.045 } : { ...settle, delay: 0.32 + d * 0.06 },
         },
   });
 
@@ -688,7 +688,7 @@ function Profile({
         {/* the new photo wipes in over the old one while sliding against it, so the person drifts slower than the frame */}
         <motion.div className="profile__drag" style={{ x: dragX }}>
         <AnimatePresence initial={false} custom={dir}>
-          <motion.div key={slideKey} className="profile__slide" custom={dir} variants={units.phone ? WIPE_PHONE : WIPE} initial="enter" animate="center" exit="exit">
+          <motion.div key={slideKey} className="profile__slide" style={{ backgroundColor: ph.bg }} custom={dir} variants={units.phone ? WIPE_PHONE : WIPE} initial="enter" animate="center" exit="exit">
             <motion.div className="profile__depth" custom={dir} variants={units.phone ? DEPTH_PHONE : DEPTH} initial="enter" animate="center" exit="exit">
               <Scene
                 ref={setPic}
@@ -829,7 +829,7 @@ const DEPTH_PHONE: Variants = {
   exit: { scale: 1.04, opacity: 0.85, transition: { duration: 0.95, ease: PHONE_EASE } },
 };
 const COPY_OUT: Variants = {
-  exit: (d: number) => ({ opacity: 0, x: d * -60, transition: { duration: 0.35, ease: [0.4, 0, 1, 1] as const } }),
+  exit: (d: number) => ({ opacity: 0, x: d * -40, transition: { x: { duration: 0.3, ease: [0.4, 0, 1, 1] as const }, opacity: { duration: 0.14, ease: "linear" } } }),
 };
 
 // box geometry rides the spring; corner rounding eases alongside it (springs don't carry those)

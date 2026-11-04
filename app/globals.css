@@ -1522,7 +1522,7 @@ a {
 .footer {
   position: relative;
   z-index: 2;
-  padding: calc(200 * var(--u)) calc(56 * var(--u)) calc(40 * var(--u));
+  padding: calc(104 * var(--u)) calc(56 * var(--u)) calc(40 * var(--u));
 }
 .footer__top {
   display: flex;
@@ -1691,7 +1691,7 @@ a {
     gap: 12px;
   }
   .footer {
-    padding: 120px 16px 32px;
+    padding: 64px 16px 32px;
   }
   .footer__top {
     flex-direction: column;

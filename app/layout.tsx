@@ -3,10 +3,10 @@ import "./globals.css";
 import Providers from "@/components/Providers";
 
 export const metadata: Metadata = {
-  title: "Tenxora",
+  title: "AI-Assisted Business Services | Human Review | Tenxora",
   description:
-    "tenxora simplifies operations, connects your systems, automates the busywork, and gets your business ready for how work happens now.",
-  metadataBase: new URL("https://www.tenxora.com"),
+    "AI-assisted business services with initial work by AI and code, human review and customer approval. Odoo implementation, consulting and integrations available today.",
+  metadataBase: new URL("https://tenxora.services"),
 };
 
 export const viewport: Viewport = {

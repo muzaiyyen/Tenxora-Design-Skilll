@@ -1,22 +1,28 @@
-// Every visible word on the home page, copied verbatim from https://www.tenxora.com/
-// (captured 2026-10-09). Do not edit wording here: the redesign changes the
+// Every visible word on the home page, copied verbatim from the live site.
+// Captured from https://www.tenxora.com/ on 2026-10-09; the hero, nav links and footer
+// were re-synced with https://tenxora.services/ on 2026-11-04. Do not edit wording here: the redesign changes the
 // presentation only. Order matches the live page.
 
 export const links = {
   // the preview build overrides these two so its pages link to each other as files
   home: process.env.NEXT_PUBLIC_HOME_HREF ?? "/",
   ourTeam: process.env.NEXT_PUBLIC_TEAM_HREF ?? "/our-team/",
-  contact: "https://www.tenxora.com/contactus",
-  blog: "https://www.tenxora.com/blog",
-  whyTenxora: "https://www.tenxora.com/why-tenxora",
-  cookiePolicy: "https://www.tenxora.com/cookie-policy",
+  contact: "https://tenxora.services/contactus/",
+  blog: "https://tenxora.services/blog/",
+  whyTenxora: "https://tenxora.services/why-tenxora/",
+  cookiePolicy: "https://tenxora.services/cookie-policy/",
+  privacy: "https://tenxora.services/privacy/",
+  odoo: "https://tenxora.services/odoo-services/",
+  odooConsulting: "https://tenxora.services/odoo-services/consulting/",
+  bookCall: "https://tenxora.services/book-a-call/",
+  portal: "https://odoo.tenxora.services/",
   facebook: "https://www.facebook.com/people/Tenxora/61572091372256/",
   linkedin: "https://www.linkedin.com/company/tenxora/services/?viewAsMember=true",
   instagram: "https://www.instagram.com/tenxora?igsh=ZTFybjBleTBmMzB3&utm_source=qr",
 };
 
 export const nav = [
-  { label: "Odoo Services", href: links.contact },
+  { label: "Odoo Services", href: links.odoo },
   { label: "Blog", href: links.blog },
   { label: "Our Team", href: links.ourTeam },
   { label: "Why Tenxora", href: links.whyTenxora },
@@ -24,7 +30,7 @@ export const nav = [
 ];
 
 export const hero = {
-  eyebrow: "The AI-Era Operating Shift",
+  eyebrow: "AI-assisted delivery. Human accountability.",
   headline: ["Winning businesses don't work harder.", "They work smarter."],
   lead: 'AI and automation are resetting what "efficient" looks like.',
   body: [
@@ -168,16 +174,55 @@ export const audit = {
 };
 
 export const footer = {
-  contact: { label: "Contact Us", href: links.contact },
-  follow: "Follow us",
-  socials: [
-    { network: "Facebook", handle: "@tenxora", href: links.facebook },
-    { network: "LinkedIn", handle: "@tenxora", href: links.linkedin },
-    { network: "Instagram", handle: "@tenxora", href: links.instagram },
-  ],
-  privacyHeading: "Privacy Policy",
-  privacyLink: { label: "Cookie policy", href: links.cookiePolicy },
-  copyright: "Copyright © Tenxora 2026",
+  tagline: "Better operations. Human-reviewed Odoo delivery.",
+  columns: [
+    {
+      heading: "Odoo services",
+      links: [
+        { label: "All Odoo services", href: links.odoo },
+        { label: "Implementation", href: "https://tenxora.services/odoo-services/implementation/" },
+        { label: "AI-assisted implementation", href: "https://tenxora.services/odoo-services/ai-assisted-implementation/" },
+        { label: "Consulting & workflow review", href: links.odooConsulting },
+      ],
+    },
+    {
+      heading: "Plan your project",
+      links: [
+        { label: "Integrations", href: "https://tenxora.services/odoo-services/integration/" },
+        { label: "Data migration", href: "https://tenxora.services/odoo-services/migration/" },
+        { label: "Customization", href: "https://tenxora.services/odoo-services/customization/" },
+        { label: "Implementation costs", href: "https://tenxora.services/odoo-services/implementation-cost/" },
+      ],
+    },
+    {
+      heading: "Company",
+      links: [
+        { label: "Why Tenxora", href: links.whyTenxora },
+        { label: "Contact us", href: links.contact },
+        { label: "Book an introduction", href: links.bookCall },
+      ],
+    },
+    {
+      heading: "Resources",
+      links: [
+        { label: "Insights", href: links.blog },
+        { label: "Explore the AI-assisted Odoo portal ↗", href: links.portal, external: true },
+        { label: "Privacy policy", href: links.privacy },
+        { label: "Cookie policy", href: links.cookiePolicy },
+      ],
+    },
+  ] as { heading: string; links: { label: string; href: string; external?: boolean }[] }[],
+  newsletter: {
+    kicker: "Notes from Tenxora",
+    heading: "Make your next move a smarter one.",
+    body: "Practical Odoo insights and updates on AI-assisted operations. We won’t spam you. Unsubscribe whenever you like.",
+    placeholder: "Email address",
+    button: "Subscribe ↗",
+    consent: ["I agree to receive Tenxora’s newsletter. Read the ", "privacy policy", "."],
+    note: "Subscribe now. We won’t spam you. Unsubscribe at any time.",
+  },
+  copyright: "© 2026 Tenxora.Services",
+  email: "contact@tenxora.services",
 };
 
 export const cookies = {
@@ -191,11 +236,17 @@ export const cookies = {
 // Wording exactly as it appears in Muzaiyyen's Figma design (file XpwNsMZvZVHYwMGLo7gRr8).
 // The hero and Operations Map follow the Figma word for word, line breaks included.
 // ---------------------------------------------------------------------------
+// 2026-11-04: headline, lead, body and buttons re-synced with the live site (tenxora.services),
+// kept in the Figma's four-line layout.
 export const heroDesign = {
-  headline: ["Winning businesses", "don’t work harder", "They work", "Smarter"],
-  lead: ["AI and automation are resetting", 'what "efficient" looks like.'],
-  primary: { label: "Get an Operations Audit", href: links.contact },
-  secondary: { label: "See How We Work", href: "#tx-framework" },
+  headline: ["AI-assisted", "business services,", "reviewed by", "people."],
+  lead: ["Odoo implementation and consulting", "for the way your business works."],
+  body: [
+    "Start with one workflow. We help you scope the work, connect systems and plan a controlled Odoo rollout.",
+    "Tenxora.Services is an AI-assisted Service as a Software company. AI and code prepare the initial work; people review it before customer approval. Odoo services are available today.",
+  ],
+  primary: { label: "Explore Odoo services", href: links.odoo },
+  secondary: { label: "Odoo consulting", href: links.odooConsulting },
   cards: ["ERP", "Integrations", "Automation & Ai", "Team Augmentation", "Managed Operations"],
 };
 

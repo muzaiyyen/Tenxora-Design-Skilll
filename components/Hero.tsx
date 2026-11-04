@@ -96,8 +96,8 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.1, ease, delay: 1.2 }}
         >
-          <p>{hero.body[0]}</p>
-          <p>{hero.body[1]}</p>
+          <p>{heroDesign.body[0]}</p>
+          <p>{heroDesign.body[1]}</p>
         </motion.div>
       </motion.div>
 

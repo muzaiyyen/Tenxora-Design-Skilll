@@ -48,6 +48,9 @@ export const team: Member[] = [
         { name: "Impetus", logo: "impetus", x: 287.87, y: 825.86, w: 77.52 },
         { name: "Machine Sens IoT", logo: "machine-sens-iot", x: 398.4, y: 826, w: 73.64 },
         { name: "henri", logo: "henri", x: 505, y: 826, w: 88.7 },
+        { name: "PwC", logo: "pwc", x: 624, y: 822, w: 52 },
+        // no Easypaisa logo file yet (their site is blocked here), so it shows as text
+        { name: "Easypaisa", x: 704, y: 829, w: 80 },
       ],
     },
   },

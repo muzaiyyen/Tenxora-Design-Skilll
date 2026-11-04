@@ -2360,7 +2360,7 @@ a {
   width: auto;
   height: calc(26 * var(--u));
 }
-.profile__clients--row span {
+.profile__clients span {
   display: block;
   font-size: max(11px, calc(15 * var(--u)));
   font-weight: 700;
@@ -2453,6 +2453,10 @@ a {
   }
   .profile__clients--row span {
     font-size: 14px;
+  }
+  /* Bilal's logos are larger on phones, so his text names match them */
+  .profile__clients:not(.profile__clients--row) span {
+    font-size: 21px;
   }
   .profile__close {
     top: 84px;

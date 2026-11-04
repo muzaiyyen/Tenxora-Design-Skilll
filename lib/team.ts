@@ -81,53 +81,6 @@ export const team: Member[] = [
     },
   },
   {
-    id: "fatima",
-    first: "Fatima",
-    last: "Rehman",
-    role: "Odoo Developer",
-    profile: {
-      intro:
-        "I’m Fatima Rehman, Odoo Developer at Tenxora. I build and configure Odoo systems around how a business actually works, turning everyday processes into clean, automated workflows. With a background in software engineering, I connect the technical side with what teams really need.",
-      points: [
-        "Odoo Development",
-        "BS Software Engineering · Hazara University",
-        "Software Developer background",
-        "Python · Odoo Configuration",
-      ],
-      workedWith: "Worked With",
-      linkedin: "https://www.linkedin.com/in/fatima-rehman-937548226/",
-      photo: { scene: "/figma/fatima-scene.jpg", card: "/figma/fatima-card.jpg", left: 0.672, top: 0.083, focus: 0.755, phoneTop: 0.045, bg: "#f9f9fa" },
-      clients: [
-        { name: "Tenxora", logo: "tenxora" },
-        { name: "Synchronous Services" },
-      ],
-    },
-  },
-  {
-    id: "gulraiz",
-    first: "Gulraiz",
-    last: "Khan",
-    role: "Senior UI/UX Designer",
-    profile: {
-      intro:
-        "I’m Gulraiz Khan, Senior UI/UX Designer at Tenxora. I design web apps, mobile apps and dashboards that are intuitive, efficient and look good. With a background in frontend development, I design interfaces that are built to ship, not just to impress.",
-      points: [
-        "3+ years designing digital products",
-        "Certified UI/UX Designer",
-        "Web · Mobile · Dashboard Design",
-        "Figma · Prototyping · Design Systems",
-      ],
-      workedWith: "Worked With",
-      linkedin: "https://www.linkedin.com/in/gulraiz-khan-b802b7257/",
-      photo: { scene: "/figma/gulraiz-scene.jpg", card: "/figma/gulraiz-card.jpg", left: 0.691, top: 0.062, focus: 0.774, phoneTop: 0.03, bg: "#fcfcfc" },
-      clients: [
-        { name: "Tenxora", logo: "tenxora" },
-        { name: "Synchronous Services" },
-        { name: "Encoracode" },
-      ],
-    },
-  },
-  {
     id: "imran",
     first: "Imran",
     last: "Sarwar",
@@ -149,54 +102,6 @@ export const team: Member[] = [
         { name: "InvoZone" },
         { name: "Ovex Technologies" },
         { name: "iTech Resources" },
-      ],
-    },
-  },
-  {
-    id: "maab",
-    first: "Maab",
-    last: "Hassan",
-    role: "Graphic Designer",
-    profile: {
-      intro:
-        "I’m Maab Hassan, Graphic Designer at Tenxora. I create logos, brand identities and marketing designs that make businesses stand out. From social media posts to full branding, I design visuals that are clean, bold and built to make an impact.",
-      points: [
-        "Nearly 3 years in graphic design",
-        "Logo & Brand Identity",
-        "Social Media & Marketing Design",
-        "Image Design · Artworking",
-      ],
-      workedWith: "Worked With",
-      linkedin: "https://www.linkedin.com/in/maab-hassan-baa412329/",
-      photo: { scene: "/figma/maab-scene.jpg", card: "/figma/maab-card.jpg", left: 0.68, top: 0.071, focus: 0.7635, phoneTop: 0.035, bg: "#fefefe" },
-      clients: [
-        { name: "Tenxora", logo: "tenxora" },
-        { name: "Synchronous Services" },
-        { name: "Tradify E-Commerce" },
-      ],
-    },
-  },
-  {
-    id: "maryam",
-    first: "Maryam",
-    last: "Hameed",
-    role: "Odoo Developer",
-    profile: {
-      intro:
-        "I’m Maryam Hameed, Odoo Developer at Tenxora. I build and customize ERP solutions, from custom modules and reports to data migration and system integrations. I turn business requirements into clean, reliable systems that keep operations running smoothly.",
-      points: [
-        "4 years in Python & Odoo development",
-        "Custom Modules · Reports · Data Migration",
-        "System Integration",
-        "Python · JavaScript · PHP · React",
-      ],
-      workedWith: "Worked With",
-      linkedin: "https://www.linkedin.com/in/maryam-hameed-4958b0188/",
-      photo: { scene: "/figma/maryam-scene.jpg", card: "/figma/maryam-card.jpg", left: 0.684, top: 0.062, focus: 0.767, phoneTop: 0.03, bg: "#fcfbfc" },
-      clients: [
-        { name: "Tenxora", logo: "tenxora" },
-        { name: "Synchronous Services" },
-        { name: "FFBL Power Company" },
       ],
     },
   },
@@ -226,6 +131,101 @@ export const team: Member[] = [
     },
   },
   {
+    id: "maryam",
+    first: "Maryam",
+    last: "Hameed",
+    role: "Odoo Developer",
+    profile: {
+      intro:
+        "I’m Maryam Hameed, Odoo Developer at Tenxora. I build and customize ERP solutions, from custom modules and reports to data migration and system integrations. I turn business requirements into clean, reliable systems that keep operations running smoothly.",
+      points: [
+        "4 years in Python & Odoo development",
+        "Custom Modules · Reports · Data Migration",
+        "System Integration",
+        "Python · JavaScript · PHP · React",
+      ],
+      workedWith: "Worked With",
+      linkedin: "https://www.linkedin.com/in/maryam-hameed-4958b0188/",
+      photo: { scene: "/figma/maryam-scene.jpg", card: "/figma/maryam-card.jpg", left: 0.684, top: 0.062, focus: 0.767, phoneTop: 0.03, bg: "#fcfbfc" },
+      clients: [
+        { name: "Tenxora", logo: "tenxora" },
+        { name: "Synchronous Services" },
+        { name: "FFBL Power Company" },
+      ],
+    },
+  },
+  {
+    id: "gulraiz",
+    first: "Gulraiz",
+    last: "Khan",
+    role: "Senior UI/UX Designer",
+    profile: {
+      intro:
+        "I’m Gulraiz Khan, Senior UI/UX Designer at Tenxora. I design web apps, mobile apps and dashboards that are intuitive, efficient and look good. With a background in frontend development, I design interfaces that are built to ship, not just to impress.",
+      points: [
+        "3+ years designing digital products",
+        "Certified UI/UX Designer",
+        "Web · Mobile · Dashboard Design",
+        "Figma · Prototyping · Design Systems",
+      ],
+      workedWith: "Worked With",
+      linkedin: "https://www.linkedin.com/in/gulraiz-khan-b802b7257/",
+      photo: { scene: "/figma/gulraiz-scene.jpg", card: "/figma/gulraiz-card.jpg", left: 0.691, top: 0.062, focus: 0.774, phoneTop: 0.03, bg: "#fcfcfc" },
+      clients: [
+        { name: "Tenxora", logo: "tenxora" },
+        { name: "Synchronous Services" },
+        { name: "Encoracode" },
+      ],
+    },
+  },
+  {
+    id: "zain",
+    first: "Zain",
+    last: "Ali",
+    role: "Assistant Accountant",
+    profile: {
+      intro:
+        "I’m Zain Ali, Assistant Accountant at Tenxora. I keep the numbers clean and accurate, handling bookkeeping, bank reconciliations, invoicing and financial reporting in Odoo. As an ACCA student, I focus on precision and compliance so finance runs smoothly.",
+      points: [
+        "2+ years in accounting",
+        "ACCA Student · SKANS School of Accountancy",
+        "Xero & QuickBooks Certified",
+        "Bookkeeping · Reconciliation · Reporting",
+      ],
+      workedWith: "Worked With",
+      linkedin: "https://www.linkedin.com/in/zainali67/",
+      photo: { scene: "/figma/zain-scene.jpg", card: "/figma/zain-card.jpg", left: 0.668, top: 0.064, focus: 0.7515, phoneTop: 0.035, bg: "#fefefe" },
+      clients: [
+        { name: "Tenxora", logo: "tenxora" },
+        { name: "Synchronous Services" },
+      ],
+    },
+  },
+  {
+    id: "maab",
+    first: "Maab",
+    last: "Hassan",
+    role: "Graphic Designer",
+    profile: {
+      intro:
+        "I’m Maab Hassan, Graphic Designer at Tenxora. I create logos, brand identities and marketing designs that make businesses stand out. From social media posts to full branding, I design visuals that are clean, bold and built to make an impact.",
+      points: [
+        "Nearly 3 years in graphic design",
+        "Logo & Brand Identity",
+        "Social Media & Marketing Design",
+        "Image Design · Artworking",
+      ],
+      workedWith: "Worked With",
+      linkedin: "https://www.linkedin.com/in/maab-hassan-baa412329/",
+      photo: { scene: "/figma/maab-scene.jpg", card: "/figma/maab-card.jpg", left: 0.68, top: 0.071, focus: 0.7635, phoneTop: 0.035, bg: "#fefefe" },
+      clients: [
+        { name: "Tenxora", logo: "tenxora" },
+        { name: "Synchronous Services" },
+        { name: "Tradify E-Commerce" },
+      ],
+    },
+  },
+  {
     id: "usama",
     first: "Usama",
     last: "Zahid",
@@ -249,22 +249,22 @@ export const team: Member[] = [
     },
   },
   {
-    id: "zain",
-    first: "Zain",
-    last: "Ali",
-    role: "Assistant Accountant",
+    id: "fatima",
+    first: "Fatima",
+    last: "Rehman",
+    role: "Odoo Developer",
     profile: {
       intro:
-        "I’m Zain Ali, Assistant Accountant at Tenxora. I keep the numbers clean and accurate, handling bookkeeping, bank reconciliations, invoicing and financial reporting in Odoo. As an ACCA student, I focus on precision and compliance so finance runs smoothly.",
+        "I’m Fatima Rehman, Odoo Developer at Tenxora. I build and configure Odoo systems around how a business actually works, turning everyday processes into clean, automated workflows. With a background in software engineering, I connect the technical side with what teams really need.",
       points: [
-        "2+ years in accounting",
-        "ACCA Student · SKANS School of Accountancy",
-        "Xero & QuickBooks Certified",
-        "Bookkeeping · Reconciliation · Reporting",
+        "Odoo Development",
+        "BS Software Engineering · Hazara University",
+        "Software Developer background",
+        "Python · Odoo Configuration",
       ],
       workedWith: "Worked With",
-      linkedin: "https://www.linkedin.com/in/zainali67/",
-      photo: { scene: "/figma/zain-scene.jpg", card: "/figma/zain-card.jpg", left: 0.668, top: 0.064, focus: 0.7515, phoneTop: 0.035, bg: "#fefefe" },
+      linkedin: "https://www.linkedin.com/in/fatima-rehman-937548226/",
+      photo: { scene: "/figma/fatima-scene.jpg", card: "/figma/fatima-card.jpg", left: 0.672, top: 0.083, focus: 0.755, phoneTop: 0.045, bg: "#f9f9fa" },
       clients: [
         { name: "Tenxora", logo: "tenxora" },
         { name: "Synchronous Services" },

@@ -587,34 +587,86 @@ function Profile({
     if (n > 0) root.current?.scrollTo({ top: 0, behavior: "smooth" });
   }, [n]);
 
-  // a sideways swipe on a phone steps to the next or previous member
-  const touch = useRef<{ x: number; y: number } | null>(null);
-  const onTouchStart = (e: React.TouchEvent) => {
-    const t = e.touches[0];
-    touch.current = { x: t.clientX, y: t.clientY };
-  };
-  const onTouchEnd = (e: React.TouchEvent) => {
-    const s0 = touch.current;
-    touch.current = null;
-    if (!s0 || leaving) return;
-    const t = e.changedTouches[0];
-    const dx = t.clientX - s0.x;
-    const dy = t.clientY - s0.y;
-    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) onNav(dx < 0 ? 1 : -1);
-  };
+  /*
+   * Phones: the photo and copy follow the finger from the first few pixels of a sideways swipe, then a
+   * short or quick flick commits to the next member and anything less springs back. Native listeners so
+   * a sideways drag can stop the page scrolling under it (React touch handlers are passive).
+   */
+  const dragX = useMotionValue(0);
+  const copyX = useTransform(dragX, (v) => v * 0.55);
+  const navRef = useRef(onNav);
+  navRef.current = onNav;
+  const leavingRef = useRef(leaving);
+  leavingRef.current = leaving;
+  useEffect(() => {
+    const el = root.current;
+    if (!el) return;
+    let s0: { x: number; y: number } | null = null;
+    let lock: "x" | "y" | null = null;
+    let last = { x: 0, t: 0 };
+    let vel = 0;
+    let back: AnimationPlaybackControls | null = null;
+    const start = (e: TouchEvent) => {
+      if (leavingRef.current || e.touches.length > 1) return;
+      const t = e.touches[0];
+      s0 = { x: t.clientX, y: t.clientY };
+      lock = null;
+      vel = 0;
+      last = { x: t.clientX, t: e.timeStamp };
+      back?.stop();
+    };
+    const move = (e: TouchEvent) => {
+      if (!s0) return;
+      const t = e.touches[0];
+      const dx = t.clientX - s0.x;
+      const dy = t.clientY - s0.y;
+      if (!lock && Math.hypot(dx, dy) > 6) lock = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
+      if (lock !== "x") return;
+      e.preventDefault();
+      const dt = e.timeStamp - last.t;
+      if (dt > 0) vel = 0.7 * ((t.clientX - last.x) / dt) + 0.3 * vel;
+      last = { x: t.clientX, t: e.timeStamp };
+      dragX.set(dx);
+    };
+    const end = () => {
+      if (!s0) return;
+      const dx = dragX.get();
+      const wasX = lock === "x";
+      s0 = null;
+      lock = null;
+      if (!wasX) return;
+      const flick = Math.abs(vel) > 0.35 && Math.sign(vel) === Math.sign(dx);
+      if (Math.abs(dx) > 50 || (flick && Math.abs(dx) > 12)) navRef.current(dx < 0 ? 1 : -1);
+      back = animate(dragX, 0, { type: "spring", stiffness: 260, damping: 32, velocity: vel * 1000 });
+    };
+    el.addEventListener("touchstart", start, { passive: true });
+    el.addEventListener("touchmove", move, { passive: false });
+    el.addEventListener("touchend", end);
+    el.addEventListener("touchcancel", end);
+    return () => {
+      el.removeEventListener("touchstart", start);
+      el.removeEventListener("touchmove", move);
+      el.removeEventListener("touchend", end);
+      el.removeEventListener("touchcancel", end);
+    };
+  }, [dragX]);
 
   const settle = { type: "spring", bounce: 0.1, duration: 0.7 } as const;
   // the copy is the near layer: after an arrow press it travels further and faster than the photo
   const rise = (d: number) => ({
-    initial: n > 0 ? { opacity: 0, x: dir * 120, y: 0, filter: "blur(8px)" } : { opacity: 0, y: 28, filter: "blur(6px)" },
+    // phones skip the blur: animating a filter on text costs frames there
+    initial:
+      n > 0
+        ? { opacity: 0, x: dir * 90, y: 0, filter: units.phone ? "none" : "blur(6px)" }
+        : { opacity: 0, y: 28, filter: units.phone ? "none" : "blur(6px)" },
     animate: leaving
       ? { opacity: 0, y: 12, filter: "blur(4px)", transition: { duration: 0.16 } }
       : {
           opacity: 1,
           x: 0,
           y: 0,
-          filter: "blur(0px)",
-          transition: n > 0 ? { type: "spring" as const, bounce: 0.12, duration: 0.85, delay: 0.18 + d * 0.05 } : { ...settle, delay: 0.32 + d * 0.06 },
+          filter: units.phone ? "none" : "blur(0px)",
+          transition: n > 0 ? { duration: units.phone ? 0.85 : 1.1, ease: units.phone ? PHONE_EASE : SLIDE_EASE, delay: (units.phone ? 0.02 : 0.1) + d * 0.045 } : { ...settle, delay: 0.32 + d * 0.06 },
         },
   });
 
@@ -627,8 +679,6 @@ function Profile({
       role="dialog"
       aria-modal="true"
       aria-label={`${m.first} ${m.last}`}
-      onTouchStart={onTouchStart}
-      onTouchEnd={onTouchEnd}
     >
       <div ref={bg} className="profile__bg">
         <div ref={tint} className="profile__tint" />
@@ -636,9 +686,10 @@ function Profile({
 
       <div ref={win} className="profile__photo">
         {/* the new photo wipes in over the old one while sliding against it, so the person drifts slower than the frame */}
+        <motion.div className="profile__drag" style={{ x: dragX }}>
         <AnimatePresence initial={false} custom={dir}>
-          <motion.div key={slideKey} className="profile__slide" custom={dir} variants={WIPE} initial="enter" animate="center" exit="exit">
-            <motion.div className="profile__depth" custom={dir} variants={DEPTH} initial="enter" animate="center" exit="exit">
+          <motion.div key={slideKey} className="profile__slide" custom={dir} variants={units.phone ? WIPE_PHONE : WIPE} initial="enter" animate="center" exit="exit">
+            <motion.div className="profile__depth" custom={dir} variants={units.phone ? DEPTH_PHONE : DEPTH} initial="enter" animate="center" exit="exit">
               <Scene
                 ref={setPic}
                 photo={ph}
@@ -650,9 +701,12 @@ function Profile({
             </motion.div>
           </motion.div>
         </AnimatePresence>
+        </motion.div>
       </div>
 
-      <AnimatePresence mode="wait" initial={false} custom={dir}>
+      {/* popLayout: the new copy starts sliding in while the old copy is still leaving */}
+      <motion.div className="profile__drag-copy" style={{ x: copyX }}>
+      <AnimatePresence mode="popLayout" initial={false} custom={dir}>
       <motion.div
         key={slideKey}
         className="profile__page"
@@ -707,6 +761,7 @@ function Profile({
         )}
       </motion.div>
       </AnimatePresence>
+      </motion.div>
 
       {(
         [
@@ -751,19 +806,30 @@ function Profile({
 
 // arrow slides: the incoming frame wipes across while its photo counter-slides (parallax), the outgoing one
 // drifts a little the other way and dims, so the new member reads as passing in front
-const SLIDE_EASE = [0.77, 0, 0.18, 1] as const;
-const WIPE: Variants = {
+// desktop: a gentle in-out glide (the old curve was much steeper in the middle, which read as a snap).
+// phones: an ease-out, so the slide carries straight on from the finger with no slow start.
+const SLIDE_EASE = [0.4, 0, 0.2, 1] as const;
+const PHONE_EASE = [0.22, 1, 0.36, 1] as const;
+const wipe = (ease: readonly [number, number, number, number], t: number): Variants => ({
   enter: (d: number) => ({ x: `${d * 100}%`, zIndex: 2 }),
-  center: { x: "0%", zIndex: 2, transition: { duration: 0.95, ease: SLIDE_EASE } },
-  exit: (d: number) => ({ x: `${d * -30}%`, zIndex: 1, transition: { duration: 0.95, ease: SLIDE_EASE } }),
-};
+  center: { x: "0%", zIndex: 2, transition: { duration: t, ease } },
+  exit: (d: number) => ({ x: `${d * -30}%`, zIndex: 1, transition: { duration: t, ease } }),
+});
+const WIPE = wipe(SLIDE_EASE, 1.2);
+const WIPE_PHONE = wipe(PHONE_EASE, 0.95);
 const DEPTH: Variants = {
-  enter: (d: number) => ({ x: `${d * -72}%`, scale: 1.12 }),
-  center: { x: "0%", scale: 1, filter: "brightness(1)", transition: { duration: 1.05, ease: SLIDE_EASE } },
-  exit: { scale: 1.05, filter: "brightness(0.82)", transition: { duration: 0.95, ease: SLIDE_EASE } },
+  enter: (d: number) => ({ x: `${d * -60}%`, scale: 1.1 }),
+  center: { x: "0%", scale: 1, filter: "brightness(1)", transition: { duration: 1.35, ease: SLIDE_EASE } },
+  exit: { scale: 1.04, filter: "brightness(0.85)", transition: { duration: 1.2, ease: SLIDE_EASE } },
+};
+// phones: the same parallax without the brightness filter, which drops frames on mobile GPUs
+const DEPTH_PHONE: Variants = {
+  enter: (d: number) => ({ x: `${d * -60}%`, scale: 1.1 }),
+  center: { x: "0%", scale: 1, transition: { duration: 1.1, ease: PHONE_EASE } },
+  exit: { scale: 1.04, opacity: 0.85, transition: { duration: 0.95, ease: PHONE_EASE } },
 };
 const COPY_OUT: Variants = {
-  exit: (d: number) => ({ opacity: 0, x: d * -70, filter: "blur(6px)", transition: { duration: 0.26, ease: [0.4, 0, 1, 1] as const } }),
+  exit: (d: number) => ({ opacity: 0, x: d * -60, transition: { duration: 0.35, ease: [0.4, 0, 1, 1] as const } }),
 };
 
 // box geometry rides the spring; corner rounding eases alongside it (springs don't carry those)

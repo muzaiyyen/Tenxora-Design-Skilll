@@ -2210,6 +2210,7 @@ a {
   position: fixed;
   inset: 0;
   z-index: 40;
+  touch-action: pan-y;
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -2467,6 +2468,15 @@ a {
 /* profile arrows: step to the previous / next team member */
 .profile__bg {
   transition: background-color 0.9s cubic-bezier(0.77, 0, 0.18, 1);
+}
+/* follows the finger during a sideways swipe on phones */
+.profile__drag {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+.profile__drag-copy {
+  position: relative;
 }
 .profile__slide,
 .profile__depth {

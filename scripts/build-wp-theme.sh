@@ -44,3 +44,17 @@ cp "$THEME_DIR/front-page.php" "$THEME_DIR/page-our-team.php" "$CHILD_DIR/"
 rm -f dist/tenxora-home.zip
 (cd wordpress && zip -qr ../dist/tenxora-home.zip tenxora-home -x '*.DS_Store')
 echo "Child theme zip: dist/tenxora-home.zip (assets served from $CHILD_PATH)"
+
+# standalone copy under its own folder, so it installs next to the live "tenxora" theme
+ALT_DIR=wordpress/tenxora-2026
+ALT_PATH="${WP_ALT_URL_PATH:-/wp-content/themes/tenxora-2026}"
+rm -rf .next out "$ALT_DIR/site"
+STATIC_EXPORT=1 ASSET_PREFIX="$ALT_PATH/site" NEXT_PUBLIC_ASSET_BASE="$ALT_PATH/site" npx next build
+mkdir -p "$ALT_DIR/site"
+cp -r out/_next out/brand out/figma out/icon.svg "$ALT_DIR/site/"
+cp out/index.html "$ALT_DIR/site/index.html"
+cp out/our-team.html "$ALT_DIR/site/our-team.html"
+cp "$THEME_DIR/front-page.php" "$THEME_DIR/page-our-team.php" "$ALT_DIR/"
+rm -f dist/tenxora-2026.zip
+(cd wordpress && zip -qr ../dist/tenxora-2026.zip tenxora-2026 -x '*.DS_Store')
+echo "Standalone theme zip: dist/tenxora-2026.zip (assets served from $ALT_PATH)"

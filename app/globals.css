@@ -1467,7 +1467,8 @@ a {
 .audit__inner {
   position: relative;
   z-index: 2;
-  padding: calc(330 * var(--u)) calc(202 * var(--u)) 0;
+  /* right edge matches the footer's (56) so the audit card lines up with the newsletter card */
+  padding: calc(330 * var(--u)) calc(56 * var(--u)) 0 calc(202 * var(--u));
 }
 .audit__grid {
   display: grid;

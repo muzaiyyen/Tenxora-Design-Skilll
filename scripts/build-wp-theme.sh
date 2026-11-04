@@ -29,3 +29,18 @@ rm -f dist/tenxora-theme-update.zip
 (cd wordpress/tenxora && zip -qr ../../dist/tenxora-theme-update.zip site page-our-team.php -x '*.DS_Store')
 echo "Theme zip: dist/tenxora-theme.zip (assets served from $THEME_PATH)"
 echo "Update-only zip: dist/tenxora-theme-update.zip (site/ + page-our-team.php)"
+
+# child theme for the live site: installs from Appearance > Themes > Upload without touching the
+# server-edited parent theme (contact form, service pages and their styles stay as they are)
+CHILD_DIR=wordpress/tenxora-home
+CHILD_PATH="${WP_CHILD_URL_PATH:-/wp-content/themes/tenxora-home}"
+rm -rf .next out "$CHILD_DIR/site"
+STATIC_EXPORT=1 ASSET_PREFIX="$CHILD_PATH/site" NEXT_PUBLIC_ASSET_BASE="$CHILD_PATH/site" npx next build
+mkdir -p "$CHILD_DIR/site"
+cp -r out/_next out/brand out/figma out/icon.svg "$CHILD_DIR/site/"
+cp out/index.html "$CHILD_DIR/site/index.html"
+cp out/our-team.html "$CHILD_DIR/site/our-team.html"
+cp "$THEME_DIR/front-page.php" "$THEME_DIR/page-our-team.php" "$CHILD_DIR/"
+rm -f dist/tenxora-home.zip
+(cd wordpress && zip -qr ../dist/tenxora-home.zip tenxora-home -x '*.DS_Store')
+echo "Child theme zip: dist/tenxora-home.zip (assets served from $CHILD_PATH)"

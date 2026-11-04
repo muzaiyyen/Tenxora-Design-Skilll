@@ -63,3 +63,21 @@ add_filter(
 	},
 	99
 );
+
+/**
+ * Favicon on every page (home, Our Team, blog, posts, other pages). A Site Icon set under
+ * Appearance > Customize takes over if there is one.
+ */
+add_action(
+	'wp_head',
+	function () {
+		if ( has_site_icon() ) {
+			return;
+		}
+		printf( '<link rel="icon" href="%s" type="image/svg+xml">' . "\n", esc_url( get_theme_file_uri( 'favicon.svg' ) ) );
+		printf( '<link rel="icon" href="%s" sizes="32x32" type="image/png">' . "\n", esc_url( get_theme_file_uri( 'favicon-32.png' ) ) );
+		printf( '<link rel="icon" href="%s" sizes="192x192" type="image/png">' . "\n", esc_url( get_theme_file_uri( 'favicon-192.png' ) ) );
+		printf( '<link rel="apple-touch-icon" href="%s">' . "\n", esc_url( get_theme_file_uri( 'apple-touch-icon.png' ) ) );
+	},
+	2
+);

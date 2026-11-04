@@ -19,6 +19,8 @@ $tenxora_html = file_get_contents( $tenxora_file ); // phpcs:ignore WordPress.WP
 
 // WordPress prints the <title> (title-tag support), so drop the bundle's own.
 $tenxora_html = preg_replace( '#<title>.*?</title>#s', '', $tenxora_html, 1 );
+// the bundle's own icon link points at the domain root; the theme prints the favicon in wp_head instead
+$tenxora_html = preg_replace( '#<link rel="icon"[^>]*>#', '', $tenxora_html );
 
 ob_start();
 wp_head();

@@ -15,6 +15,8 @@ if ( ! is_readable( $tenxora_file ) ) {
 }
 $tenxora_html = file_get_contents( $tenxora_file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 $tenxora_html = preg_replace( '#<title>.*?</title>#s', '', $tenxora_html, 1 );
+// the bundle's own icon link points at the domain root; the theme prints the favicon in wp_head instead
+$tenxora_html = preg_replace( '#<link rel="icon"[^>]*>#', '', $tenxora_html );
 
 // the bundle carries its own styles, so leave out the theme and block styles here
 add_action(

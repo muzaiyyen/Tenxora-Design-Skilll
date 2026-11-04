@@ -39,7 +39,7 @@ export const team: Member[] = [
       ],
       workedWith: "Worked With",
       linkedin: "https://www.linkedin.com/in/bilalmashkoor/",
-      photo: { scene: "/figma/bilal-scene.jpg", card: "/figma/bilal-card.jpg", left: 0.53906, top: 0.12236, focus: 0.675, phoneTop: 0.01, bg: "#ebe0d1" },
+      photo: { scene: "/figma/bilal-scene.jpg", card: "/figma/bilal-card.jpg", left: 0.6419, top: 0.1154, focus: 0.7253, phoneTop: 0, bg: "#e3d0be" },
       clients: [
         { name: "MobilinkBank", logo: "mobilink-bank", x: 287, y: 773.63, w: 28.71 },
         { name: "Norsk Global", logo: "norsk-global", x: 344.44, y: 773.63, w: 84.47 },
@@ -70,7 +70,7 @@ export const team: Member[] = [
       ],
       workedWith: "Worked With",
       linkedin: "https://www.linkedin.com/in/ahsan-mahmood-9b6a76b0/",
-      photo: { scene: "/figma/ahsan-scene.jpg", card: "/figma/ahsan-card.jpg", left: 0.596, top: 0.08, focus: 0.68, phoneTop: 0.045, bg: "#f6f4f5" },
+      photo: { scene: "/figma/ahsan-scene.jpg", card: "/figma/ahsan-card.jpg", left: 0.6318, top: 0.1029, focus: 0.7151, phoneTop: 0.013, bg: "#fcfcfc" },
       clients: [
         { name: "PwC", logo: "pwc" },
         { name: "IMC Worldwide" },

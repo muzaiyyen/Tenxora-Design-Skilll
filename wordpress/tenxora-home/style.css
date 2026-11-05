@@ -1,0 +1,15 @@
+/*
+Theme Name: Tenxora Home
+Theme URI: https://tenxora.services/
+Author: Tenxora
+Description: Child of the Tenxora theme. Serves the redesigned home page and the Our Team page (pre-built bundles in /site); every other page, the contact form and all inner-page styles come from the parent Tenxora theme unchanged.
+Template: tenxora
+Version: 1.3.4
+Requires at least: 6.0
+Requires PHP: 7.4
+License: Proprietary
+Text Domain: tenxora
+*/
+
+/* the parent enqueues get_stylesheet_uri(), which is this file in a child theme, so pull the parent's inner-page styles in here */
+@import url("../tenxora/style.css");

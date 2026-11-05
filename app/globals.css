@@ -1786,8 +1786,8 @@ a {
     flex-wrap: wrap;
     justify-content: center;
     align-content: center;
-    gap: 9px 7px;
-    padding: 76px 16px 36px;
+    gap: 8px;
+    padding: 76px 20px 36px;
   }
   .bw__pain {
     position: relative !important;
@@ -1795,6 +1795,10 @@ a {
     top: auto !important;
     max-width: none;
     font-size: 13px;
+    /* each row stretches edge to edge, so both sides of the cluster line up */
+    flex: 1 1 auto;
+    justify-content: center;
+    padding: 0 12px;
   }
   .bw__capsule {
     height: auto;

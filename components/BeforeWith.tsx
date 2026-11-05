@@ -88,8 +88,15 @@ export default function BeforeWith() {
           heading={beforeWith.heading}
           split={4}
           body={<p>{beforeWith.body}</p>}
-          aside={<Switch on={on} set={set} />}
+          aside={mobile ? undefined : <Switch on={on} set={set} />}
         />
+
+        {/* phones: the switch sits right on top of the panel it controls */}
+        {mobile && (
+          <div className="bw__switch-row">
+            <Switch on={on} set={set} />
+          </div>
+        )}
 
         <div ref={ref} className="capsule bw__capsule" aria-live="polite">
           <motion.div className="bw__state-label" key={on ? "with" : "before"} initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>

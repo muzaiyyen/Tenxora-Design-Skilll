@@ -1804,6 +1804,14 @@ a {
     height: auto;
     min-height: 600px;
   }
+  .bw__switch-row {
+    display: flex;
+    justify-content: center;
+    margin-top: 28px;
+  }
+  .bw__switch-row + .bw__capsule {
+    margin-top: 14px;
+  }
 }
 @media (max-width: 760px) {
   .bw__tangle {

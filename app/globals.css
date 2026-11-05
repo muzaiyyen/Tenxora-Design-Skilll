@@ -1784,8 +1784,10 @@ a {
     position: relative;
     display: flex;
     flex-wrap: wrap;
-    gap: 7px 6px;
-    padding: 68px 18px 30px;
+    justify-content: center;
+    align-content: center;
+    gap: 9px 7px;
+    padding: 76px 16px 36px;
   }
   .bw__pain {
     position: relative !important;

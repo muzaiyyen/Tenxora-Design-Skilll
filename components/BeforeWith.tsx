@@ -42,13 +42,37 @@ export default function BeforeWith() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { amount: 0.55 });
   const mobile = useMedia("(max-width: 760px)");
-
-  // flip once by itself after the visitor has had a look at the mess
+  // phones: the pills pop in one by one the first time the panel scrolls in
+  const listRef = useRef<HTMLUListElement>(null);
+  const seen = useInView(listRef, { amount: 0.2, once: true });
+  // how far each pill travels to reach the middle of the panel when it is pulled into tenxora
+  const [pull, setPull] = useState<{ x: number; y: number }[]>([]);
   useEffect(() => {
-    if (!inView || touched) return;
+    const ul = listRef.current;
+    if (!ul || !mobile) return;
+    const measure = () => {
+      const cx = ul.clientWidth / 2;
+      const cy = Math.min(ul.clientHeight / 2, 260);
+      setPull(
+        Array.from(ul.children as HTMLCollectionOf<HTMLElement>, (li) => ({
+          x: Math.round(cx - (li.offsetLeft + li.offsetWidth / 2)),
+          y: Math.round(cy - (li.offsetTop + li.offsetHeight / 2)),
+        })),
+      );
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(ul);
+    document.fonts?.ready.then(measure);
+    return () => ro.disconnect();
+  }, [mobile]);
+
+  // flip once by itself after the visitor has had a look at the mess (desktop only: on phones the cards wait for a tap)
+  useEffect(() => {
+    if (!inView || touched || mobile) return;
     const t = setTimeout(() => setOn(true), 2600);
     return () => clearTimeout(t);
-  }, [inView, touched]);
+  }, [inView, touched, mobile]);
 
   const set = (v: boolean) => {
     setTouched(true);
@@ -79,8 +103,38 @@ export default function BeforeWith() {
           {!mobile && <Tangle on={on} host={ref} />}
 
           {/* the 20 pains: scattered before, pulled into tenxora with */}
-          <ul className="bw__pains">
+          <ul ref={listRef} className="bw__pains">
             {beforeWith.pains.map((p, i) => {
+              if (mobile) {
+                const d = pull[i] ?? { x: 0, y: 0 };
+                const n = beforeWith.pains.length;
+                return (
+                  <motion.li
+                    key={`m-${p}`}
+                    className="bw__pain"
+                    initial={{ opacity: 0, scale: 0.3, y: 18, filter: "blur(6px)" }}
+                    animate={
+                      on
+                        ? { opacity: 0, scale: 0.2, x: d.x, y: d.y, filter: "blur(10px)" }
+                        : seen
+                          ? { opacity: 1, scale: 1, x: 0, y: 0, filter: "blur(0px)" }
+                          : { opacity: 0, scale: 0.3, x: 0, y: 18, filter: "blur(6px)" }
+                    }
+                    transition={
+                      on
+                        ? { duration: 0.55, ease: [0.55, 0, 0.75, 0.2], delay: (n - 1 - i) * 0.018 }
+                        : {
+                            default: { type: "spring", stiffness: 320, damping: 19, mass: 0.8, delay: 0.1 + i * 0.055 },
+                            opacity: { duration: 0.25, delay: 0.1 + i * 0.055 },
+                            filter: { duration: 0.35, delay: 0.1 + i * 0.055 },
+                          }
+                    }
+                  >
+                    <span className="bw__pain-dot" />
+                    {p}
+                  </motion.li>
+                );
+              }
               const s = SCATTER[i];
               const pos = { left: `${s.left}%`, top: `${s.top}%` };
               return (
@@ -90,10 +144,8 @@ export default function BeforeWith() {
                   initial={false}
                   animate={
                     on
-                      ? mobile
-                        ? { opacity: 0, scale: 0.5, rotate: 0, x: "0%", y: "0%" }
-                        : { left: "50%", top: "50%", x: "-50%", y: "-50%", opacity: 0, scale: 0.3, rotate: 0 }
-                      : { ...pos, x: "0%", y: "0%", opacity: 1, scale: 1, rotate: mobile ? 0 : s.rot }
+                      ? { left: "50%", top: "50%", x: "-50%", y: "-50%", opacity: 0, scale: 0.3, rotate: 0 }
+                      : { ...pos, x: "0%", y: "0%", opacity: 1, scale: 1, rotate: s.rot }
                   }
                   transition={{ type: "spring", stiffness: 90, damping: 16, delay: on ? i * 0.02 : 0.1 + i * 0.03 }}
                   whileHover={on ? undefined : { scale: 1.08, rotate: 0, zIndex: 5 }}
@@ -111,10 +163,14 @@ export default function BeforeWith() {
               <motion.div key="with" className="bw__with" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
                 <motion.div
                   className="bw__brand ops-breathe"
-                  initial={{ scale: 0.3 }}
-                  animate={{ scale: 1 }}
-                  exit={{ scale: 0.3 }}
-                  transition={{ type: "spring", stiffness: 180, damping: 13, delay: 0.25 }}
+                  initial={{ scale: 0.3, opacity: mobile ? 0 : 1 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.3, opacity: mobile ? 0 : 1 }}
+                  transition={
+                    mobile
+                      ? { type: "spring", stiffness: 300, damping: 18, delay: 0.45 }
+                      : { type: "spring", stiffness: 180, damping: 13, delay: 0.25 }
+                  }
                 >
                   <img src={asset("/brand/wordmark-black.svg")} alt="" />
                   <span className="sr-only">{beforeWith.withBrand}</span>
@@ -210,6 +266,30 @@ function Tangle({ on, host }: { on: boolean; host: React.RefObject<HTMLDivElemen
 function StageCard({ name, i, mobile }: { name: string; i: number; mobile: boolean }) {
   // phones: a calmer tilt and no drop, so the two-column grid keeps clear gaps
   const rot = mobile ? ROTS[i] * 0.3 : ROTS[i];
+  if (mobile)
+    return (
+      <motion.div
+        className="bw__stage"
+        initial={{ opacity: 0, scale: 0.35, y: 24, rotate: 0, filter: "blur(8px)" }}
+        animate={{ opacity: 1, scale: 1, y: 0, rotate: rot, filter: "blur(0px)" }}
+        exit={{ opacity: 0, scale: 0.6, filter: "blur(6px)", transition: { duration: 0.25 } }}
+        transition={{
+          default: { type: "spring", stiffness: 260, damping: 18, mass: 0.9, delay: 0.7 + i * 0.12 },
+          opacity: { duration: 0.3, delay: 0.7 + i * 0.12 },
+          filter: { duration: 0.4, delay: 0.7 + i * 0.12 },
+        }}
+      >
+        <div className="wcard bw__stage-card">
+          <div className="bw__stage-art">
+            {i === 0 && <Bars bars={listBars.slice(0, 3)} />}
+            {i === 1 && <ChecklistArt />}
+            {i === 2 && <EqArt />}
+            {i === 3 && <ChartArt delay={1.1} />}
+          </div>
+          <span className="hcard__label bw__stage-label">{name}</span>
+        </div>
+      </motion.div>
+    );
   return (
     <motion.div
       className="bw__stage"

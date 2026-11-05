@@ -709,7 +709,7 @@ function Profile({
       <AnimatePresence mode="popLayout" initial={false} custom={dir}>
       <motion.div
         key={slideKey}
-        className="profile__page"
+        className={`profile__page${p.clientGroups || p.experience ? " profile__page--flow" : ""}`}
         style={units.phone ? { paddingTop: box.winH + 36 } : { minHeight: box.winH }}
         custom={dir}
         variants={COPY_OUT}
@@ -731,6 +731,24 @@ function Profile({
             <li key={t}>{t}</li>
           ))}
         </motion.ul>
+        {p.experience && (
+          <motion.div className="profile__group" {...rise(4)}>
+            <p className="profile__with">{p.experience.heading}</p>
+            <p className="profile__names">{p.experience.items.join(" · ")}</p>
+          </motion.div>
+        )}
+        {p.clientGroups ? (
+          <motion.div className="profile__group" {...rise(5)}>
+            <p className="profile__with">{p.workedWith}</p>
+            {p.clientGroups.map((g) => (
+              <div key={g.heading} className="profile__sub">
+                <p className="profile__sub-h">{g.heading}</p>
+                <p className="profile__names">{g.items.join(" · ")}</p>
+              </div>
+            ))}
+          </motion.div>
+        ) : (
+        <>
         <motion.p className="profile__with" {...rise(4)}>
           {p.workedWith}
         </motion.p>
@@ -741,6 +759,8 @@ function Profile({
             </li>
           ))}
         </motion.ul>
+        </>
+        )}
         {p.linkedin && (
         <motion.a
           className="profile__linkedin"

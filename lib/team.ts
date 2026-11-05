@@ -19,6 +19,10 @@ export type Member = {
     // Others: no spot given, so the list wraps in a row under "Worked With"; a name without a logo
     // file shows as text until we have its logo.
     clients: { name: string; logo?: string; x?: number; y?: number; w?: number }[];
+    // longer profiles (Ahsan): a "·" list of past companies and client names grouped by where;
+    // these switch the profile copy to a flowing layout instead of the Figma spots
+    experience?: { heading: string; items: string[] };
+    clientGroups?: { heading: string; items: string[] }[];
   };
 };
 
@@ -61,26 +65,28 @@ export const team: Member[] = [
     role: "CFO",
     profile: {
       intro:
-        "I’m Ahsan Mahmood, Director at Tenxora. I help businesses build finance functions that actually work, moving them from spreadsheet chaos to structured, automated, insight-driven operations. I’ve spent 15+ years as both the auditor and the CFO, so I know where finance breaks and how to fix it.",
+        "I’m Ahsan Mahmood, CFO at Tenxora. I help businesses move beyond traditional accounting to integrated, automated, insight-driven finance. With 15+ years across audit, CFO advisory and enterprise transformation, I build finance functions that scale.",
       points: [
         "15+ years in finance & transformation",
-        "Started at PwC · ICAEW",
-        "Led programmes across UK, Pakistan & Africa",
-        "ERP · CFO Advisory · Finance Transformation",
+        "Finance Transformation & Strategy",
+        "CFO Advisory · FP&A",
+        "ERP · Internal Controls · Governance",
       ],
-      workedWith: "Worked With",
+      experience: {
+        heading: "Professional Experience",
+        items: ["Tenxora", "Wave The Willow", "SyncBooks", "Synchronous Services", "Invest2Innovate (i2i)", "MMBA Accountants", "IMC Worldwide", "Pakistan Human Development Fund", "PwC (A.F. Ferguson & Co.)", "Biocare Labs", "UK Legal Advisors LLP", "The Co-operative Group", "ESA Retail", "Phillips, Kobbs & Co", "Foot Locker"],
+      },
+      workedWith: "Clients I’ve Worked With",
+      clientGroups: [
+        { heading: "At PwC", items: ["Jazz", "Attock Group", "Attock Gen", "POL", "Attock Petroleum", "Attock Refinery Limited", "TNB Liberty Power", "OGDCL"] },
+        {
+          heading: "At Tenxora / Synchronous",
+          items: ["Norsk Global", "Airblue", "Novacare", "Impetus", "MG", "MG Apparel", "Bin Hashim", "Symmetric Energy", "Henri Nutrition", "Mobilink Bank", "Western University Canada", "Clariti", "Armor", "Rivalz", "MachineSens IoT", "Niluma Media", "Amston Enterprises", "eTutor4Me", "GB Meals", "Green Corporate Initiative", "Green Agrimall", "Beyond East", "Technical Palace Group", "Vacation Rental Property Partners"],
+        },
+      ],
       linkedin: "https://www.linkedin.com/in/ahsan-mahmood-9b6a76b0/",
       photo: { scene: "/figma/ahsan-scene.jpg", card: "/figma/ahsan-card.jpg", left: 0.6318, top: 0.1029, focus: 0.7151, phoneTop: 0.013, bg: "#fcfcfc" },
-      clients: [
-        { name: "PwC", logo: "pwc" },
-        { name: "IMC Worldwide" },
-        { name: "DFID" },
-        { name: "OGDCL" },
-        { name: "Jazz", logo: "jazz" },
-        { name: "Attock Gen" },
-        { name: "Pakistan Oilfields" },
-        { name: "TNB Liberty Power" },
-      ],
+      clients: [],
     },
   },
   {

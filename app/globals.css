@@ -2324,6 +2324,74 @@ a {
   font-size: max(11px, calc(13.852 * var(--u)));
   font-weight: 500;
 }
+/* longer profiles (Ahsan) flow down the page instead of sitting at the Figma spots */
+.profile__names {
+  margin: 0;
+  font-size: max(11px, calc(13.852 * var(--u)));
+  line-height: 1.6;
+  letter-spacing: calc(0.1385 * var(--u));
+  color: rgba(0, 0, 0, 0.78);
+}
+.profile__sub-h {
+  margin: 0 0 4px;
+  font-size: max(11px, calc(12.5 * var(--u)));
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(0, 0, 0, 0.55);
+}
+.profile__group .profile__with {
+  position: static;
+  margin: 0 0 calc(10 * var(--u));
+}
+.profile__sub + .profile__sub {
+  margin-top: calc(16 * var(--u));
+}
+.profile__sub:first-of-type {
+  margin-top: 0;
+}
+@media (min-width: 761px) {
+  .profile__page--flow {
+    padding: calc(218 * var(--u)) 0 calc(120 * var(--u)) calc(287 * var(--u));
+  }
+  .profile__page--flow > * {
+    position: static;
+    max-width: calc(466 * var(--u));
+  }
+  .profile__page--flow .profile__name {
+    max-width: none;
+  }
+  .profile__page--flow .profile__role {
+    margin-top: calc(13 * var(--u));
+  }
+  .profile__page--flow .profile__intro {
+    margin-top: calc(30 * var(--u));
+  }
+  .profile__page--flow .profile__points {
+    margin-top: calc(22 * var(--u));
+    margin-left: calc(-9 * var(--u));
+  }
+  .profile__page--flow .profile__group {
+    margin-top: calc(34 * var(--u));
+  }
+  .profile__page--flow .profile__linkedin {
+    margin-top: calc(36 * var(--u));
+  }
+}
+@media (max-width: 760px) {
+  .profile__group {
+    margin-top: 28px;
+  }
+  .profile__names {
+    font-size: 14px;
+  }
+  .profile__sub-h {
+    font-size: 12px;
+  }
+  .profile__sub + .profile__sub {
+    margin-top: 14px;
+  }
+}
 /* the list box spans the frame; each logo sits at its own Figma position */
 .profile__clients {
   inset: 0;

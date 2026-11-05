@@ -168,7 +168,7 @@ export default function BeforeWith() {
           <motion.div className="bw__state-label" key={on ? "with" : "before"} initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
             <span className="status">
               <span className={`status__dot${on ? "" : " status__dot--red"}`} />
-              {on ? beforeWith.withLabel : beforeWith.beforeLabel}
+              <span className="status__text">{on ? beforeWith.withLabel : beforeWith.beforeLabel}</span>
             </span>
           </motion.div>
 
@@ -233,10 +233,9 @@ export default function BeforeWith() {
   );
 }
 
-// the Figma stack: each pill sits a little off-centre and off-level, overlapping the one above
+// the Figma stack: every pill centred, each a little off-level, overlapping the one above
 const STACK = beforeWith.pains.map((_, i) => ({
   rot: Math.round((rand(i + 7) - 0.5) * 6 * 10) / 10,
-  x: Math.round((rand(i + 21) - 0.5) * 22),
 }));
 
 /** One phone pill: pops in as it scrolls into view, floats while idle, and is pulled into tenxora on "With". */
@@ -255,8 +254,8 @@ function MobilePain({ text, i, on, pull }: { text: string; i: number; on: boolea
         on
           ? { opacity: 0, scale: 0.2, x: d.x, y: d.y, filter: "blur(10px)" }
           : seen
-            ? { opacity: 1, scale: 1, x: st.x, y: 0, filter: "blur(0px)" }
-            : { opacity: 0, scale: 0.4, x: st.x, y: 26, filter: "blur(8px)" }
+            ? { opacity: 1, scale: 1, x: 0, y: 0, filter: "blur(0px)" }
+            : { opacity: 0, scale: 0.4, x: 0, y: 26, filter: "blur(8px)" }
       }
       transition={
         on

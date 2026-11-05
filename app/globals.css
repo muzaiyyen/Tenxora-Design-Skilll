@@ -1825,7 +1825,10 @@ a {
     white-space: nowrap;
     background:
       linear-gradient(180deg, rgba(255, 255, 255, calc(0.08 + var(--c) * 0.14)), rgba(255, 255, 255, 0) 55%),
-      color-mix(in srgb, rgba(78, 80, 82, 0.82) calc(var(--c) * 100%), #fb6b6b);
+      color-mix(in srgb, rgba(70, 72, 74, 0.74) calc(var(--c) * 100%), rgba(250, 100, 100, 0.86));
+    /* frosted: whatever sits behind (the pill above, the panel) is blurred through */
+    -webkit-backdrop-filter: blur(10px) saturate(1.5);
+    backdrop-filter: blur(10px) saturate(1.5);
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, calc(0.22 + var(--c) * 0.3)),
       inset 0 -1px 1px rgba(0, 0, 0, calc(0.06 + var(--c) * 0.14)),
@@ -1838,6 +1841,50 @@ a {
     cursor: default;
     -webkit-tap-highlight-color: transparent;
     user-select: none;
+  }
+  /* status (Figma): a dark disc holding the dot, then a separate dark pill with the label, centred */
+  .bw__state-label {
+    left: 0;
+    right: 0;
+    top: 40px;
+    display: flex;
+    justify-content: center;
+  }
+  .bw__state-label .status {
+    gap: 2px;
+    height: 26px;
+    padding: 0;
+    background: none;
+  }
+  .bw__state-label .status__dot {
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
+    background:
+      radial-gradient(circle, #ef4b4b 0 6.5px, transparent 7px),
+      var(--pill-dark);
+  }
+  .bw__state-label .status__dot::after {
+    inset: 7px;
+    background: #ef4b4b;
+  }
+  .bw__state-label .status__dot:not(.status__dot--red) {
+    background:
+      radial-gradient(circle, var(--tx-treen) 0 6.5px, transparent 7px),
+      var(--pill-dark);
+  }
+  .bw__state-label .status__dot:not(.status__dot--red)::after {
+    background: var(--tx-treen);
+  }
+  .bw__state-label .status__text {
+    display: inline-flex;
+    align-items: center;
+    height: 26px;
+    padding: 0 16px;
+    border-radius: 999px;
+    background: var(--pill-dark);
+    font-size: 13.5px;
+    text-transform: capitalize;
   }
   @keyframes bw-float {
     0%,

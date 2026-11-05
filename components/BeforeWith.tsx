@@ -47,12 +47,14 @@ export default function BeforeWith() {
   const seen = useInView(listRef, { amount: 0.2, once: true });
   // how far each pill travels to reach the middle of the panel when it is pulled into tenxora
   const [pull, setPull] = useState<{ x: number; y: number }[]>([]);
+  const [stackH, setStackH] = useState(0);
   useEffect(() => {
     const ul = listRef.current;
     if (!ul || !mobile) return;
     const measure = () => {
       const cx = ul.clientWidth / 2;
-      const cy = Math.min(ul.clientHeight / 2, 260);
+      const cy = Math.min(ul.clientHeight / 2, 230);
+      setStackH(ul.offsetHeight);
       setPull(
         Array.from(ul.children as HTMLCollectionOf<HTMLElement>, (li) => ({
           x: Math.round(cx - (li.offsetLeft + li.offsetWidth / 2)),
@@ -65,6 +67,63 @@ export default function BeforeWith() {
     ro.observe(ul);
     document.fonts?.ready.then(measure);
     return () => ro.disconnect();
+  }, [mobile]);
+
+  // phones: the pill nearest the middle of the screen turns into dark liquid glass as the page scrolls;
+  // a finger or pointer on a pill takes over. Written straight to CSS variables, so scrolling never re-renders.
+  useEffect(() => {
+    const ul = listRef.current;
+    if (!ul || !mobile) return;
+    let hot = -1;
+    let raf = 0;
+    const items = () => Array.from(ul.querySelectorAll<HTMLElement>(".bw__pain-glass"));
+    const frame = () => {
+      raf = 0;
+      const focus = window.innerHeight * 0.48;
+      items().forEach((el, i) => {
+        const r = el.getBoundingClientRect();
+        let p = 1 - Math.abs(r.top + r.height / 2 - focus) / 64;
+        p = Math.max(0, Math.min(1, p));
+        p = p * p * (3 - 2 * p);
+        if (hot >= 0) p = hot === i ? 1 : 0;
+        el.style.setProperty("--p", p.toFixed(3));
+        // colour only flips on the pill that is really in focus, so its neighbours stay clean coral
+        const c = p > 0.45 ? Math.min(1, (p - 0.45) / 0.45) : 0;
+        el.style.setProperty("--c", c.toFixed(3));
+        (el.closest("li") as HTMLElement).style.zIndex = p > 0.5 ? "40" : String(i + 1);
+      });
+    };
+    const kick = () => {
+      if (!raf) raf = requestAnimationFrame(frame);
+    };
+    const pick = (e: PointerEvent) => {
+      const el = (e.target as HTMLElement).closest?.(".bw__pain-glass");
+      const next = el ? items().indexOf(el as HTMLElement) : -1;
+      if (next !== hot) {
+        hot = next;
+        kick();
+      }
+    };
+    const drop = () => {
+      hot = -1;
+      kick();
+    };
+    kick();
+    window.addEventListener("scroll", kick, { passive: true });
+    window.addEventListener("resize", kick);
+    ul.addEventListener("pointerover", pick);
+    ul.addEventListener("pointerdown", pick);
+    ul.addEventListener("pointerleave", drop);
+    ul.addEventListener("pointercancel", drop);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", kick);
+      window.removeEventListener("resize", kick);
+      ul.removeEventListener("pointerover", pick);
+      ul.removeEventListener("pointerdown", pick);
+      ul.removeEventListener("pointerleave", drop);
+      ul.removeEventListener("pointercancel", drop);
+    };
   }, [mobile]);
 
   // flip once by itself after the visitor has had a look at the mess (desktop only: on phones the cards wait for a tap)
@@ -98,7 +157,14 @@ export default function BeforeWith() {
           </div>
         )}
 
-        <div ref={ref} className="capsule bw__capsule" aria-live="polite">
+        <motion.div
+          ref={ref}
+          className="capsule bw__capsule"
+          aria-live="polite"
+          // phones: the tall pill stack folds down to fit the four cards once tenxora is on
+          animate={mobile && stackH ? { height: on ? 660 : stackH } : undefined}
+          transition={{ duration: 0.7, ease, delay: on ? 0.3 : 0 }}
+        >
           <motion.div className="bw__state-label" key={on ? "with" : "before"} initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
             <span className="status">
               <span className={`status__dot${on ? "" : " status__dot--red"}`} />
@@ -112,36 +178,7 @@ export default function BeforeWith() {
           {/* the 20 pains: scattered before, pulled into tenxora with */}
           <ul ref={listRef} className="bw__pains">
             {beforeWith.pains.map((p, i) => {
-              if (mobile) {
-                const d = pull[i] ?? { x: 0, y: 0 };
-                const n = beforeWith.pains.length;
-                return (
-                  <motion.li
-                    key={`m-${p}`}
-                    className="bw__pain"
-                    initial={{ opacity: 0, scale: 0.3, y: 18, filter: "blur(6px)" }}
-                    animate={
-                      on
-                        ? { opacity: 0, scale: 0.2, x: d.x, y: d.y, filter: "blur(10px)" }
-                        : seen
-                          ? { opacity: 1, scale: 1, x: 0, y: 0, filter: "blur(0px)" }
-                          : { opacity: 0, scale: 0.3, x: 0, y: 18, filter: "blur(6px)" }
-                    }
-                    transition={
-                      on
-                        ? { duration: 0.55, ease: [0.55, 0, 0.75, 0.2], delay: (n - 1 - i) * 0.018 }
-                        : {
-                            default: { type: "spring", stiffness: 320, damping: 19, mass: 0.8, delay: 0.1 + i * 0.055 },
-                            opacity: { duration: 0.25, delay: 0.1 + i * 0.055 },
-                            filter: { duration: 0.35, delay: 0.1 + i * 0.055 },
-                          }
-                    }
-                  >
-                    <span className="bw__pain-dot" />
-                    {p}
-                  </motion.li>
-                );
-              }
+              if (mobile) return <MobilePain key={`m-${p}`} text={p} i={i} on={on} pull={pull[i]} />;
               const s = SCATTER[i];
               const pos = { left: `${s.left}%`, top: `${s.top}%` };
               return (
@@ -190,9 +227,51 @@ export default function BeforeWith() {
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
+        </motion.div>
       </div>
     </section>
+  );
+}
+
+// the Figma stack: each pill sits a little off-centre and off-level, overlapping the one above
+const STACK = beforeWith.pains.map((_, i) => ({
+  rot: Math.round((rand(i + 7) - 0.5) * 6 * 10) / 10,
+  x: Math.round((rand(i + 21) - 0.5) * 22),
+}));
+
+/** One phone pill: pops in as it scrolls into view, floats while idle, and is pulled into tenxora on "With". */
+function MobilePain({ text, i, on, pull }: { text: string; i: number; on: boolean; pull?: { x: number; y: number } }) {
+  const ref = useRef<HTMLLIElement>(null);
+  const seen = useInView(ref, { once: true, margin: "0px 0px -12% 0px" });
+  const d = pull ?? { x: 0, y: 0 };
+  const n = beforeWith.pains.length;
+  const st = STACK[i];
+  return (
+    <motion.li
+      ref={ref}
+      className="bw__pain"
+      initial={{ opacity: 0, scale: 0.4, y: 26, filter: "blur(8px)" }}
+      animate={
+        on
+          ? { opacity: 0, scale: 0.2, x: d.x, y: d.y, filter: "blur(10px)" }
+          : seen
+            ? { opacity: 1, scale: 1, x: st.x, y: 0, filter: "blur(0px)" }
+            : { opacity: 0, scale: 0.4, x: st.x, y: 26, filter: "blur(8px)" }
+      }
+      transition={
+        on
+          ? { duration: 0.55, ease: [0.55, 0, 0.75, 0.2], delay: (n - 1 - i) * 0.018 }
+          : {
+              default: { type: "spring", stiffness: 340, damping: 20, mass: 0.8, delay: 0.04 * (i % 3) },
+              opacity: { duration: 0.25, delay: 0.04 * (i % 3) },
+              filter: { duration: 0.35, delay: 0.04 * (i % 3) },
+            }
+      }
+    >
+      <span className="bw__pain-float" style={{ animationDelay: `${-(i * 0.73) % 5}s`, ["--rot" as string]: `${st.rot}deg` }}>
+        <span className="bw__pain-glass">{text}</span>
+      </span>
+    </motion.li>
   );
 }
 

@@ -1780,25 +1780,78 @@ a {
     --u: calc(100vw / 560);
     height: calc(450 * var(--u));
   }
+  /* Before panel on phones (Figma "B & W T"): coral pills stacked down the middle, overlapping,
+     each a touch off-level; the one at the middle of the screen (or under a finger) turns into dark liquid glass */
   .bw__pains {
     position: relative;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-content: center;
-    gap: 8px;
-    padding: 76px 20px 36px;
+    flex-direction: column;
+    align-items: center;
+    padding: 118px 16px 84px;
   }
   .bw__pain {
     position: relative !important;
     left: auto !important;
     top: auto !important;
     max-width: none;
-    font-size: 13px;
-    /* each row stretches edge to edge, so both sides of the cluster line up */
-    flex: 1 1 auto;
+    height: auto;
+    padding: 0;
+    margin-top: -9px;
+    background: none;
+    box-shadow: none;
+    overflow: visible;
+  }
+  .bw__pain:first-child {
+    margin-top: 0;
+  }
+  .bw__pain-float {
+    display: block;
+    transform: rotate(var(--rot));
+    animation: bw-float 5s ease-in-out infinite;
+  }
+  .bw__pain-glass {
+    --p: 0;
+    --c: 0;
+    display: inline-flex;
+    align-items: center;
     justify-content: center;
-    padding: 0 12px;
+    height: 48px;
+    padding: 0 24px;
+    border-radius: 999px;
+    font-size: 15.5px;
+    letter-spacing: 0.005em;
+    text-transform: capitalize;
+    color: #fff;
+    white-space: nowrap;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, calc(0.08 + var(--c) * 0.14)), rgba(255, 255, 255, 0) 55%),
+      color-mix(in srgb, rgba(78, 80, 82, 0.82) calc(var(--c) * 100%), #fb6b6b);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, calc(0.22 + var(--c) * 0.3)),
+      inset 0 -1px 1px rgba(0, 0, 0, calc(0.06 + var(--c) * 0.14)),
+      0 calc(6px + var(--p) * 10px) calc(14px + var(--p) * 24px) rgba(40, 20, 20, calc(0.14 + var(--c) * 0.16));
+    transform: scale(calc(1 + var(--p) * 0.14)) rotate(calc(var(--p) * var(--rot) * -1));
+    transition:
+      transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+      background 0.2s ease,
+      box-shadow 0.2s ease;
+    cursor: default;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  @keyframes bw-float {
+    0%,
+    100% {
+      transform: translateY(0) rotate(var(--rot));
+    }
+    50% {
+      transform: translateY(-3px) rotate(calc(var(--rot) * 0.6));
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bw__pain-float {
+      animation: none;
+    }
   }
   .bw__capsule {
     height: auto;
@@ -1955,8 +2008,8 @@ a {
 
   /* With Tenxora: a roomier two-column grid, centred so the space above and below is even */
   .bw__with {
-    justify-content: center;
-    padding: 56px 0 24px;
+    justify-content: flex-start;
+    padding: 96px 0 24px;
   }
   .bw__stages {
     display: grid;

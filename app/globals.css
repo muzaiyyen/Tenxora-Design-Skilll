@@ -2531,7 +2531,7 @@ a {
   margin: 0 0 calc(10 * var(--u));
 }
 .profile__sub + .profile__sub {
-  margin-top: calc(16 * var(--u));
+  margin-top: max(22px, calc(30 * var(--u)));
 }
 .profile__sub:first-of-type {
   margin-top: 0;
@@ -2575,7 +2575,7 @@ a {
     font-size: 12px;
   }
   .profile__sub + .profile__sub {
-    margin-top: 14px;
+    margin-top: 24px;
   }
 }
 /* the list box spans the frame; each logo sits at its own Figma position */

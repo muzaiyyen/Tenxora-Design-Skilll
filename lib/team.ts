@@ -94,6 +94,18 @@ export const team: Member[] = [
       clientGroups: [
         { heading: "At PwC", items: ["Jazz", "Attock Group", "Attock Gen", "POL", "Attock Petroleum", "Attock Refinery Limited", "TNB Liberty Power", "OGDCL"] },
         {
+          heading: "At MMBA · Statutory Audits",
+          items: ["The CMA Welfare Trust", "Medley Pharma Limited", "C G C Technologies Ltd", "Sheet Metal Precision Limited", "Comtech UK Holdings Limited", "Renaissance Capital Limited", "London Bridge Business Academy Limited", "Super Destinations Limited", "International Learning Movement", "EGL Capital Limited"],
+        },
+        {
+          heading: "At MMBA · ATOL Audits",
+          items: ["Hashim Travels Limited", "Super Destinations Limited", "JK (BB) Limited", "Oceans Travel Limited", "Crown Travels Limited"],
+        },
+        {
+          heading: "At MMBA · SRA Audits",
+          items: ["Just Law Solicitors Ltd", "Hassan & Hassan Solicitors Limited", "SABZ Solicitors LLP", "Parkview Solicitors Limited", "Sky Solicitors Limited", "UK Law Solicitors Limited", "Privilege Solicitors Limited", "Clyde Solicitors Limited", "Ask Legal Solicitors Limited"],
+        },
+        {
           heading: "At Tenxora / Synchronous",
           items: ["Norsk Global", "Airblue", "Novacare", "Impetus", "MG", "MG Apparel", "Bin Hashim", "Symmetric Energy", "Henri Nutrition", "Mobilink Bank", "Western University Canada", "Clariti", "Armor", "Rivalz", "MachineSens IoT", "Niluma Media", "Amston Enterprises", "eTutor4Me", "GB Meals", "Green Corporate Initiative", "Green Agrimall", "Beyond East", "Technical Palace Group", "Vacation Rental Property Partners"],
         },

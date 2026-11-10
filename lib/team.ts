@@ -26,6 +26,20 @@ export type Member = {
   };
 };
 
+/** Company names in the text lists (Ahsan's experience and client groups) that have a real logo file in
+ * public/figma/clients; those show as logos, the rest stay as names. */
+export const companyLogos: Record<string, string> = {
+  Jazz: "jazz",
+  "PwC (A.F. Ferguson & Co.)": "pwc",
+  "Norsk Global": "norsk-global",
+  Novacare: "novacare",
+  Impetus: "impetus",
+  "Symmetric Energy": "symmetric-energy",
+  "Henri Nutrition": "henri",
+  "Mobilink Bank": "mobilink-bank",
+  "MachineSens IoT": "machine-sens-iot",
+};
+
 export const team: Member[] = [
   {
     id: "bilal",
@@ -74,7 +88,7 @@ export const team: Member[] = [
       ],
       experience: {
         heading: "Professional Experience",
-        items: ["Tenxora", "Wave The Willow", "SyncBooks", "Synchronous Services", "Invest2Innovate (i2i)", "MMBA Accountants", "IMC Worldwide", "Pakistan Human Development Fund", "PwC (A.F. Ferguson & Co.)", "Biocare Labs", "UK Legal Advisors LLP", "The Co-operative Group", "ESA Retail", "Phillips, Kobbs & Co", "Foot Locker"],
+        items: ["Wave The Willow", "SyncBooks", "Synchronous Services", "Invest2Innovate (i2i)", "MMBA Accountants", "IMC Worldwide", "Pakistan Human Development Fund", "PwC (A.F. Ferguson & Co.)", "Biocare Labs", "UK Legal Advisors LLP", "The Co-operative Group", "ESA Retail", "Phillips, Kobbs & Co", "Foot Locker"],
       },
       workedWith: "Clients I’ve Worked With",
       clientGroups: [
@@ -132,7 +146,6 @@ export const team: Member[] = [
       linkedin: "https://www.linkedin.com/in/muzaiyyen-khan-931a3921a/",
       photo: { scene: "/figma/muzaiyyen-scene.jpg", card: "/figma/muzaiyyen-card.jpg", left: 0.68, top: 0.074, focus: 0.7635, phoneTop: 0.035, bg: "#fefefe" },
       clients: [
-        { name: "Tenxora", logo: "tenxora" },
         { name: "Synchronous Services" },
         { name: "Tradify E-Commerce" },
         { name: "GiantTech Solutions" },
@@ -157,7 +170,6 @@ export const team: Member[] = [
       linkedin: "https://www.linkedin.com/in/maryam-hameed-4958b0188/",
       photo: { scene: "/figma/maryam-scene.jpg", card: "/figma/maryam-card.jpg", left: 0.684, top: 0.062, focus: 0.767, phoneTop: 0.03, bg: "#fcfbfc" },
       clients: [
-        { name: "Tenxora", logo: "tenxora" },
         { name: "Synchronous Services" },
         { name: "FFBL Power Company" },
       ],
@@ -181,7 +193,6 @@ export const team: Member[] = [
       linkedin: "https://www.linkedin.com/in/gulraiz-khan-b802b7257/",
       photo: { scene: "/figma/gulraiz-scene.jpg", card: "/figma/gulraiz-card.jpg", left: 0.691, top: 0.062, focus: 0.774, phoneTop: 0.03, bg: "#fcfcfc" },
       clients: [
-        { name: "Tenxora", logo: "tenxora" },
         { name: "Synchronous Services" },
         { name: "Encoracode" },
       ],
@@ -205,7 +216,6 @@ export const team: Member[] = [
       linkedin: "https://www.linkedin.com/in/zainali67/",
       photo: { scene: "/figma/zain-scene.jpg", card: "/figma/zain-card.jpg", left: 0.668, top: 0.064, focus: 0.7515, phoneTop: 0.035, bg: "#fefefe" },
       clients: [
-        { name: "Tenxora", logo: "tenxora" },
         { name: "Synchronous Services" },
       ],
     },
@@ -228,7 +238,6 @@ export const team: Member[] = [
       linkedin: "https://www.linkedin.com/in/maab-hassan-baa412329/",
       photo: { scene: "/figma/maab-scene.jpg", card: "/figma/maab-card.jpg", left: 0.68, top: 0.071, focus: 0.7635, phoneTop: 0.035, bg: "#fefefe" },
       clients: [
-        { name: "Tenxora", logo: "tenxora" },
         { name: "Synchronous Services" },
         { name: "Tradify E-Commerce" },
       ],
@@ -252,7 +261,6 @@ export const team: Member[] = [
       linkedin: "https://www.linkedin.com/in/syed-usama-zahid-786296365/",
       photo: { scene: "/figma/usama-scene.jpg", card: "/figma/usama-card.jpg", left: 0.647, top: 0.087, focus: 0.73, phoneTop: 0.04, bg: "#fefefe" },
       clients: [
-        { name: "Tenxora", logo: "tenxora" },
         { name: "Synchronous Services" },
       ],
     },
@@ -275,7 +283,6 @@ export const team: Member[] = [
       linkedin: "https://www.linkedin.com/in/fatima-rehman-937548226/",
       photo: { scene: "/figma/fatima-scene.jpg", card: "/figma/fatima-card.jpg", left: 0.672, top: 0.083, focus: 0.755, phoneTop: 0.045, bg: "#f9f9fa" },
       clients: [
-        { name: "Tenxora", logo: "tenxora" },
         { name: "Synchronous Services" },
       ],
     },

@@ -3,7 +3,7 @@
 import { animate, AnimatePresence, motion, useMotionValue, useTransform, type AnimationPlaybackControls, type MotionValue, type Variants } from "motion/react";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { team, type Member } from "@/lib/team";
+import { companyLogos, team, type Member } from "@/lib/team";
 import { asset } from "@/lib/asset";
 
 /*
@@ -735,7 +735,7 @@ function Profile({
         {p.experience && (
           <motion.div className="profile__group" {...rise(4)}>
             <p className="profile__with">{p.experience.heading}</p>
-            <p className="profile__names">{p.experience.items.join(" · ")}</p>
+            <Names items={p.experience.items} />
           </motion.div>
         )}
         {p.clientGroups ? (
@@ -744,7 +744,7 @@ function Profile({
             {p.clientGroups.map((g) => (
               <div key={g.heading} className="profile__sub">
                 <p className="profile__sub-h">{g.heading}</p>
-                <p className="profile__names">{g.items.join(" · ")}</p>
+                <Names items={g.items} />
               </div>
             ))}
           </motion.div>
@@ -927,5 +927,25 @@ function Arrow() {
     <svg viewBox="0 0 24 24" width="100%" height="100%" aria-hidden>
       <path d="M4 4.5 21 12 4 19.5l3.2-7.5z" fill="currentColor" />
     </svg>
+  );
+}
+
+/** A company list: the ones with a real logo file show as logos, the others stay as names. */
+function Names({ items }: { items: string[] }) {
+  const logos = items.filter((n) => companyLogos[n]);
+  const rest = items.filter((n) => !companyLogos[n]);
+  return (
+    <>
+      {logos.length > 0 && (
+        <ul className="profile__logo-row">
+          {logos.map((n) => (
+            <li key={n}>
+              <img src={asset(`/figma/clients/${companyLogos[n]}.svg`)} alt={n} draggable={false} />
+            </li>
+          ))}
+        </ul>
+      )}
+      {rest.length > 0 && <p className="profile__names">{rest.join(" · ")}</p>}
+    </>
   );
 }

@@ -2503,6 +2503,21 @@ a {
   letter-spacing: calc(0.1385 * var(--u));
   color: rgba(0, 0, 0, 0.78);
 }
+.profile__logo-row {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: calc(14 * var(--u)) calc(26 * var(--u));
+  margin: 0 0 calc(10 * var(--u));
+  padding: 0;
+}
+.profile__logo-row img {
+  display: block;
+  height: max(18px, calc(22 * var(--u)));
+  width: auto;
+  max-width: calc(130 * var(--u));
+}
 .profile__sub-h {
   margin: 0 0 4px;
   font-size: max(11px, calc(12.5 * var(--u)));

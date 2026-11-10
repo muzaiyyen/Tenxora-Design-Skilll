@@ -706,7 +706,8 @@ function Profile({
 
       {/* popLayout: the new copy starts sliding in while the old copy is still leaving */}
       <motion.div className="profile__drag-copy" style={{ x: copyX }}>
-      <AnimatePresence mode="popLayout" initial={false} custom={dir}>
+      {/* no initial={false} here: it would suppress the name-then-details reveal when a profile first opens */}
+      <AnimatePresence mode="popLayout" custom={dir}>
       <motion.div
         key={slideKey}
         className={`profile__page${p.clientGroups || p.experience ? " profile__page--flow" : ""}`}

@@ -2072,6 +2072,52 @@ a {
   .bw__stage-art {
     --u: calc(var(--sw) / 252);
   }
+
+  /* With Tenxora on phones: a looping 3D card deck (positions set per frame in Deck) */
+  .bw__deck {
+    --sw: min(calc(100vw - 120px), 262px);
+    position: relative;
+    width: 100%;
+    height: 460px;
+    margin-top: -26px;
+    perspective: 760px;
+    perspective-origin: 50% 35%;
+  }
+  .bw__deck-card {
+    --shade: 0;
+    position: absolute;
+    left: 50%;
+    top: 112px;
+    width: var(--sw);
+    height: var(--sw);
+    margin-left: calc(var(--sw) / -2);
+    transform-origin: 50% 50%;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+  }
+  .bw__deck-card .wcard {
+    background: #fff;
+    box-shadow:
+      inset 0 1px 0 #fff,
+      0 18px 40px rgba(10, 30, 60, 0.12);
+  }
+  .bw__deck-card .wcard::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: #0b1420;
+    opacity: var(--shade);
+    pointer-events: none;
+  }
+  .bw__deck-card .bw__stage-art {
+    --u: calc(var(--sw) / 252);
+  }
+  .bw__deck-card .hcard__label {
+    font-size: 16px;
+    left: 16px;
+    bottom: 16px;
+  }
 }
 @media (max-width: 760px) {
   /* menu open: the pill carries its own frosted fill, since phones can drop the backdrop blur while the panel animates */

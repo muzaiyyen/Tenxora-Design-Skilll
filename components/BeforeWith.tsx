@@ -162,7 +162,7 @@ export default function BeforeWith() {
           className="capsule bw__capsule"
           aria-live="polite"
           // phones: the tall pill stack folds down to fit the four cards once tenxora is on
-          animate={mobile && stackH ? { height: on ? 660 : stackH } : undefined}
+          animate={mobile && stackH ? { height: on ? 680 : stackH } : undefined}
           transition={{ duration: 0.7, ease, delay: on ? 0.3 : 0 }}
         >
           <motion.div className="bw__state-label" key={on ? "with" : "before"} initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
@@ -219,11 +219,15 @@ export default function BeforeWith() {
                   <img src={asset("/brand/wordmark-black.svg")} alt="" />
                   <span className="sr-only">{beforeWith.withBrand}</span>
                 </motion.div>
-                <div className="bw__stages">
-                  {beforeWith.withStages.map((st, i) => (
-                    <StageCard key={st} name={st} i={i} mobile={mobile} />
-                  ))}
-                </div>
+                {mobile ? (
+                  <Deck />
+                ) : (
+                  <div className="bw__stages">
+                    {beforeWith.withStages.map((st, i) => (
+                      <StageCard key={st} name={st} i={i} mobile={mobile} />
+                    ))}
+                  </div>
+                )}
               </motion.div>
             )}
           </AnimatePresence>
@@ -345,6 +349,105 @@ function Tangle({ on, host }: { on: boolean; host: React.RefObject<HTMLDivElemen
         );
       })}
     </svg>
+  );
+}
+
+/* ---------- Phone deck: the four stages as a looping 3D card stack ----------
+   Upcoming cards wait above, tilted back so only their top edges show; the front card sits flat in the
+   middle; the card before it tips forward and drops out of the bottom of the panel. The deck rolls on
+   its own every few seconds and page scroll rolls it too. Transforms are written per frame, no re-renders. */
+const DECK_N = 8; // the four stages twice over, so the stack above always looks full
+const HOLD = 1.6; // seconds resting on a card
+const ROLL = 1.0; // seconds rolling to the next
+const SCROLL_PX = 320; // page scroll that rolls the deck by one card
+const easeInOut = (x: number) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+const clamp01 = (x: number) => Math.max(0, Math.min(1, x));
+
+function place(d: number) {
+  if (d >= 0) {
+    // waiting in the stack: tipped back, stepping up and shrinking so only top edges show
+    const a = Math.min(d, 1);
+    const k = Math.max(0, d - 1);
+    const y = -a * 54 - k * 16;
+    const rot = 7 + a * 26 + k * 2;
+    const sc = 1 - a * 0.08 - k * 0.04;
+    const op = d > 4.6 ? clamp01((5.2 - d) / 0.6) : 1;
+    return { y, rot, sc, op, shade: Math.min(0.05 + d * 0.06, 0.3) * a, z: Math.round(100 - d * 10) };
+  }
+  // done: tips toward the viewer and drops out of the bottom of the panel
+  const e = -d;
+  return { y: e * 268, rot: 7 - e * 50, sc: 1 + e * 0.12, op: 1 - clamp01((e - 1) * 2.5), shade: 0, z: 110 };
+}
+
+function Deck() {
+  const host = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = host.current;
+    if (!el) return;
+    const cards = Array.from(el.querySelectorAll<HTMLElement>(".bw__deck-card"));
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let raf = 0;
+    let visible = true;
+    let clock = 0;
+    let last = performance.now();
+    const scroll0 = window.scrollY;
+    const frame = (now: number) => {
+      raf = requestAnimationFrame(frame);
+      const dt = Math.min(0.05, (now - last) / 1000);
+      last = now;
+      if (!visible) return;
+      if (!still) clock += dt;
+      const step = Math.floor(clock / (HOLD + ROLL));
+      const into = clock - step * (HOLD + ROLL);
+      const t = step + easeInOut(clamp01((into - HOLD) / ROLL)) + (window.scrollY - scroll0) / SCROLL_PX;
+      cards.forEach((c, i) => {
+        let d = (((i - t) % DECK_N) + DECK_N) % DECK_N;
+        if (d > DECK_N - 1.5) d -= DECK_N;
+        const p = place(d);
+        c.style.transform = `translate3d(0, ${p.y.toFixed(1)}px, 0) rotateX(${p.rot.toFixed(2)}deg) scale(${p.sc.toFixed(4)})`;
+        c.style.opacity = p.op.toFixed(3);
+        c.style.zIndex = String(p.z);
+        c.style.setProperty("--shade", p.shade.toFixed(3));
+      });
+    };
+    raf = requestAnimationFrame(frame);
+    const io = new IntersectionObserver(([en]) => {
+      visible = en.isIntersecting;
+    });
+    io.observe(el);
+    return () => {
+      cancelAnimationFrame(raf);
+      io.disconnect();
+    };
+  }, []);
+
+  return (
+    <motion.div
+      ref={host}
+      className="bw__deck"
+      initial={{ opacity: 0, y: 60, scale: 0.85, filter: "blur(8px)" }}
+      animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+      exit={{ opacity: 0, y: 40, transition: { duration: 0.25 } }}
+      transition={{ type: "spring", stiffness: 160, damping: 20, delay: 0.7 }}
+    >
+      {Array.from({ length: DECK_N }, (_, k) => {
+        const i = k % 4;
+        const name = beforeWith.withStages[i];
+        return (
+          <div key={k} className="bw__deck-card" aria-hidden={k >= 4 || undefined}>
+            <div className="wcard bw__stage-card">
+              <div className="bw__stage-art">
+                {i === 0 && <Bars bars={listBars.slice(0, 3)} />}
+                {i === 1 && <ChecklistArt />}
+                {i === 2 && <EqArt />}
+                {i === 3 && <ChartArt delay={0.9} />}
+              </div>
+              <span className="hcard__label bw__stage-label">{name}</span>
+            </div>
+          </div>
+        );
+      })}
+    </motion.div>
   );
 }
 

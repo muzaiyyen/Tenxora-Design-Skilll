@@ -361,8 +361,8 @@ function Tangle({ on, host }: { on: boolean; host: React.RefObject<HTMLDivElemen
    middle; the card before it tips forward and drops out of the bottom of the panel. The deck rolls on
    its own every few seconds, independent of page scroll. Transforms are written per frame, no re-renders. */
 const DECK_N = 8; // the four stages twice over, so the stack above always looks full
-const HOLD = 1.6; // seconds resting on a card
-const ROLL = 1.0; // seconds rolling to the next
+const HOLD = 0.7; // seconds resting on a card
+const ROLL = 0.85; // seconds rolling to the next
 const easeInOut = (x: number) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
 const clamp01 = (x: number) => Math.max(0, Math.min(1, x));
 

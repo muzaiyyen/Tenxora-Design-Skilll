@@ -205,20 +205,24 @@ export default function BeforeWith() {
           <AnimatePresence>
             {on && (
               <motion.div key="with" className="bw__with" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
-                <motion.div
-                  className="bw__brand ops-breathe"
-                  initial={{ scale: 0.3, opacity: mobile ? 0 : 1 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0.3, opacity: mobile ? 0 : 1 }}
-                  transition={
-                    mobile
-                      ? { type: "spring", stiffness: 300, damping: 18, delay: 0.45 }
-                      : { type: "spring", stiffness: 180, damping: 13, delay: 0.25 }
-                  }
-                >
-                  <img src={asset("/brand/wordmark-black.svg")} alt="" />
+                {mobile ? (
                   <span className="sr-only">{beforeWith.withBrand}</span>
-                </motion.div>
+                ) : (
+                  <motion.div
+                    className="bw__brand ops-breathe"
+                    initial={{ scale: 0.3, opacity: mobile ? 0 : 1 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.3, opacity: mobile ? 0 : 1 }}
+                    transition={
+                      mobile
+                        ? { type: "spring", stiffness: 300, damping: 18, delay: 0.45 }
+                        : { type: "spring", stiffness: 180, damping: 13, delay: 0.25 }
+                    }
+                  >
+                    <img src={asset("/brand/wordmark-black.svg")} alt="" />
+                    <span className="sr-only">{beforeWith.withBrand}</span>
+                  </motion.div>
+                )}
                 {mobile ? (
                   <Deck />
                 ) : (
@@ -355,28 +359,27 @@ function Tangle({ on, host }: { on: boolean; host: React.RefObject<HTMLDivElemen
 /* ---------- Phone deck: the four stages as a looping 3D card stack ----------
    Upcoming cards wait above, tilted back so only their top edges show; the front card sits flat in the
    middle; the card before it tips forward and drops out of the bottom of the panel. The deck rolls on
-   its own every few seconds and page scroll rolls it too. Transforms are written per frame, no re-renders. */
+   its own every few seconds, independent of page scroll. Transforms are written per frame, no re-renders. */
 const DECK_N = 8; // the four stages twice over, so the stack above always looks full
 const HOLD = 1.6; // seconds resting on a card
 const ROLL = 1.0; // seconds rolling to the next
-const SCROLL_PX = 320; // page scroll that rolls the deck by one card
 const easeInOut = (x: number) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
 const clamp01 = (x: number) => Math.max(0, Math.min(1, x));
 
 function place(d: number) {
   if (d >= 0) {
-    // waiting in the stack: tipped back, stepping up and shrinking so only top edges show
+    // waiting in the stack: tipped back, stepping up and shrinking, with a clear gap between edges
     const a = Math.min(d, 1);
     const k = Math.max(0, d - 1);
-    const y = -a * 54 - k * 16;
-    const rot = 7 + a * 26 + k * 2;
-    const sc = 1 - a * 0.08 - k * 0.04;
+    const y = -a * 70 - k * 22;
+    const rot = 7 + a * 22 + k * 2;
+    const sc = 1 - a * 0.08 - k * 0.045;
     const op = d > 4.6 ? clamp01((5.2 - d) / 0.6) : 1;
     return { y, rot, sc, op, shade: Math.min(0.05 + d * 0.06, 0.3) * a, z: Math.round(100 - d * 10) };
   }
-  // done: tips toward the viewer and drops out of the bottom of the panel
+  // done: tips toward the viewer and drops well clear of the front card, out of the bottom of the panel
   const e = -d;
-  return { y: e * 268, rot: 7 - e * 50, sc: 1 + e * 0.12, op: 1 - clamp01((e - 1) * 2.5), shade: 0, z: 110 };
+  return { y: e * 318, rot: 7 - e * 46, sc: 1 + e * 0.1, op: 1 - clamp01((e - 1) * 2.5), shade: 0, z: 110 };
 }
 
 function Deck() {
@@ -390,7 +393,6 @@ function Deck() {
     let visible = true;
     let clock = 0;
     let last = performance.now();
-    const scroll0 = window.scrollY;
     const frame = (now: number) => {
       raf = requestAnimationFrame(frame);
       const dt = Math.min(0.05, (now - last) / 1000);
@@ -399,7 +401,7 @@ function Deck() {
       if (!still) clock += dt;
       const step = Math.floor(clock / (HOLD + ROLL));
       const into = clock - step * (HOLD + ROLL);
-      const t = step + easeInOut(clamp01((into - HOLD) / ROLL)) + (window.scrollY - scroll0) / SCROLL_PX;
+      const t = step + easeInOut(clamp01((into - HOLD) / ROLL));
       cards.forEach((c, i) => {
         let d = (((i - t) % DECK_N) + DECK_N) % DECK_N;
         if (d > DECK_N - 1.5) d -= DECK_N;

@@ -1,7 +1,7 @@
 // Copy for the Why Tenxora and Blog pages, from the live tenxora.services pages (read 2026-11-12).
 // Do not reword. Paragraphs marked PENDING could not be copied verbatim from here (the build environment
 // cannot reach tenxora.services); they stay empty until the exact text is supplied, and empty ones are not shown.
-import { links } from "./content";
+import { footer, links } from "./content";
 
 export const why = {
   title: "About Tenxora | AI-Assisted Services, Human Reviewed",
@@ -27,6 +27,52 @@ export const why = {
       { label: "Telephone", value: "+92 336 5188711", href: "tel:+923365188711" },
     ] as { label: string; value: string; href?: string }[],
   },
+};
+
+// Blog post bodies. Text is copied exactly from the live post; segments are plain text, bold ({ b }) or links ({ a, href }).
+export type Seg = string | { b: string } | { a: string; href: string };
+export type Block = { p: Seg[] } | { h2: string } | { ul: Seg[][] };
+
+// Only posts with a body here get a page in this build; the rest of the cards link to the live posts.
+// PENDING: this body stops where the user's screenshot did (before "How much time does each role need?").
+export const articles: Record<string, Block[]> = {
+  "odoo-implementation-team-time": [
+    {
+      p: [
+        "More than most owners plan for. Odoo’s own implementation guide asked customers for a project lead available at least 2 full days a week. One ERP vendor’s project manager puts the internal project lead at about 70% of their working time, and key users at about 50% during the build. Block that time before you sign.",
+      ],
+    },
+    {
+      p: [
+        "This is a follow-up to ",
+        // PENDING: the exact URL of this post (not in the blog listing read on 2026-11-12); points at the blog for now
+        { a: "How Long Does an Odoo Implementation Take?", href: "https://tenxora.services/blog/" },
+        " The calendar date depends heavily on one thing your partner cannot supply: your own people’s time.",
+      ],
+    },
+    { h2: "Who on my team needs to be involved?" },
+    {
+      p: [
+        "Most Odoo projects need three groups from your side. Small businesses often combine roles, but none of them can be skipped.",
+      ],
+    },
+    {
+      ul: [
+        [{ b: "Project lead (single point of contact):" }, " makes decisions, chases answers internally and signs off each stage. Odoo’s guide says this person should have authority to decide on their own."],
+        [{ b: "Key users:" }, " one per area, such as sales, stock, purchasing and accounts. They explain how work really happens, test the setup and later train colleagues."],
+        [{ b: "End users:" }, " everyone who will use Odoo daily. They need time to practise their own tasks before go-live."],
+        [{ b: "Owner or senior manager:" }, " settles disputes between departments and approves scope changes."],
+      ],
+    },
+  ],
+};
+
+const postBase = process.env.NEXT_PUBLIC_POST_BASE; // preview build: "./post-" (pages are flattened to post-<slug>.html)
+export const slugOf = (href: string) => href.replace(/\/$/, "").split("/").pop() as string;
+export const postHref = (href: string) => {
+  const slug = slugOf(href);
+  if (!articles[slug]) return href;
+  return postBase ? `${postBase}${slug}.html` : `/blog/${slug}/`;
 };
 
 export const blog = {
@@ -66,4 +112,47 @@ export const blog = {
     odoo: { label: "explore our Odoo services", href: links.odoo },
     after: ".",
   },
+};
+
+// Odoo Services, copied from the user's screenshot of the live page (2026-11-12).
+// PENDING: the bodies and link labels of cards 03 and 04, and anything below them, were cut off in the screenshot.
+export const odooServices = {
+  title: "Odoo Services | Tenxora",
+  h1: "Odoo services",
+  eyebrow: "Odoo ERP services • AI-assisted, human-reviewed",
+  lead: "Make Odoo work around the way your business operates.",
+  body: "Tenxora.Services helps English-speaking businesses worldwide plan, implement and improve Odoo. We are an AI-assisted Service as a Software company: AI and code prepare initial work, then a human reviews it against the agreed requirements. Your team approves the business workflows before an agreed production handover.",
+  // the button's destination wasn't visible in the screenshot; the contact page is assumed
+  cta: { label: "Discuss your Odoo project →", href: links.contact },
+  email: { label: footer.email, href: `mailto:${footer.email}` },
+  services: [
+    {
+      n: "01",
+      kicker: "Build your foundation",
+      title: "Odoo implementation",
+      body: "For a new rollout or a defined next phase: agree processes, configure the relevant applications, prepare data and test the workflows your team needs.",
+      link: { label: "Explore Odoo implementation →", href: "https://tenxora.services/odoo-services/implementation/" },
+    },
+    {
+      n: "02",
+      kicker: "Decide before you build",
+      title: "Odoo consulting",
+      body: "For unclear requirements or an existing setup that needs direction: assess fit, identify gaps and turn competing requests into a prioritized delivery plan.",
+      link: { label: "Explore Odoo consulting →", href: links.odooConsulting },
+    },
+    {
+      n: "03",
+      kicker: "Understand the method",
+      title: "AI-assisted implementation",
+      body: "",
+      link: { label: "", href: "https://tenxora.services/odoo-services/ai-assisted-implementation/" },
+    },
+    {
+      n: "04",
+      kicker: "Improve an existing system",
+      title: "Integrations and improvements",
+      body: "",
+      link: { label: "", href: "https://tenxora.services/odoo-services/integration/" },
+    },
+  ],
 };

@@ -12,7 +12,7 @@ export const links = {
   whyTenxora: process.env.NEXT_PUBLIC_WHY_HREF ?? "https://tenxora.services/why-tenxora/",
   cookiePolicy: "https://tenxora.services/cookie-policy/",
   privacy: "https://tenxora.services/privacy/",
-  odoo: "https://tenxora.services/odoo-services/",
+  odoo: process.env.NEXT_PUBLIC_ODOO_HREF ?? "https://tenxora.services/odoo-services/",
   odooConsulting: "https://tenxora.services/odoo-services/consulting/",
   bookCall: "https://tenxora.services/book-a-call/",
   portal: "https://odoo.tenxora.services/",

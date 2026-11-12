@@ -13,11 +13,13 @@ export default function PageHero({
   title,
   lead,
   body,
+  actions,
 }: {
   label?: string;
   title: string;
   lead?: string;
   body?: React.ReactNode;
+  actions?: React.ReactNode;
 }) {
   const ref = useRef<HTMLElement>(null);
   const mobile = useMedia("(max-width: 760px)");
@@ -71,6 +73,16 @@ export default function PageHero({
             transition={{ duration: 1.1, ease, delay: 0.75 }}
           >
             {body}
+          </motion.div>
+        )}
+        {actions && (
+          <motion.div
+            className="hero__ctas phero__ctas"
+            initial={{ opacity: 0, y: 30, scale: 0.94 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ type: "spring", stiffness: 140, damping: 18, delay: 1 }}
+          >
+            {actions}
           </motion.div>
         )}
       </motion.div>

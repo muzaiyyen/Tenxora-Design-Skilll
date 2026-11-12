@@ -2,7 +2,7 @@
 
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
 import { useMemo, useState } from "react";
-import { blog } from "@/lib/pages";
+import { blog, postHref } from "@/lib/pages";
 import PageHero from "./PageHero";
 import SkyFooter from "./SkyFooter";
 
@@ -46,7 +46,7 @@ export default function Blog() {
                       transition={{ duration: 0.6, ease, delay: (i % 3) * 0.06 }}
                     >
                       <motion.a
-                        href={p.href}
+                        href={postHref(p.href)}
                         className="wcard post"
                         whileHover={{ y: -6 }}
                         transition={{ type: "spring", stiffness: 260, damping: 22 }}

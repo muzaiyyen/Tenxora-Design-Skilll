@@ -13,7 +13,7 @@ import { hero, heroDesign } from "@/lib/content";
 import { asset } from "@/lib/asset";
 import { Bars, ChartArt, ChecklistArt, listBars } from "./Skeleton";
 import Magnetic from "./Magnetic";
-import { useMedia } from "@/lib/hooks";
+import { useMedia, useReduce } from "@/lib/hooks";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 const u = (n: number) => `calc(${n} * var(--u))`;
@@ -47,6 +47,7 @@ export default function Hero() {
   const stageRY = useTransform(sx, [-1, 1], [-9, 9]);
   const spread = useTransform(scrollYProgress, [0, 0.7], [0, 1]);
   const mobile = useMedia("(max-width: 760px)");
+  const still = useReduce();
 
   const onMove = (e: React.PointerEvent) => {
     if (e.pointerType !== "mouse") return;
@@ -62,11 +63,11 @@ export default function Hero() {
   return (
     <section ref={ref} className="hero on-sky" data-header="dark" onPointerMove={onMove} onPointerLeave={onLeave}>
       {/* phones skip the sky parallax: repainting the tall sky layer on every scroll frame made scrolling stutter */}
-      <motion.div className="hero__sky" style={mobile ? undefined : { y: skyY, scale: skyScale, x: skyX }} aria-hidden>
+      <motion.div className="hero__sky" style={mobile || still ? undefined : { y: skyY, scale: skyScale, x: skyX }} aria-hidden>
         <img src={asset("/figma/sky.jpg")} alt="" fetchPriority="high" />
       </motion.div>
 
-      <motion.div className="hero__copy wrap" style={{ y: copyY, opacity: copyOpacity }}>
+      <motion.div className="hero__copy wrap" style={still ? undefined : { y: copyY, opacity: copyOpacity }}>
         <p className="sr-only">{hero.eyebrow}</p>
         <h1 className="h-display hero__h1">
           <Line i={0}>{heroDesign.headline[0]}</Line>

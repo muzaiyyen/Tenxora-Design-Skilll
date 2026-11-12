@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion, useInView } from "motion/react";
 import { useEffect, useRef, useState } from "react";
+import { useMotionPaused } from "@/lib/a11y";
 import { beforeWith } from "@/lib/content";
 import { asset } from "@/lib/asset";
 import { useMedia } from "@/lib/hooks";
@@ -343,7 +344,7 @@ function Tangle({ on, host }: { on: boolean; host: React.RefObject<HTMLDivElemen
             key={i}
             d={`M${A.x} ${A.y} C${c1} ${c2} ${B.x} ${B.y}`}
             fill="none"
-            stroke="rgba(239,75,75,.32)"
+            style={{ stroke: "rgba(var(--tx-alert-rgb), 0.32)" }}
             strokeWidth={1.4}
             strokeLinecap="round"
             initial={{ pathLength: 0, opacity: 0 }}
@@ -384,11 +385,12 @@ function place(d: number) {
 
 function Deck() {
   const host = useRef<HTMLDivElement>(null);
+  const paused = useMotionPaused();
   useEffect(() => {
     const el = host.current;
     if (!el) return;
     const cards = Array.from(el.querySelectorAll<HTMLElement>(".bw__deck-card"));
-    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const still = paused || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let raf = 0;
     let visible = true;
     let clock = 0;
@@ -421,7 +423,7 @@ function Deck() {
       cancelAnimationFrame(raf);
       io.disconnect();
     };
-  }, []);
+  }, [paused]);
 
   return (
     <motion.div

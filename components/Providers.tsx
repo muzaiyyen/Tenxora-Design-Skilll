@@ -2,12 +2,15 @@
 
 import { MotionConfig } from "motion/react";
 import { useEffect } from "react";
+import { useMotionPaused } from "@/lib/a11y";
+import A11yMenu from "./A11yMenu";
 
 /**
  * Native scrolling (no wheel smoothing, so the page follows the wheel and trackpad with no lag),
  * reduced-motion aware springs, and the glass specular tracker.
  */
 export default function Providers({ children }: { children: React.ReactNode }) {
+  const paused = useMotionPaused();
   // in-page anchors glide; everything else scrolls natively
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
@@ -17,7 +20,8 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       const el = id.length > 1 ? document.querySelector<HTMLElement>(id) : null;
       if (!el) return;
       e.preventDefault();
-      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const reduce =
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches || document.documentElement.hasAttribute("data-a11y-motion");
       el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
       el.setAttribute("tabindex", "-1");
       el.focus({ preventScroll: true });
@@ -50,5 +54,10 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  return <MotionConfig reducedMotion="user">{children}</MotionConfig>;
+  return (
+    <MotionConfig reducedMotion={paused ? "always" : "user"}>
+      {children}
+      <A11yMenu />
+    </MotionConfig>
+  );
 }

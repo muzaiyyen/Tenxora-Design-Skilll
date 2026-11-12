@@ -2,6 +2,7 @@
 
 import { animate, useInView, useMotionValue, useReducedMotion, useScroll, type MotionValue } from "motion/react";
 import { useEffect, useState, type RefObject } from "react";
+import { useMotionPaused } from "./a11y";
 
 export function useMedia(query: string, initial = false) {
   const [match, setMatch] = useState(initial);
@@ -22,7 +23,9 @@ export function useMedia(query: string, initial = false) {
  * Reduced motion: always 1, the finished state.
  */
 export function useStageProgress(ref: RefObject<HTMLElement | null>, sticky: boolean, offset: [string, string] = ["start start", "end end"]): MotionValue<number> {
-  const reduce = useReducedMotion();
+  const os = useReducedMotion();
+  const paused = useMotionPaused();
+  const reduce = os || paused;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { scrollYProgress } = useScroll({ target: ref, offset: offset as any });
   const played = useMotionValue(0);
@@ -45,5 +48,7 @@ export function useStageProgress(ref: RefObject<HTMLElement | null>, sticky: boo
 
 /** prefers-reduced-motion, but false during SSR and the first client render so hydration matches. */
 export function useReduce() {
-  return useMedia("(prefers-reduced-motion: reduce)");
+  const os = useMedia("(prefers-reduced-motion: reduce)");
+  const paused = useMotionPaused();
+  return os || paused;
 }

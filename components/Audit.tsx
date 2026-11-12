@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
 import { audit } from "@/lib/content";
 import { asset } from "@/lib/asset";
+import { useReduce } from "@/lib/hooks";
 import Magnetic from "./Magnetic";
 import Footer from "./Footer";
 
@@ -14,10 +15,11 @@ export default function Audit() {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end end"] });
   const skyY = useTransform(scrollYProgress, [0, 1], ["-12%", "0%"]);
+  const still = useReduce();
 
   return (
     <section ref={ref} className="audit on-sky" data-header="dark" aria-labelledby="audit-title">
-      <motion.div className="audit__sky" style={{ y: skyY }} aria-hidden>
+      <motion.div className="audit__sky" style={still ? undefined : { y: skyY }} aria-hidden>
         <img src={asset("/figma/sky.jpg")} alt="" />
       </motion.div>
       {/* the cloud-white top of this band needs the dark header */}

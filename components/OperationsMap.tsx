@@ -69,8 +69,8 @@ function Gradients() {
         <stop offset="1" stopColor="#1fd67a" />
       </linearGradient>
       <linearGradient id="ops-red" x1="0" x2="1">
-        <stop offset="0" stopColor="#ef4b4b" />
-        <stop offset="0.35" stopColor="#ef4b4b" stopOpacity="0.8" />
+        <stop offset="0" style={{ stopColor: "var(--tx-alert)" }} />
+        <stop offset="0.35" style={{ stopColor: "var(--tx-alert)" }} stopOpacity="0.8" />
         <stop offset="0.7" stopColor="#08e88c" />
       </linearGradient>
       <linearGradient id="ops-yellow" x1="0" x2="1">
@@ -271,7 +271,7 @@ function MobileMap({ play }: { play: boolean }) {
             key={i}
             d={d}
             fill="none"
-            stroke={i === 1 ? "#ef4b4b" : "#08e88c"}
+            style={{ stroke: i === 1 ? "var(--tx-alert)" : "#08e88c" }}
             strokeWidth="2"
             initial={{ pathLength: 0 }}
             animate={play ? { pathLength: 1 } : {}}

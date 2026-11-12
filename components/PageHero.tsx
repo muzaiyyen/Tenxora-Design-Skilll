@@ -3,7 +3,7 @@
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
 import { asset } from "@/lib/asset";
-import { useMedia } from "@/lib/hooks";
+import { useMedia, useReduce } from "@/lib/hooks";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -22,7 +22,9 @@ export default function PageHero({
   actions?: React.ReactNode;
 }) {
   const ref = useRef<HTMLElement>(null);
-  const mobile = useMedia("(max-width: 760px)");
+  const phone = useMedia("(max-width: 760px)");
+  const still = useReduce();
+  const mobile = phone || still;
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const skyY = useTransform(scrollYProgress, [0, 1], ["0%", "16%"]);
   const copyY = useTransform(scrollYProgress, [0, 0.8], [0, -90]);

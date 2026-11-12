@@ -1523,7 +1523,8 @@ a {
 .footer {
   position: relative;
   z-index: 2;
-  padding: calc(104 * var(--u)) calc(56 * var(--u)) calc(40 * var(--u));
+  /* left edge matches the audit heading above (202) so the logo and tagline line up with it */
+  padding: calc(104 * var(--u)) calc(56 * var(--u)) calc(40 * var(--u)) calc(202 * var(--u));
 }
 .footer__top {
   display: flex;
@@ -2808,4 +2809,279 @@ a {
 }
 .team--arc .tcard--gap {
   box-shadow: none;
+}
+
+/* ---------- Inner pages: Why Tenxora + Blog ---------- */
+.phero {
+  position: relative;
+  overflow: clip;
+  color: #fff;
+  min-height: calc(900 * var(--u));
+}
+.phero__sky {
+  height: 100%;
+}
+.phero__sky::after {
+  height: 34%;
+}
+.phero__copy {
+  position: relative;
+  z-index: 2;
+  padding: calc(240 * var(--u)) 16px calc(280 * var(--u));
+  text-align: center;
+}
+.phero__label {
+  margin: 0 0 calc(34 * var(--u));
+}
+.phero__title {
+  font-size: max(48px, calc(96 * var(--u)));
+}
+.phero__lead {
+  margin-top: calc(40 * var(--u));
+}
+.phero__body {
+  width: min(calc(684 * var(--u)), 100%);
+  margin: calc(36 * var(--u)) auto 0;
+}
+.phero__body p + p {
+  margin-top: 1.06em;
+}
+.why,
+.posts {
+  padding-top: 0;
+  margin-top: calc(-120 * var(--u));
+  z-index: 3;
+}
+.why__steps {
+  list-style: none;
+  margin: 0;
+  padding: calc(48 * var(--u));
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: calc(20 * var(--u));
+}
+.why__card {
+  min-height: calc(420 * var(--u));
+  padding: calc(28 * var(--u));
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+.why__art {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: calc(190 * var(--u));
+}
+.why__meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.why__tag {
+  font-size: max(14px, calc(17 * var(--u)));
+  color: rgba(0, 0, 0, 0.55);
+  font-variation-settings: "ROND" 100;
+}
+.why__h {
+  margin: calc(16 * var(--u)) 0 0;
+  font-weight: 400;
+  font-size: max(22px, calc(32 * var(--u)));
+  line-height: 1.08;
+  font-variation-settings: "ROND" 100;
+}
+.why__body {
+  margin: calc(12 * var(--u)) 0 0;
+  font-size: max(14px, calc(17.5 * var(--u)));
+  line-height: 1.35;
+  color: rgba(0, 0, 0, 0.67);
+}
+.why-co__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: calc(90 * var(--u));
+  align-items: center;
+  padding: 0 calc(63 * var(--u));
+}
+.why-co__body {
+  margin-top: calc(28 * var(--u));
+  color: rgba(0, 0, 0, 0.67);
+  max-width: 40ch;
+}
+.why-co__card {
+  padding: calc(40 * var(--u));
+  border-radius: calc(36 * var(--u));
+  background: #fff;
+}
+.why-co__h {
+  margin: 0 0 calc(24 * var(--u));
+  font-weight: 500;
+  font-size: max(20px, calc(28 * var(--u)));
+}
+.why-co__list {
+  margin: 0;
+  display: grid;
+}
+.why-co__row {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr);
+  gap: 16px;
+  padding: calc(16 * var(--u)) 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  font-size: max(15px, calc(19 * var(--u)));
+  line-height: 1.3;
+}
+.why-co__row dt {
+  color: rgba(0, 0, 0, 0.5);
+}
+.why-co__row dd {
+  margin: 0;
+}
+.why-co__row a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--tx-treen);
+  text-underline-offset: 3px;
+}
+.posts__grid {
+  list-style: none;
+  margin: 0;
+  padding: calc(48 * var(--u));
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: calc(20 * var(--u));
+}
+.posts__grid > li {
+  display: flex;
+}
+.post {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(22 * var(--u));
+  min-height: calc(250 * var(--u));
+  padding: calc(26 * var(--u)) calc(28 * var(--u)) calc(28 * var(--u));
+  color: #000;
+  text-decoration: none;
+}
+.post__title {
+  margin: 0;
+  flex: 1;
+  font-weight: 400;
+  font-size: max(19px, calc(26 * var(--u)));
+  line-height: 1.15;
+  font-variation-settings: "ROND" 100;
+  text-wrap: pretty;
+}
+.post__arrow {
+  align-self: flex-end;
+  display: grid;
+  place-items: center;
+  width: max(38px, calc(46 * var(--u)));
+  height: max(38px, calc(46 * var(--u)));
+  border-radius: 999px;
+  background: var(--pill-dark);
+  color: #fff;
+  transition: background-color 0.35s var(--ease), color 0.35s var(--ease), transform 0.35s var(--ease);
+}
+.post__arrow svg {
+  width: 42%;
+  height: 42%;
+}
+.post:hover .post__arrow,
+.post:focus-visible .post__arrow {
+  background: var(--tx-treen);
+  color: #000;
+  transform: rotate(45deg);
+}
+.skyfoot {
+  margin-top: calc(160 * var(--u));
+}
+.skyfoot__inner {
+  position: relative;
+  z-index: 2;
+  padding: calc(330 * var(--u)) calc(56 * var(--u)) 0 calc(202 * var(--u));
+}
+.skyfoot__inner:empty {
+  padding-top: calc(200 * var(--u));
+}
+.skyfoot__line {
+  max-width: 28ch;
+}
+.skyfoot__line a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--tx-treen);
+  text-decoration-thickness: 3px;
+  text-underline-offset: 6px;
+}
+@media (max-width: 1100px) and (min-width: 761px) {
+  .why__steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .posts__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 760px) {
+  .phero {
+    min-height: 0;
+  }
+  .phero__copy {
+    padding: 150px 16px 150px;
+  }
+  .phero__label {
+    margin-bottom: 20px;
+  }
+  .why,
+  .posts {
+    margin-top: -70px;
+    padding: 0 12px;
+  }
+  .why__steps,
+  .posts__grid {
+    grid-template-columns: 1fr;
+    padding: 12px;
+    gap: 12px;
+    border-radius: 36px;
+  }
+  .why__card {
+    min-height: 230px;
+    padding: 22px;
+    border-radius: 26px;
+  }
+  .why__art {
+    height: 120px;
+  }
+  .skyfoot__inner:empty {
+    padding-top: 140px;
+  }
+  .why-co__grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 0 8px;
+  }
+  .why-co__card {
+    padding: 24px;
+    border-radius: 28px;
+  }
+  .why-co__row {
+    grid-template-columns: 1fr;
+    gap: 2px;
+    padding: 12px 0;
+  }
+  .post {
+    min-height: 0;
+    padding: 18px 20px 20px;
+    border-radius: 26px;
+  }
+  .skyfoot {
+    margin-top: 96px;
+  }
+  .skyfoot__inner {
+    padding: 200px 16px 0;
+  }
 }

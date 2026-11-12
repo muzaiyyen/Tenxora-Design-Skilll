@@ -2945,10 +2945,152 @@ a {
   text-decoration-color: var(--tx-treen);
   text-underline-offset: 3px;
 }
+.posts__panel {
+  padding: calc(48 * var(--u));
+}
+.posts__filters {
+  display: flex;
+  flex-direction: column;
+  gap: calc(18 * var(--u));
+  margin-bottom: calc(28 * var(--u));
+}
+.posts__search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: min(100%, calc(520 * var(--u)));
+  min-width: 260px;
+  height: max(46px, calc(54 * var(--u)));
+  padding: 0 14px 0 18px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    inset 0 0 0 1px rgba(0, 0, 0, 0.06),
+    0 10px 30px rgba(10, 30, 60, 0.06);
+  color: rgba(0, 0, 0, 0.5);
+  transition: box-shadow 0.3s var(--ease);
+}
+.posts__search:focus-within {
+  box-shadow:
+    inset 0 1px 0 #fff,
+    inset 0 0 0 2px var(--tx-treen),
+    0 10px 30px rgba(10, 30, 60, 0.08);
+}
+.posts__search svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
+}
+.posts__search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: none;
+  outline: none;
+  font: inherit;
+  font-size: max(16px, calc(19 * var(--u)));
+  color: #000;
+}
+.posts__search input::-webkit-search-cancel-button {
+  display: none;
+}
+.posts__clear {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--pill-dark);
+  color: #fff;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+.posts__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.posts__chip {
+  position: relative;
+  flex: none;
+  border: 0;
+  height: max(36px, calc(42 * var(--u)));
+  padding: 0 calc(18 * var(--u));
+  min-width: 44px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+  font: inherit;
+  font-size: max(14px, calc(16 * var(--u)));
+  font-variation-settings: "ROND" 100;
+  color: #000;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.3s var(--ease);
+}
+.posts__chip:hover {
+  background: #fff;
+}
+.posts__chip-thumb {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--pill-dark);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+.posts__chip-label {
+  position: relative;
+  z-index: 1;
+  transition: color 0.3s var(--ease);
+}
+.posts__chip[aria-pressed="true"] .posts__chip-label {
+  color: #fff;
+}
+.posts__chip-n {
+  margin-left: 4px;
+  opacity: 0.5;
+  font-size: 0.85em;
+}
+.posts__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: calc(60 * var(--u)) 0;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.6);
+}
+.post__foot {
+  align-self: stretch;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+.post__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.post__tag {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.05);
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.6);
+  transition: background-color 0.3s var(--ease), color 0.3s var(--ease);
+}
+.post__tag.is-on {
+  background: var(--tx-treen);
+  color: #000;
+}
 .posts__grid {
   list-style: none;
   margin: 0;
-  padding: calc(48 * var(--u));
+  padding: 0;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: calc(20 * var(--u));
@@ -2977,7 +3119,7 @@ a {
   text-wrap: pretty;
 }
 .post__arrow {
-  align-self: flex-end;
+  flex: none;
   display: grid;
   place-items: center;
   width: max(38px, calc(46 * var(--u)));
@@ -3042,11 +3184,33 @@ a {
     padding: 0 12px;
   }
   .why__steps,
+  .posts__panel {
+    padding: 12px;
+    border-radius: 36px;
+  }
+  .why__steps,
   .posts__grid {
     grid-template-columns: 1fr;
-    padding: 12px;
     gap: 12px;
-    border-radius: 36px;
+  }
+  .posts__filters {
+    gap: 12px;
+    margin: 4px 0 14px;
+  }
+  .posts__search {
+    width: 100%;
+    min-width: 0;
+  }
+  /* chips scroll sideways on phones instead of stacking four rows deep */
+  .posts__chips {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin: 0 -12px;
+    padding: 2px 12px 4px;
+    scrollbar-width: none;
+  }
+  .posts__chips::-webkit-scrollbar {
+    display: none;
   }
   .why__card {
     min-height: 230px;

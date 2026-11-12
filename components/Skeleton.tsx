@@ -102,3 +102,54 @@ export function ChartArt({ delay = 0 }: { delay?: number }) {
     </svg>
   );
 }
+
+/** AI-assisted card: a sparkle drafts three lines, then a person checks the draft. */
+export function AiArt() {
+  const star = "M14 0 C15.5 9 19 12.5 28 14 C19 15.5 15.5 19 14 28 C12.5 19 9 15.5 0 14 C9 12.5 12.5 9 14 0 Z";
+  return (
+    <>
+      <motion.svg
+        viewBox="0 0 28 28"
+        style={{ position: "absolute", left: u(27), top: u(26), width: u(30), height: u(30), overflow: "visible" }}
+        aria-hidden
+        initial={{ scale: 0, rotate: -90 }}
+        whileInView={{ scale: 1, rotate: 0 }}
+        viewport={{ once: true }}
+        transition={{ type: "spring", stiffness: 160, damping: 12 }}
+      >
+        <motion.g
+          animate={{ scale: [1, 1.18, 1], rotate: [0, 12, 0] }}
+          transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
+          style={{ transformOrigin: "14px 14px" }}
+        >
+          <path d={star} fill="#6b71cd" />
+        </motion.g>
+        <path d={star} fill="#bfc5ff" transform="translate(26 -6) scale(0.42)" />
+      </motion.svg>
+      <Bars
+        bars={[
+          { x: 70, y: 34, w: 120, tone: "purple" },
+          { x: 70, y: 59, w: 150 },
+          { x: 70, y: 84, w: 104 },
+        ]}
+        delay={0.3}
+      />
+      {/* the human review step */}
+      <motion.span
+        className="ai-review"
+        style={{ left: u(27), top: u(112) }}
+        initial={{ opacity: 0, y: 8 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 1.1 }}
+      >
+        <svg viewBox="0 0 20 20" aria-hidden>
+          <circle cx="10" cy="7" r="3.6" fill="currentColor" />
+          <path d="M3 18c.8-3.6 3.6-5.4 7-5.4s6.2 1.8 7 5.4" fill="currentColor" />
+        </svg>
+      </motion.span>
+      <Check x={58} y={115} />
+      <Bars bars={[{ x: 92, y: 120.5, w: 64, tone: "dark" }]} delay={1.3} />
+    </>
+  );
+}

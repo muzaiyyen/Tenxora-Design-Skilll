@@ -4,13 +4,13 @@ import { motion } from "motion/react";
 import { why } from "@/lib/pages";
 import PageHero from "./PageHero";
 import SkyFooter from "./SkyFooter";
-import { Bars, ChartArt, ChecklistArt, listBars } from "./Skeleton";
+import { AiArt, Bars, ChartArt, ChecklistArt, listBars } from "./Skeleton";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
 const ART = [
   () => <Bars bars={listBars} />,
-  () => <ChartArt />,
+  () => <AiArt />,
   () => <ChecklistArt />,
   () => <ChartArt delay={0.3} />,
 ];

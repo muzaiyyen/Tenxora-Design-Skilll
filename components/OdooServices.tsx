@@ -5,13 +5,13 @@ import { odooServices as o } from "@/lib/pages";
 import PageHero from "./PageHero";
 import SkyFooter from "./SkyFooter";
 import Magnetic from "./Magnetic";
-import { Bars, ChartArt, ChecklistArt, listBars } from "./Skeleton";
+import { AiArt, Bars, ChartArt, ChecklistArt, listBars } from "./Skeleton";
 
 const ART = [
   () => <ChecklistArt />,
   () => <Bars bars={listBars} />,
+  () => <AiArt />,
   () => <ChartArt />,
-  () => <ChartArt delay={0.3} />,
 ];
 
 const Arrow = () => (

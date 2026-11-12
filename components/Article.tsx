@@ -7,6 +7,7 @@ import { links } from "@/lib/content";
 import { asset } from "@/lib/asset";
 import Magnetic from "./Magnetic";
 import SkyFooter from "./SkyFooter";
+import Share from "./Share";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 const c = blog.closing;
@@ -136,6 +137,9 @@ export default function Article({ slug }: { slug: string }) {
           >
             <article className="wcard prose">
               <Body blocks={blocks} />
+              <div className="art__share-end">
+                <Share url={post.href} title={post.title} label="Share this post" />
+              </div>
             </article>
             <aside className="art__aside">
               <div className="art__sticky">
@@ -153,6 +157,9 @@ export default function Article({ slug }: { slug: string }) {
                     </ol>
                   </nav>
                 )}
+                <div className="wcard art__share">
+                  <Share url={post.href} title={post.title} />
+                </div>
                 <div className="wcard art__cta">
                   <p>{c.before.trim()}</p>
                   <Magnetic strength={0.15}>

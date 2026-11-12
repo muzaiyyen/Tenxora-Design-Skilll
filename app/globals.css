@@ -3789,6 +3789,7 @@ a {
   height: 20px;
 }
 .a11y__body {
+  overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
   padding: 4px 16px 8px;
@@ -3837,7 +3838,7 @@ a {
 }
 .a11y__grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 8px;
 }
 .a11y__tile {
@@ -3891,7 +3892,7 @@ a {
   font-size: 15px;
   font-weight: 500;
   line-height: 1.2;
-  padding-right: 28px;
+  padding-right: 38px;
 }
 .a11y__hint {
   grid-column: 1 / -1;
@@ -3987,8 +3988,90 @@ a {
     border-radius: 30px;
     transform-origin: 50% 100%;
   }
+  .a11y__head {
+    padding: 22px 18px 16px 22px;
+  }
+  .a11y__body {
+    padding: 4px 14px 12px;
+  }
+  .a11y__group {
+    margin-bottom: 22px;
+  }
+  /* phone: one roomy list per group, like a settings screen */
+  .a11y__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    border-radius: 24px;
+    background: #fff;
+    box-shadow:
+      inset 0 0 0 1px rgba(0, 0, 0, 0.05),
+      0 8px 24px rgba(10, 30, 60, 0.06);
+    overflow: hidden;
+  }
   .a11y__tile {
-    min-height: 0;
+    grid-template-columns: 40px minmax(0, 1fr) 44px;
+    grid-template-rows: auto auto;
+    column-gap: 14px;
+    row-gap: 2px;
+    min-height: 72px;
+    padding: 14px 16px;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+  .a11y__tile + .a11y__tile::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 70px;
+    right: 16px;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.07);
+  }
+  .a11y__tile:hover {
+    box-shadow: none;
+  }
+  .a11y__tile[aria-checked="true"] {
+    background: #ecfdf5;
+    box-shadow: none;
+  }
+  .a11y__icon {
+    grid-row: 1 / 3;
+    align-self: center;
+    width: 40px;
+    height: 40px;
+  }
+  .a11y__name {
+    grid-column: 2;
+    align-self: end;
+    padding-right: 0;
+    font-size: 16px;
+  }
+  .a11y__hint {
+    grid-column: 2;
+    align-self: start;
+    font-size: 13px;
+  }
+  .a11y__switch {
+    position: static;
+    grid-column: 3;
+    grid-row: 1 / 3;
+    justify-self: end;
+    align-self: center;
+    width: 44px;
+    height: 26px;
+  }
+  .a11y__switch span {
+    top: 3px;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+  }
+  .a11y__switch {
+    position: relative;
+  }
+  .a11y__tile[aria-checked="true"] .a11y__switch span {
+    transform: translateX(18px);
   }
   .a11y__foot {
     flex-direction: column;

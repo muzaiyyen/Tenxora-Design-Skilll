@@ -74,6 +74,21 @@ export default function Footer() {
 
       <div className="footer__bottom">
         <p className="footer__copy">{footer.copyright}</p>
+        <div className="footer__meta">
+          <a className="footer__llms" href={footer.llms.href}>
+            <code>{footer.llms.label}</code>
+            <span>{footer.llms.note}</span>
+          </a>
+          <a className="footer__sitemap glass" href={footer.sitemap.href}>
+            <svg viewBox="0 0 20 20" fill="none" aria-hidden>
+              <rect x="7.5" y="2.5" width="5" height="4" rx="1.2" stroke="currentColor" strokeWidth="1.6" />
+              <rect x="2.5" y="13.5" width="5" height="4" rx="1.2" stroke="currentColor" strokeWidth="1.6" />
+              <rect x="12.5" y="13.5" width="5" height="4" rx="1.2" stroke="currentColor" strokeWidth="1.6" />
+              <path d="M10 6.5v3.5M5 13.5V10h10v3.5" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+            </svg>
+            <span style={{ position: "relative", zIndex: 2 }}>{footer.sitemap.label}</span>
+          </a>
+        </div>
         <a className="footer__copy footer__mail" href={`mailto:${footer.email}`}>
           {footer.email}
         </a>

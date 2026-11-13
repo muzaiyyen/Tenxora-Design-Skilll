@@ -156,3 +156,29 @@ export const odooServices = {
     },
   ],
 };
+
+// Sitemap page (new page, 2026-11-13). Headings and the intro line are NEW copy: Bilal to approve.
+export const sitemapPage = {
+  title: "Sitemap | Tenxora",
+  h1: "Sitemap",
+  intro: "Every page on Tenxora.Services in one place.",
+  main: {
+    heading: "Main pages",
+    links: [
+      { label: "Home", href: links.home },
+      { label: "Odoo Services", href: links.odoo },
+      { label: "Blog", href: links.blog },
+      { label: "Our Team", href: links.ourTeam },
+      { label: "Why Tenxora", href: links.whyTenxora },
+      { label: "Contact Us", href: links.contact },
+    ],
+  },
+  postsHeading: "Insights",
+  machine: {
+    heading: "For search engines and AI",
+    links: [
+      { label: "XML sitemap", href: links.sitemapXml },
+      { label: "llms.txt", href: footer.llms.href },
+    ],
+  },
+};

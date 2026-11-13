@@ -14,6 +14,9 @@ export const links = {
   privacy: "https://tenxora.services/privacy/",
   odoo: process.env.NEXT_PUBLIC_ODOO_HREF ?? "https://tenxora.services/odoo-services/",
   odooConsulting: "https://tenxora.services/odoo-services/consulting/",
+  // human-readable sitemap page (new, 2026-11-13); the XML one is for search engines
+  sitemap: process.env.NEXT_PUBLIC_SITEMAP_HREF ?? "https://tenxora.services/sitemap/",
+  sitemapXml: "https://tenxora.services/sitemap.xml",
   bookCall: "https://tenxora.services/book-a-call/",
   portal: "https://odoo.tenxora.services/",
   facebook: "https://www.facebook.com/people/Tenxora/61572091372256/",
@@ -224,7 +227,7 @@ export const footer = {
   copyright: "© 2026 Tenxora.Services",
   // NEW footer line (2026-11-13, needs Bilal's sign-off): the llms.txt note and the sitemap button
   llms: { label: "llms.txt", note: "A plain summary of this site for AI assistants", href: "https://tenxora.services/llms.txt" },
-  sitemap: { label: "Sitemap", href: "https://tenxora.services/sitemap.xml" },
+  sitemap: { label: "Sitemap", href: links.sitemap },
   email: "contact@tenxora.services",
 };
 

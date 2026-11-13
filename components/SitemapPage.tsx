@@ -6,6 +6,7 @@ import { footer } from "@/lib/content";
 import { blog, postHref, sitemapPage as sm } from "@/lib/pages";
 import PageHero from "./PageHero";
 import SkyFooter from "./SkyFooter";
+import { route } from "@/lib/route";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -53,7 +54,7 @@ function Group({ n, heading, links, i, wide }: { n: string; heading: string; lin
       <ul className="smap__list">
         {links.map((l) => (
           <li key={l.href + l.label}>
-            <a href={l.href} className="smap__link" {...(l.external ? { target: "_blank", rel: "noopener" } : {})}>
+            <a href={route(l.href)} className="smap__link" {...(l.external ? { target: "_blank", rel: "noopener" } : {})}>
               <span>{l.label.replace(/\s*↗$/, "")}</span>
               <span className="smap__arrow">
                 <Arrow />

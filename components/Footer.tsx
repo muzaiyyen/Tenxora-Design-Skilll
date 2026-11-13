@@ -3,6 +3,7 @@
 import { motion } from "motion/react";
 import { footer, links } from "@/lib/content";
 import { asset } from "@/lib/asset";
+import { route } from "@/lib/route";
 
 const n = footer.newsletter;
 
@@ -37,7 +38,7 @@ export default function Footer() {
             <input type="checkbox" name="consent" required />
             <span>
               {n.consent[0]}
-              <a href={links.privacy}>{n.consent[1]}</a>
+              <a href={route(links.privacy)}>{n.consent[1]}</a>
               {n.consent[2]}
             </span>
           </label>
@@ -60,7 +61,7 @@ export default function Footer() {
                 <li key={l.label}>
                   <a
                     className="footer__link"
-                    href={l.href}
+                    href={route(l.href)}
                     {...(l.external ? { target: "_blank", rel: "noreferrer" } : {})}
                   >
                     {l.label}

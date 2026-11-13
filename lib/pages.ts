@@ -2,6 +2,7 @@
 // Do not reword. Paragraphs marked PENDING could not be copied verbatim from here (the build environment
 // cannot reach tenxora.services); they stay empty until the exact text is supplied, and empty ones are not shown.
 import { footer, links } from "./content";
+import type { Sec } from "./docs";
 
 export const why = {
   title: "About Tenxora | AI-Assisted Services, Human Reviewed",
@@ -17,6 +18,10 @@ export const why = {
   ],
   odoo: { heading: "Odoo today. A broader service model ahead.", body: "" }, // PENDING: body
   // "A practical working relationship." was removed at the user's request (2026-11-12)
+  actions: [
+    { label: "Discuss your operation →", href: links.contact },
+    { label: "Explore Odoo services", href: links.odoo },
+  ],
   company: {
     heading: "Company details",
     rows: [
@@ -118,12 +123,11 @@ export const blog = {
 // Odoo Services, copied from the user's screenshot of the live page (2026-11-12).
 // PENDING: the bodies and link labels of cards 03 and 04, and anything below them, were cut off in the screenshot.
 export const odooServices = {
-  title: "Odoo Services | Tenxora",
+  title: "Odoo Services | Implementation & Consulting | Tenxora",
   h1: "Odoo services",
   eyebrow: "Odoo ERP services • AI-assisted, human-reviewed",
   lead: "Make Odoo work around the way your business operates.",
-  body: "Tenxora.Services helps English-speaking businesses worldwide plan, implement and improve Odoo. We are an AI-assisted Service as a Software company: AI and code prepare initial work, then a human reviews it against the agreed requirements. Your team approves the business workflows before an agreed production handover.",
-  // the button's destination wasn't visible in the screenshot; the contact page is assumed
+  body: "Tenxora.Services helps businesses worldwide plan, implement and improve Odoo. We are an AI-assisted Service as a Software company: AI and code prepare initial work, then a human reviews it against the agreed requirements. Your team approves the business workflows before an agreed production handover.",
   cta: { label: "Discuss your Odoo project →", href: links.contact },
   email: { label: footer.email, href: `mailto:${footer.email}` },
   services: [
@@ -146,16 +150,35 @@ export const odooServices = {
       kicker: "Understand the method",
       title: "AI-assisted implementation",
       body: "",
-      link: { label: "", href: "https://tenxora.services/odoo-services/ai-assisted-implementation/" },
+      link: { label: "See the review process →", href: "https://tenxora.services/odoo-services/ai-assisted-implementation/" },
     },
     {
       n: "04",
       kicker: "Improve an existing system",
       title: "Integrations and improvements",
       body: "",
-      link: { label: "", href: "https://tenxora.services/odoo-services/integration/" },
+      link: { label: "Describe your improvement →", href: links.contact },
     },
   ],
+  // the rest of the live page (read 2026-11-13); paragraph bodies PENDING
+  more: [
+    { kind: "text", heading: "Start with one business problem" },
+    { kind: "text", heading: "What we agree before delivery" },
+    { kind: "text", heading: "What does an Odoo project cost?" },
+    { kind: "feature", heading: "Check the partner evidence", links: [{ label: "Tenxora (Private) Limited as a Ready partner", href: "https://www.odoo.com/partners/tenxora-private-limited-14366535" }] },
+    { kind: "feature", heading: "Explore the delivery approach", cta: { label: "Explore AI-assisted Odoo delivery →", href: "https://odoo.tenxora.services/" } },
+    { kind: "actions", heading: "Bring the right context to the first discussion", actions: [{ label: "Discuss your Odoo project →", href: links.contact }, { label: footer.email, href: `mailto:${footer.email}` }] },
+    {
+      kind: "cards",
+      heading: "Explore your next Odoo step",
+      items: [
+        { heading: "Connect your systems", link: { label: "Odoo integrations →", href: "https://tenxora.services/odoo-services/integration/" } },
+        { heading: "Move business data", link: { label: "Odoo data migration →", href: "https://tenxora.services/odoo-services/migration/" } },
+        { heading: "Adapt a workflow", link: { label: "Odoo customization →", href: "https://tenxora.services/odoo-services/customization/" } },
+        { heading: "Understand the budget", link: { label: "Implementation cost →", href: "https://tenxora.services/odoo-services/implementation-cost/" } },
+      ],
+    },
+  ] as Sec[],
 };
 
 // Sitemap page (new page, 2026-11-13). Headings and the intro line are NEW copy: Bilal to approve.

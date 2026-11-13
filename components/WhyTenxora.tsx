@@ -5,6 +5,8 @@ import { why } from "@/lib/pages";
 import PageHero from "./PageHero";
 import SkyFooter from "./SkyFooter";
 import { AiArt, Bars, ChartArt, ChecklistArt, listBars } from "./Skeleton";
+import { route } from "@/lib/route";
+import Magnetic from "./Magnetic";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -81,6 +83,15 @@ export default function WhyTenxora() {
               ))}
             </h2>
             {why.odoo.body && <p className="body why-co__body">{why.odoo.body}</p>}
+            <div className="why-co__ctas">
+              {why.actions.map((a, i) => (
+                <Magnetic key={a.label}>
+                  <a href={route(a.href)} className={`pill ${i === 0 ? "pill--green" : "pill--ghost"} glass`}>
+                    <span style={{ position: "relative", zIndex: 2 }}>{a.label}</span>
+                  </a>
+                </Magnetic>
+              ))}
+            </div>
           </div>
 
           <motion.div

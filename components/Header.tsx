@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { links as site, nav } from "@/lib/content";
 import { asset } from "@/lib/asset";
+import { route } from "@/lib/route";
 
 /**
  * Figma "Frame 11": logo left, four links centred, dark "Contact Us" pill right.
@@ -74,7 +75,7 @@ export default function Header() {
 
         <nav className="header__nav" aria-label="Main" onPointerLeave={() => setHover(null)}>
           {links.map((l, i) => (
-            <a key={l.label} href={l.href} className="header__link" onPointerEnter={() => setHover(i)} onFocus={() => setHover(i)}>
+            <a key={l.label} href={route(l.href)} className="header__link" onPointerEnter={() => setHover(i)} onFocus={() => setHover(i)}>
               {hover === i && (
                 <motion.span
                   layoutId="nav-hl"
@@ -87,7 +88,7 @@ export default function Header() {
           ))}
         </nav>
 
-        <a href={contact.href} className="pill pill--dark glass header__cta">
+        <a href={route(contact.href)} className="pill pill--dark glass header__cta">
           <span style={{ position: "relative", zIndex: 2 }}>{contact.label}</span>
         </a>
 
@@ -132,7 +133,7 @@ export default function Header() {
             {nav.map((l, i) => (
               <motion.a
                 key={l.label}
-                href={l.href}
+                href={route(l.href)}
                 className={`header__menu-link${i === nav.length - 1 ? " is-cta" : ""}`}
                 onClick={() => setOpen(false)}
                 initial={{ opacity: 0, y: 8 }}

@@ -1,6 +1,6 @@
 # Tenxora.Services
 
-> AI-assisted business services, reviewed by people. Tenxora.Services helps English-speaking businesses worldwide plan, implement and improve Odoo. AI and code prepare the initial work; people review it before customer approval. Odoo services are available today.
+> AI-assisted business services, reviewed by people. Tenxora.Services helps businesses worldwide plan, implement and improve Odoo. AI and code prepare the initial work; people review it before customer approval. Odoo services are available today.
 
 Tenxora.Services is an AI-assisted Service as a Software company. Your team approves the business workflows before an agreed production handover. Only Odoo services are offered at the moment; other services are not yet available.
 

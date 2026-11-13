@@ -3,9 +3,11 @@
 import { motion } from "motion/react";
 import { odooServices as o } from "@/lib/pages";
 import PageHero from "./PageHero";
+import { DocSections } from "./DocPage";
 import SkyFooter from "./SkyFooter";
 import Magnetic from "./Magnetic";
 import { AiArt, Bars, ChartArt, ChecklistArt, listBars } from "./Skeleton";
+import { route } from "@/lib/route";
 
 const ART = [
   () => <ChecklistArt />,
@@ -31,7 +33,7 @@ export default function OdooServices() {
         actions={
           <>
             <Magnetic>
-              <a href={o.cta.href} className="pill pill--green glass">
+              <a href={route(o.cta.href)} className="pill pill--green glass">
                 <span style={{ position: "relative", zIndex: 2 }}>{o.cta.label}</span>
               </a>
             </Magnetic>
@@ -58,7 +60,7 @@ export default function OdooServices() {
                   transition={{ type: "spring", stiffness: 70, damping: 15, delay: (i % 2) * 0.1 }}
                 >
                   <motion.a
-                    href={s.link.href}
+                    href={route(s.link.href)}
                     className="wcard svc__card"
                     whileHover={{ y: -8 }}
                     transition={{ type: "spring", stiffness: 260, damping: 22 }}
@@ -84,6 +86,14 @@ export default function OdooServices() {
               );
             })}
           </ul>
+        </div>
+      </section>
+
+      <section className="section on-white doc doc--next" data-header="light">
+        <div className="wrap">
+          <div className="capsule doc__sheet">
+            <DocSections sections={o.more} />
+          </div>
         </div>
       </section>
 

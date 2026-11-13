@@ -71,7 +71,8 @@ const postBase = process.env.NEXT_PUBLIC_POST_BASE; // preview build: "./post-" 
 export const slugOf = (href: string) => href.replace(/\/$/, "").split("/").pop() as string;
 export const postHref = (href: string) => {
   const slug = slugOf(href);
-  if (!articles[slug]) return href;
+  // WordPress build: every post lives at its real permalink, so keep it
+  if (!articles[slug] || process.env.NEXT_PUBLIC_POSTS_LIVE === "1") return href;
   return postBase ? `${postBase}${slug}.html` : `/blog/${slug}/`;
 };
 

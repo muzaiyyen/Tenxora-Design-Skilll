@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { footer } from "@/lib/content";
 import { blog, postHref, sitemapPage as sm } from "@/lib/pages";
@@ -9,6 +10,23 @@ import SkyFooter from "./SkyFooter";
 const ease = [0.22, 1, 0.36, 1] as const;
 
 type L = { label: string; href: string; external?: boolean };
+type P = { label: string; href: string; date: string };
+
+// On WordPress, page-sitemap.php prints every published post into window.__TX_SITEMAP_POSTS, so the
+// list stays current as posts are added. The built-in list is the fallback (preview, no data).
+declare global {
+  interface Window {
+    __TX_SITEMAP_POSTS?: { title: string; url: string; date: string }[];
+  }
+}
+function useLivePosts(fallback: P[]) {
+  const [posts, setPosts] = useState(fallback);
+  useEffect(() => {
+    const live = window.__TX_SITEMAP_POSTS;
+    if (Array.isArray(live) && live.length) setPosts(live.map((p) => ({ label: p.title, href: p.url, date: p.date })));
+  }, []);
+  return posts;
+}
 
 const Arrow = () => (
   <svg viewBox="0 0 20 20" fill="none" aria-hidden>
@@ -50,7 +68,7 @@ function Group({ n, heading, links, i, wide }: { n: string; heading: string; lin
 
 export default function SitemapPage() {
   const groups = [sm.main, ...footer.columns, sm.machine];
-  const posts = blog.posts.map((p) => ({ label: p.title, href: postHref(p.href), date: p.date }));
+  const posts = useLivePosts(blog.posts.map((p) => ({ label: p.title, href: postHref(p.href), date: p.date })));
   return (
     <>
       <PageHero title={sm.h1} body={<p>{sm.intro}</p>} />

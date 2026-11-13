@@ -226,7 +226,7 @@ export const footer = {
   },
   copyright: "© 2026 Tenxora.Services",
   // NEW footer line (2026-11-13, needs Bilal's sign-off): the llms.txt note and the sitemap button
-  llms: { label: "llms.txt", note: "A plain summary of this site for AI assistants", href: "https://tenxora.services/llms.txt" },
+  llms: { label: "llms.txt", note: "A plain summary of this site for AI assistants", href: process.env.NEXT_PUBLIC_LLMS_HREF ?? "https://tenxora.services/llms.txt" },
   sitemap: { label: "Sitemap", href: links.sitemap },
   email: "contact@tenxora.services",
 };

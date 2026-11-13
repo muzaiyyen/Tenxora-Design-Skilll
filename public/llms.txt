@@ -1,0 +1,62 @@
+# Tenxora.Services
+
+> AI-assisted business services, reviewed by people. Tenxora.Services helps English-speaking businesses worldwide plan, implement and improve Odoo. AI and code prepare the initial work; people review it before customer approval. Odoo services are available today.
+
+Tenxora.Services is an AI-assisted Service as a Software company. Your team approves the business workflows before an agreed production handover. Only Odoo services are offered at the moment; other services are not yet available.
+
+- Founder: Bilal Mashkoor
+- Founded: 2026
+- Team: 15 people
+- Business address: 4th Floor, Interlace Plaza, I-8 Markaz, Islamabad 44000, Pakistan
+- Telephone: +92 336 5188711
+- Email: contact@tenxora.services
+
+## Main pages
+
+- [Home](https://tenxora.services/): AI-assisted business services, reviewed by people; Odoo implementation and consulting for the way your business works.
+- [Odoo services](https://tenxora.services/odoo-services/): Make Odoo work around the way your business operates. Overview of implementation, consulting, AI-assisted implementation, and integrations and improvements.
+- [Why Tenxora](https://tenxora.services/why-tenxora/): AI-assisted delivery with human accountability, how the work is done, and company details.
+- [Our Team](https://tenxora.services/our-team/): The people behind Tenxora.Services and their experience.
+- [Contact](https://tenxora.services/contactus/): Discuss your Odoo project.
+- [Book an introduction](https://tenxora.services/book-a-call/): Book a call with the team.
+
+## Odoo services
+
+- [Odoo implementation](https://tenxora.services/odoo-services/implementation/): For a new rollout or a defined next phase: agree processes, configure the relevant applications, prepare data and test the workflows your team needs.
+- [Odoo consulting and workflow review](https://tenxora.services/odoo-services/consulting/): For unclear requirements or an existing setup that needs direction: assess fit, identify gaps and turn competing requests into a prioritized delivery plan.
+- [AI-assisted implementation](https://tenxora.services/odoo-services/ai-assisted-implementation/): How AI and code prepare initial work and people review it against the agreed requirements.
+- [Integrations](https://tenxora.services/odoo-services/integration/): Connect Odoo with other systems and improve an existing setup.
+- [Data migration](https://tenxora.services/odoo-services/migration/): Moving data into Odoo.
+- [Customization](https://tenxora.services/odoo-services/customization/): Adapting Odoo to how the business works.
+- [Implementation costs](https://tenxora.services/odoo-services/implementation-cost/): What an Odoo implementation costs.
+
+## Insights
+
+- [Blog](https://tenxora.services/blog/): Practical thinking on Odoo, AI-assisted services and better business workflows.
+- [When Is the Best Time to Go Live With Odoo in Pakistan?](https://tenxora.services/2026/11/11/odoo-go-live-date-pakistan/): November 11, 2026
+- [How Long Does Odoo Data Migration Take?](https://tenxora.services/2026/11/11/odoo-data-migration-time/): November 11, 2026
+- [Is Odoo Good for Restaurants in Pakistan?](https://tenxora.services/2026/11/11/odoo-for-restaurants-pakistan/): November 11, 2026
+- [How Much Does Odoo Cost Per User in Pakistan?](https://tenxora.services/2026/11/10/odoo-cost-per-user-pakistan/): November 10, 2026
+- [How Much Time Will My Team Need to Give an Odoo Implementation?](https://tenxora.services/2026/11/10/odoo-implementation-team-time/): November 10, 2026
+- [Why Do Odoo Implementations Run Over Schedule?](https://tenxora.services/2026/11/10/why-odoo-projects-run-over-schedule/): November 10, 2026
+- [Does Odoo POS Work Offline?](https://tenxora.services/2026/11/10/odoo-pos-offline/): November 10, 2026
+- [Can Odoo Handle Multiple Branches or Companies?](https://tenxora.services/2026/11/10/odoo-multiple-branches-companies/): November 10, 2026
+- [Odoo vs QuickBooks or Zoho: Which Does a Growing Business Need?](https://tenxora.services/2026/11/10/odoo-vs-quickbooks-zoho/): November 10, 2026
+- [Why Is My Odoo Slow, and How Do I Speed It Up?](https://tenxora.services/2026/11/10/why-is-odoo-slow-speed-up/): November 10, 2026
+- [Why Do Odoo Upgrades Break Custom Modules, and What Does an Upgrade Cost?](https://tenxora.services/2026/11/06/odoo-upgrade-custom-modules-cost/): November 6, 2026
+- [How Do I Fix Bank Reconciliation Problems in Odoo?](https://tenxora.services/2026/11/06/fix-odoo-bank-reconciliation/): November 6, 2026
+- [Why Doesn't My Odoo Inventory Valuation Match My Balance Sheet?](https://tenxora.services/2026/11/05/odoo-inventory-valuation-balance-sheet-mismatch/): November 5, 2026
+- [Who Owns My Odoo Database If a Partner Set It Up?](https://tenxora.services/2026/11/04/who-owns-odoo-database-partner/): November 4, 2026
+- [How Do I Know It's Time to Switch My Odoo Partner?](https://tenxora.services/2026/11/04/when-to-switch-odoo-partner/): November 4, 2026
+- [How Do I Get My Staff to Actually Use a New ERP Instead of Excel?](https://tenxora.services/2026/11/04/get-staff-to-use-erp-instead-of-excel/): November 4, 2026
+- [Does Odoo Work for Businesses in Pakistan (FBR, Sales Tax, Withholding)?](https://tenxora.services/2026/11/03/odoo-pakistan-fbr-sales-tax-withholding/): November 3, 2026
+- [How Do I Integrate FBR POS With My ERP in Pakistan?](https://tenxora.services/2026/11/03/fbr-pos-integration-erp-pakistan/): November 3, 2026
+- [What Are the Hidden Costs of an Odoo Implementation?](https://tenxora.services/2026/11/02/odoo-implementation-hidden-costs/): November 2, 2026
+- [Why Did My Odoo Implementation Fail, and How Do I Rescue It?](https://tenxora.services/2026/11/02/odoo-implementation-failed-rescue/): November 2, 2026
+
+## Optional
+
+- [AI-assisted Odoo portal](https://odoo.tenxora.services/): Tenxora's Odoo portal.
+- [Privacy policy](https://tenxora.services/privacy/)
+- [Cookie policy](https://tenxora.services/cookie-policy/)
+- [XML sitemap](https://tenxora.services/sitemap.xml): Full list of URLs for search engines.

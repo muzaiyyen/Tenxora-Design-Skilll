@@ -30,6 +30,20 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     return () => document.removeEventListener("click", onClick);
   }, []);
 
+  // Preview build only: pages not rebuilt yet live on tenxora.services, which the preview frame can't
+  // navigate to in place, so those links open in a new tab instead.
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_PREVIEW !== "1") return;
+    const onClick = (e: MouseEvent) => {
+      const a = (e.target as HTMLElement).closest<HTMLAnchorElement>("a[href^='http']");
+      if (!a || a.target) return;
+      a.target = "_blank";
+      a.rel = "noopener";
+    };
+    document.addEventListener("click", onClick, true);
+    return () => document.removeEventListener("click", onClick, true);
+  }, []);
+
   // One delegated listener moves the specular highlight on whichever glass element is under the pointer.
   useEffect(() => {
     let frame = 0;

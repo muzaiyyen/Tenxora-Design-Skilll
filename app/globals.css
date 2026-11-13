@@ -4643,6 +4643,7 @@ html[data-a11y-cursor] :is(a, button, [role="switch"], [role="radio"], label, in
   gap: 10px;
 }
 .doc__chips .chip {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 12px;

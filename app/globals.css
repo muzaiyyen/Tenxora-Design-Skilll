@@ -5077,3 +5077,23 @@ html[data-a11y-cursor] :is(a, button, [role="switch"], [role="radio"], label, in
     padding: 0 8px;
   }
 }
+
+/* Smaller header on desktop (user, 2026-11-17): logo, nav buttons and Contact Us about 15-20% smaller */
+@media (min-width: 761px) {
+  .header__logo {
+    width: max(128px, calc(172 * var(--u)));
+  }
+  .header__link {
+    height: calc(40 * var(--u));
+    min-height: 36px;
+    padding: 0 calc(20 * var(--u));
+    font-size: max(14px, calc(18 * var(--u)));
+  }
+  .header__cta {
+    width: auto;
+    height: calc(44 * var(--u));
+    min-height: 38px;
+    padding: 0 calc(22 * var(--u));
+    font-size: max(14px, calc(18 * var(--u)));
+  }
+}

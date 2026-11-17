@@ -6,11 +6,15 @@ const flat: Record<string, string> = {
   "book-a-call/": "book-a-call",
   "privacy/": "privacy",
   "cookie-policy/": "cookie-policy",
+  "partners/": "partners",
+  "partners/pricing/": "partners-pricing",
+  "partners/terms/": "partners-terms",
 };
 export function route(href: string): string {
   if (process.env.NEXT_PUBLIC_PREVIEW !== "1" || !href.startsWith(LIVE)) return href;
-  const [path, hash] = href.slice(LIVE.length).split("#");
-  const h = hash ? `#${hash}` : "";
+  const [rest, hash] = href.slice(LIVE.length).split("#");
+  const [path, query] = rest.split("?");
+  const h = (query ? `?${query}` : "") + (hash ? `#${hash}` : "");
   if (flat[path]) return `./${flat[path]}.html${h}`;
   const m = path.match(/^odoo-services\/([a-z-]+)\/$/);
   if (m) return `./svc-${m[1]}.html${h}`;

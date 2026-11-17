@@ -4903,3 +4903,177 @@ html[data-a11y-cursor] :is(a, button, [role="switch"], [role="radio"], label, in
   color: #000;
   background: rgba(0, 0, 0, 0.06);
 }
+
+/* Partners: plans, comparison table, FAQ, enquiry/checkout forms (2026-11-17) */
+.doc__ul li {
+  position: relative;
+  padding: 12px 14px 12px 40px;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.035);
+  font-size: max(15px, calc(18 * var(--u)));
+  line-height: 1.4;
+}
+.doc__ul li::before {
+  content: "";
+  position: absolute;
+  left: 16px;
+  top: 1.15em;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--tx-treen);
+}
+.doc__plans {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: calc(20 * var(--u));
+}
+.doc__plan {
+  padding: calc(32 * var(--u));
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.doc__plan-name {
+  margin: 0;
+  font-weight: 400;
+  font-size: max(18px, calc(24 * var(--u)));
+  font-variation-settings: "ROND" 100;
+}
+.doc__plan-price {
+  margin: calc(18 * var(--u)) 0 0;
+  font-size: max(34px, calc(58 * var(--u)));
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variation-settings: "ROND" 100;
+}
+.doc__plan-hours {
+  align-self: flex-start;
+  margin: 0;
+}
+.doc__plan-extra {
+  margin: 0;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.55);
+}
+.doc__plan-cta {
+  margin-top: auto;
+  padding-top: 12px;
+}
+.doc__pills--left {
+  justify-content: flex-start;
+  padding: 0 calc(12 * var(--u));
+  gap: 10px 24px;
+}
+.doc__textlink {
+  color: #000;
+  font-size: max(15px, calc(17 * var(--u)));
+  text-underline-offset: 3px;
+}
+.doc__tablecard,
+.doc__faq {
+  padding: calc(36 * var(--u));
+}
+.doc__tablewrap {
+  margin-top: calc(22 * var(--u));
+  overflow-x: auto;
+}
+.doc__table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: max(14px, calc(17 * var(--u)));
+}
+.doc__table caption {
+  caption-side: bottom;
+  padding-top: 12px;
+  text-align: left;
+  font-size: 13px;
+  font-style: italic;
+  color: rgba(0, 0, 0, 0.55);
+}
+.doc__table th,
+.doc__table td {
+  padding: 14px 16px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+}
+.doc__table thead th {
+  font-weight: 500;
+  background: rgba(0, 0, 0, 0.035);
+}
+.doc__table thead th:first-child {
+  border-radius: 14px 0 0 14px;
+}
+.doc__table thead th:last-child {
+  border-radius: 0 14px 14px 0;
+}
+.doc__table tbody th {
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.6);
+}
+.doc__faq ul {
+  list-style: none;
+  margin: calc(18 * var(--u)) 0 0;
+  padding: 0;
+}
+.doc__faq li {
+  border-top: 1px solid rgba(0, 0, 0, 0.07);
+}
+.doc__faq-q,
+.doc__faq summary {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 2px;
+}
+.doc__faq summary {
+  cursor: pointer;
+  list-style: none;
+}
+.doc__faq h3 {
+  margin: 0;
+  font-weight: 400;
+  font-size: max(16px, calc(20 * var(--u)));
+  line-height: 1.3;
+}
+.doc__pform {
+  scroll-margin-top: 110px;
+}
+.doc__fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.doc__field--wide {
+  grid-column: 1 / -1;
+}
+.doc__note {
+  margin: 0;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.6);
+}
+@media (max-width: 1100px) {
+  .doc__plans {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 760px) {
+  .doc__plans {
+    gap: 12px;
+  }
+  .doc__plan,
+  .doc__tablecard,
+  .doc__faq {
+    padding: 22px 20px;
+    border-radius: 26px;
+  }
+  .doc__fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .doc__pills--left {
+    padding: 0 8px;
+  }
+}

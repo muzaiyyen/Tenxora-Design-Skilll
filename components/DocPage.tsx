@@ -255,6 +255,166 @@ function Block({ s, i }: { s: Sec; i: number }) {
           </a>
         </motion.section>
       );
+    case "plans":
+      return (
+        <div className="doc__block" id={s.id}>
+          <h2 className="doc__bh">{s.heading}</h2>
+          <div className="doc__plans">
+            {s.plans.map((pl, j) => (
+              <motion.section
+                key={pl.name}
+                className="wcard doc__plan"
+                initial={{ opacity: 0, y: 60, rotate: j === 1 ? 0 : j === 0 ? -2 : 2 }}
+                whileInView={{ opacity: 1, y: 0, rotate: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ type: "spring", stiffness: 70, damping: 15, delay: j * 0.08 }}
+                whileHover={{ y: -8 }}
+              >
+                <div className="why__meta">
+                  <span className={`num ${j === 0 ? "num--green" : ""}`}>{String(j + 1).padStart(2, "0")}</span>
+                  <h3 className="doc__plan-name">{pl.name}</h3>
+                </div>
+                <p className="doc__plan-price">{pl.price}</p>
+                <p className="status doc__plan-hours">
+                  <span className="status__dot" aria-hidden />
+                  {pl.hours}
+                </p>
+                <p className="doc__p">{pl.desc}</p>
+                {pl.extra && <p className="doc__plan-extra">{pl.extra}</p>}
+                <div className="doc__plan-cta">
+                  <Pill l={pl.cta} green />
+                </div>
+              </motion.section>
+            ))}
+          </div>
+          {s.links && (
+            <div className="doc__pills doc__pills--left">
+              {s.links.map((l) => (
+                <a key={l.href} href={route(l.href)} className="doc__textlink">
+                  {l.label} <span aria-hidden>→</span>
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+      );
+    case "table":
+      return (
+        <motion.section className="wcard doc__tablecard" {...rise(0)}>
+          <h2 className="doc__h">{s.heading}</h2>
+          <div className="doc__tablewrap">
+            <table className="doc__table">
+              {s.caption && <caption>{s.caption}</caption>}
+              <thead>
+                <tr>
+                  {s.head.map((h) => (
+                    <th key={h} scope="col">
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {s.rows.map((r) => (
+                  <tr key={r[0]}>
+                    {r.map((c, j) =>
+                      j === 0 ? (
+                        <th key={j} scope="row">
+                          {c}
+                        </th>
+                      ) : (
+                        <td key={j}>{c}</td>
+                      ),
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </motion.section>
+      );
+    case "faq":
+      return (
+        <motion.section className="wcard doc__faq" {...rise(0)}>
+          <h2 className="doc__h">{s.heading}</h2>
+          <ul>
+            {s.items.map((it, j) =>
+              it.a ? (
+                <li key={it.q}>
+                  <details>
+                    <summary>
+                      <span className="num">{String(j + 1).padStart(2, "0")}</span>
+                      <h3>{it.q}</h3>
+                    </summary>
+                    <p className="doc__p">{it.a}</p>
+                  </details>
+                </li>
+              ) : (
+                <li key={it.q}>
+                  <div className="doc__faq-q">
+                    <span className="num">{String(j + 1).padStart(2, "0")}</span>
+                    <h3>{it.q}</h3>
+                  </div>
+                </li>
+              ),
+            )}
+          </ul>
+        </motion.section>
+      );
+    case "pform":
+      return (
+        <motion.form className="wcard doc__form doc__pform" id={s.id} {...rise(0)} onSubmit={(e) => e.preventDefault()} aria-label={s.heading}>
+          <h2 className="doc__h">{s.heading}</h2>
+          <div className="doc__fields">
+            {s.fields.map((fd) => {
+              const hint = fd.type !== "select" ? fd.options?.[0] : undefined;
+              return (
+                <label key={fd.label} className={`doc__field${fd.type === "textarea" || fd.type === "url" || s.fields.length === 1 ? " doc__field--wide" : ""}`}>
+                  <span>{fd.label}</span>
+                  {fd.type === "select" ? (
+                    <select required={fd.required} defaultValue="">
+                      <option value="" disabled>
+                        {fd.options?.[0]}
+                      </option>
+                      {fd.options?.slice(1).map((o) => (
+                        <option key={o}>{o}</option>
+                      ))}
+                    </select>
+                  ) : fd.type === "textarea" ? (
+                    <textarea required={fd.required} minLength={20} maxLength={5000} rows={5} />
+                  ) : (
+                    <input type={fd.type ?? "text"} required={fd.required} />
+                  )}
+                  {hint && <small>{hint}</small>}
+                </label>
+              );
+            })}
+          </div>
+          {s.consent && (
+            <label className="doc__check">
+              <input type="checkbox" required />
+              <span>
+                {s.consent.before}
+                <a href={route(s.consent.link.href)}>{s.consent.link.label}</a>
+                {s.consent.after}
+              </span>
+            </label>
+          )}
+          <button type="submit" className="pill pill--green glass doc__submit">
+            <span style={{ position: "relative", zIndex: 2 }}>{s.submit}</span>
+          </button>
+          {s.note && <p className="doc__note">{s.note}</p>}
+          {s.links && (
+            <div className="doc__pills doc__pills--left">
+              {s.links.map((l) => (
+                <a key={l.href} href={route(l.href)} className="doc__textlink">
+                  {l.label} <span aria-hidden>→</span>
+                </a>
+              ))}
+            </div>
+          )}
+        </motion.form>
+      );
     case "form":
       return <Form />;
     case "cards":

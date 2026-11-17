@@ -18,6 +18,10 @@ export type Sec =
   | { kind: "badges"; heading: string; body?: string; badges: string[] }
   | { kind: "embed"; heading: string; body?: string; src: string; fallback: L }
   | { kind: "form" }
+  | { kind: "plans"; id?: string; heading: string; plans: { name: string; price: string; hours: string; extra: string; desc: string; cta: L }[]; links?: L[] }
+  | { kind: "table"; heading: string; caption?: string; head: string[]; rows: string[][] }
+  | { kind: "faq"; heading: string; items: { q: string; a?: string }[] }
+  | { kind: "pform"; id?: string; heading: string; fields: { label: string; type?: "text" | "email" | "url" | "select" | "textarea"; options?: string[]; required?: boolean }[]; consent?: { before: string; link: L; after: string }; submit: string; note?: string; links?: L[] }
   | { kind: "cards"; heading: string; items: { heading: string; body?: string; link: L }[] };
 
 export type Doc = {
@@ -415,7 +419,7 @@ export const privacyPage: Doc = {
   title: "Privacy Policy | Tenxora",
   label: "Website enquiries & privacy",
   h1: "Privacy policy",
-  updated: "Updated 29 October 2026.",
+  updated: "Updated 14 November 2026.",
   sections: [
     T("Information you choose to share"),
     T("Where enquiries go"),
@@ -424,6 +428,12 @@ export const privacyPage: Doc = {
     T("Cookies and external resources", { links: [{ label: "cookie policy", href: "https://tenxora.services/cookie-policy/" }] }),
     T("Retention and requests", { links: [email] }),
     T("Scope of this policy"),
+    T("Optional website analytics", {
+      links: [
+        { label: "Cookie Policy", href: "https://tenxora.services/cookie-policy/" },
+        { label: "Google’s Privacy Policy", href: "https://policies.google.com/privacy" },
+      ],
+    }),
   ],
 };
 
@@ -432,11 +442,200 @@ export const cookiePage: Doc = {
   title: "Cookie Policy | Tenxora",
   label: "How this website works",
   h1: "Cookie policy",
-  updated: "Updated 29 October 2026.",
+  updated: "Updated 14 November 2026.",
   sections: [
     T("Website functionality"),
     T("Marketing and analytics"),
     T("External resources and links"),
     T("Your choices", { links: [email, { label: "privacy policy", href: "https://tenxora.services/privacy/" }] }),
+    T("Your Analytics choice", { links: [{ label: "Change cookie choices", href: "https://tenxora.services/#cookie-choices" }] }),
+  ],
+};
+
+// ===== For Partners (live since 2026-11-16; read 2026-11-17) =====
+const P = "https://tenxora.services/partners/";
+const plans = [
+  { name: "Starter block", price: "$1,000/month", hours: "40 hours", extra: "Extra hours: $25/hour.", desc: "Shared delivery pool for overflow and support tickets.", cta: { label: "Start now", href: `${P}pricing/?partner_plan=starter#checkout` } },
+  { name: "Delivery pod", price: "$2,200/month", hours: "100 hours", extra: "Extra hours: $22/hour.", desc: "Functional and technical consultant capacity for ongoing projects.", cta: { label: "Start now", href: `${P}pricing/?partner_plan=pod#checkout` } },
+  { name: "Dedicated consultant", price: "$2,900/month", hours: "160 hours", extra: "Extra hours: $18/hour.", desc: "One named consultant for a long implementation.", cta: { label: "Start now", href: `${P}pricing/?partner_plan=dedicated#checkout` } },
+];
+const consent = { before: "I have read the ", link: { label: "privacy policy", href: "https://tenxora.services/privacy/" }, after: " and understand that Tenxora will use my details to respond to this enquiry. *" };
+
+export const partnersPage: Doc = {
+  slug: "partners",
+  title: "White-label Odoo Development for Partners | Tenxora",
+  h1: "White-label Odoo delivery for partners",
+  lead: "Your Odoo backlog, delivered under your brand.",
+  body: "From $1,000/month for 40 hours. Delivery from Islamabad, Pakistan. Contracting and invoicing through TENXORA LTD, UK company no. 17163494.",
+  actions: [
+    { label: "Choose your plan", href: `${P}#pricing` },
+    { label: "See pricing", href: `${P}#pricing` },
+  ],
+  sections: [
+    T("Keep client work moving", {
+      list: [
+        "Take on work when your existing team is already committed.",
+        "Add delivery capacity without recruiting for every backlog.",
+        "Give ERP tickets a defined scope, review and handover.",
+      ],
+    }),
+    T("Hand over the delivery work", {
+      list: [
+        "Functional configuration for Accounting, Inventory, Sales, Purchase, Manufacturing, HR/Payroll and CRM, within an agreed scope.",
+        "Custom modules and changes to existing modules.",
+        "Reports and QWeb/PDF templates.",
+        "Integrations, APIs and data migration.",
+        "Version upgrades and post-go-live support tickets.",
+      ],
+      links: [{ label: "Odoo’s hosting guidance", href: "https://www.odoo.com/documentation/18.0/administration/odoo_sh/getting_started/create.html" }],
+    }),
+    {
+      kind: "steps",
+      heading: "Hire delivery capacity for your next project",
+      items: [
+        { n: "01", heading: "Choose your plan." },
+        { n: "02", heading: "Confirm the engagement." },
+        { n: "03", heading: "Keep your workflow." },
+        { n: "04", heading: "Adjust as work changes." },
+      ],
+    },
+    {
+      kind: "plans",
+      id: "pricing",
+      heading: "Choose your monthly capacity",
+      plans,
+      links: [
+        { label: "Compare all plans", href: `${P}pricing/` },
+        { label: "Terms and refund policy", href: `${P}terms/#refunds` },
+      ],
+    },
+    {
+      kind: "pform",
+      id: "engagement",
+      heading: "Start your engagement",
+      fields: [
+        { label: "Name *", required: true },
+        { label: "Company *", required: true },
+        { label: "Work email *", type: "email", required: true },
+        { label: "Country *", required: true },
+        { label: "Odoo version *", required: true },
+        { label: "Monthly plan *", type: "select", required: true, options: ["Choose a plan", "Starter block — 40 hours, $1,000/month", "Delivery pod — 100 hours, $2,200/month", "Dedicated consultant — 160 hours, $2,900/month"] },
+        { label: "Hosting *", type: "select", required: true, options: ["Choose hosting", "Odoo.sh", "Odoo Online", "On-premise"] },
+        { label: "Engagement scope *", type: "textarea", required: true, options: ["20–5,000 characters. A non-confidential summary only. We arrange access privately after the NDA."] },
+        { label: "Non-secret repository or staging URL (optional)", type: "url", options: ["No sign-in details, signed access links, query parameters or fragments. Do not upload files or send credentials."] },
+      ],
+      consent,
+      submit: "Send hiring enquiry",
+      links: [{ label: "Book an introduction", href: "https://tenxora.services/book-a-call/" }],
+    },
+    T("Keep your client relationship", {
+      subs: [{ heading: "UK contracting." }, { heading: "White-label as standard." }, { heading: "Human review." }, { heading: "Your release decision." }],
+    }),
+    {
+      kind: "faq",
+      heading: "Questions before you start",
+      items: [
+        { q: "Who owns the code?" },
+        { q: "Do you speak to our client?" },
+        { q: "What if we don’t use all our hours?" },
+        { q: "What if we need more hours?" },
+        { q: "What is the minimum commitment?" },
+        { q: "How do we pay?" },
+        { q: "How quickly do you respond?" },
+      ],
+    },
+    {
+      kind: "actions",
+      heading: "Put delivery capacity behind your next project",
+      actions: [
+        { label: "Choose your plan", href: `${P}#pricing` },
+        { label: "Start your engagement", href: `${P}#engagement` },
+      ],
+    },
+  ],
+};
+
+export const partnersPricingPage: Doc = {
+  slug: "partners-pricing",
+  title: "Odoo Partner Delivery Pricing | Tenxora",
+  h1: "Odoo partner delivery pricing",
+  lead: "Odoo delivery capacity, with a clear monthly price.",
+  sections: [
+    {
+      kind: "plans",
+      heading: "Choose the hours you need",
+      plans: [
+        { name: "Starter block", price: "$1,000/month", hours: "40 hours", extra: "", desc: "Shared pool. For overflow and support tickets.", cta: { label: "Start now", href: "#checkout" } },
+        { name: "Delivery pod", price: "$2,200/month", hours: "100 hours", extra: "", desc: "Functional + technical consultant. For ongoing projects.", cta: { label: "Start now", href: "#checkout" } },
+        { name: "Dedicated consultant", price: "$2,900/month", hours: "160 hours", extra: "", desc: "One named consultant. For a long implementation.", cta: { label: "Start now", href: "#checkout" } },
+      ],
+      links: [{ label: "Talk to us first", href: "https://tenxora.services/book-a-call/" }],
+    },
+    {
+      kind: "table",
+      heading: "Compare the plans",
+      caption: "Partner delivery plans — monthly prices in USD",
+      head: ["Plan detail", "Starter block", "Delivery pod", "Dedicated consultant"],
+      rows: [
+        ["Monthly price", "$1,000", "$2,200", "$2,900"],
+        ["Included hours", "40", "100", "160"],
+        ["Team", "Shared pool", "Functional + technical consultant", "One named consultant"],
+        ["Best for", "Overflow and support tickets", "Ongoing projects", "A long implementation"],
+        ["Extra hours", "$25/hour", "$22/hour", "$18/hour"],
+      ],
+    },
+    T("Know the commitment", {
+      links: [
+        { label: "Read the partner terms", href: `${P}terms/` },
+        { label: "Read the cancellation and refund policy", href: `${P}terms/#refunds` },
+      ],
+    }),
+    {
+      kind: "faq",
+      heading: "Billing questions",
+      items: [
+        { q: "What if we don’t use all our hours?" },
+        { q: "What if we need more hours?" },
+        { q: "What is the minimum commitment?" },
+        { q: "How do we pay?" },
+        { q: "Can we cancel or receive a refund?" },
+      ],
+    },
+    {
+      kind: "pform",
+      id: "checkout",
+      heading: "Start your engagement",
+      fields: [
+        { label: "Your monthly plan", type: "select", required: true, options: ["Choose a plan", "Starter block — $1,000/month · 40 hours", "Delivery pod — $2,200/month · 100 hours", "Dedicated consultant — $2,900/month · 160 hours"] },
+      ],
+      consent: {
+        before: "I am purchasing for my business and agree to the ",
+        link: { label: "partner terms and refund policy", href: `${P}terms/` },
+        after: ", including monthly billing, the three-month minimum and payment for work performed.",
+      },
+      submit: "Continue to secure checkout",
+      note: "Payment is taken only when you complete secure Stripe checkout.",
+      links: [
+        { label: "Privacy policy", href: "https://tenxora.services/privacy/" },
+        { label: "Talk to us first", href: "https://tenxora.services/book-a-call/" },
+      ],
+    },
+  ],
+};
+
+export const partnersTermsPage: Doc = {
+  slug: "partners-terms",
+  title: "Partner Delivery Terms | Tenxora",
+  label: "Partner service terms and refund policy",
+  h1: "Partner delivery terms",
+  updated: "Effective 17 November 2026.",
+  sections: [
+    T("Your monthly plan"),
+    T("Minimum term and renewal"),
+    T("Hours and delivery"),
+    T("Cancellation and refunds", { id: "refunds" }),
+    T("White-label delivery and ownership"),
+    T("Checkout and payment records", { links: [{ label: "Stripe’s privacy policy", href: "https://stripe.com/privacy" }] }),
+    T("Agreeing your engagement", { links: [email, { label: "website privacy policy", href: "https://tenxora.services/privacy/" }] }),
   ],
 };

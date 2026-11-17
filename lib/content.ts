@@ -10,6 +10,7 @@ export const links = {
   contact: "https://tenxora.services/contactus/",
   blog: process.env.NEXT_PUBLIC_BLOG_HREF ?? "https://tenxora.services/blog/",
   whyTenxora: process.env.NEXT_PUBLIC_WHY_HREF ?? "https://tenxora.services/why-tenxora/",
+  partners: "https://tenxora.services/partners/",
   cookiePolicy: "https://tenxora.services/cookie-policy/",
   privacy: "https://tenxora.services/privacy/",
   odoo: process.env.NEXT_PUBLIC_ODOO_HREF ?? "https://tenxora.services/odoo-services/",
@@ -29,6 +30,7 @@ export const nav = [
   { label: "Blog", href: links.blog },
   { label: "Our Team", href: links.ourTeam },
   { label: "Why Tenxora", href: links.whyTenxora },
+  { label: "For Partners", href: links.partners },
   { label: "Contact Us", href: links.contact },
 ];
 
@@ -201,6 +203,7 @@ export const footer = {
       heading: "Company",
       links: [
         { label: "Why Tenxora", href: links.whyTenxora },
+        { label: "For Partners", href: links.partners },
         { label: "Contact us", href: links.contact },
         { label: "Book an introduction", href: links.bookCall },
       ],

@@ -88,8 +88,14 @@ export const blog = {
   intro: "Practical thinking on Odoo, AI-assisted services and better business workflows.",
   // the live WordPress blog lists posts itself; these mirror the 20 posts live on 2026-11-12 for the preview
   // filter chips (site UI labels, not page copy); each post lists the ones it belongs to
-  topics: ["Implementation", "Costs", "Pakistan & FBR", "POS & retail", "Accounting & inventory", "Upgrades & performance", "Choosing Odoo", "Partners"],
+  topics: ["Implementation", "Costs", "Pakistan & FBR", "POS & retail", "Accounting & inventory", "Upgrades & performance", "Choosing Odoo", "Partners", "Guides"],
+  // all 32 posts and their categories as on the live blog (read 2026-11-17)
   posts: [
+    { title: "What Is an Odoo Success Pack, and Is It Worth It?", date: "November 17, 2026", href: "https://tenxora.services/2026/11/17/odoo-success-pack-worth-it/", topics: ["Guides"] },
+    { title: "What Should Be on My Odoo Go-Live Cutover Checklist?", date: "November 16, 2026", href: "https://tenxora.services/2026/11/16/odoo-go-live-cutover-checklist/", topics: ["Guides"] },
+    { title: "Which Odoo Apps Should a Small Business Start With?", date: "November 16, 2026", href: "https://tenxora.services/2026/11/16/odoo-apps-small-business-start/", topics: ["Guides"] },
+    { title: "Is Odoo Good for Manufacturing Companies?", date: "November 16, 2026", href: "https://tenxora.services/2026/11/16/odoo-manufacturing-companies/", topics: ["Guides"] },
+    { title: "Is Odoo Good for Retail and Trading Businesses?", date: "November 16, 2026", href: "https://tenxora.services/2026/11/16/odoo-retail-trading-business/", topics: ["Guides"] },
     { title: "When Is the Best Time to Go Live With Odoo in Pakistan?", date: "November 11, 2026", href: "https://tenxora.services/2026/11/11/odoo-go-live-date-pakistan/", topics: ["Implementation", "Pakistan & FBR"] },
     { title: "How Long Does Odoo Data Migration Take?", date: "November 11, 2026", href: "https://tenxora.services/2026/11/11/odoo-data-migration-time/", topics: ["Implementation", "Upgrades & performance"] },
     { title: "Is Odoo Good for Restaurants in Pakistan?", date: "November 11, 2026", href: "https://tenxora.services/2026/11/11/odoo-for-restaurants-pakistan/", topics: ["Choosing Odoo", "POS & retail", "Pakistan & FBR"] },
@@ -110,6 +116,13 @@ export const blog = {
     { title: "How Do I Integrate FBR POS With My ERP in Pakistan?", date: "November 3, 2026", href: "https://tenxora.services/2026/11/03/fbr-pos-integration-erp-pakistan/", topics: ["Pakistan & FBR", "POS & retail"] },
     { title: "What Are the Hidden Costs of an Odoo Implementation?", date: "November 2, 2026", href: "https://tenxora.services/2026/11/02/odoo-implementation-hidden-costs/", topics: ["Costs", "Implementation"] },
     { title: "Why Did My Odoo Implementation Fail, and How Do I Rescue It?", date: "November 2, 2026", href: "https://tenxora.services/2026/11/02/odoo-implementation-failed-rescue/", topics: ["Implementation", "Partners"] },
+    { title: "What Happens After Odoo Go-Live, and What Support Do I Need?", date: "November 2, 2026", href: "https://tenxora.services/2026/11/02/after-odoo-go-live-support/", topics: ["Guides"] },
+    { title: "Is Odoo Worth It for a Small Business?", date: "November 2, 2026", href: "https://tenxora.services/2026/11/02/is-odoo-worth-it-small-business/", topics: ["Guides"] },
+    { title: "What Should I Ask an Odoo Partner Before Signing?", date: "November 2, 2026", href: "https://tenxora.services/2026/11/02/questions-to-ask-odoo-partner/", topics: ["Guides"] },
+    { title: "How Do I Move From Excel, QuickBooks or Tally to Odoo Without Losing Data?", date: "November 2, 2026", href: "https://tenxora.services/2026/11/02/migrate-excel-quickbooks-tally-to-odoo/", topics: ["Guides"] },
+    { title: "Odoo Community or Enterprise: Which One Does My Business Need?", date: "November 2, 2026", href: "https://tenxora.services/2026/11/02/odoo-community-vs-enterprise/", topics: ["Guides"] },
+    { title: "Can I Implement Odoo Myself, or Do I Need a Partner?", date: "November 2, 2026", href: "https://tenxora.services/2026/11/02/implement-odoo-yourself-or-partner/", topics: ["Guides"] },
+    { title: "How Long Does an Odoo Implementation Take?", date: "November 2, 2026", href: "https://tenxora.services/2026/11/02/how-long-does-odoo-implementation-take/", topics: ["Guides"] },
   ],
   closing: {
     before: "Have a question we haven’t answered? ",

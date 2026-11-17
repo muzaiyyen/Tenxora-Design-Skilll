@@ -5097,3 +5097,25 @@ html[data-a11y-cursor] :is(a, button, [role="switch"], [role="radio"], label, in
     font-size: max(14px, calc(18 * var(--u)));
   }
 }
+
+/* Logo and Contact Us slide up out of view while scrolling down, back on scroll up (desktop) */
+@media (min-width: 761px) {
+  .header__logo,
+  .header__cta {
+    transition:
+      transform 0.55s var(--ease),
+      opacity 0.4s var(--ease);
+  }
+  .header.is-tucked .header__logo,
+  .header.is-tucked .header__cta {
+    transform: translateY(-180%);
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+@media (min-width: 761px) and (prefers-reduced-motion: reduce) {
+  .header__logo,
+  .header__cta {
+    transition: opacity 0.2s linear;
+  }
+}

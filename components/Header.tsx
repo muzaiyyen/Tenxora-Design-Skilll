@@ -12,6 +12,8 @@ import { route } from "@/lib/route";
  */
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
+  // scrolling down tucks the logo and Contact Us away; scrolling up brings them back
+  const [tucked, setTucked] = useState(false);
   const [light, setLight] = useState(false);
   const [hover, setHover] = useState<number | null>(null);
   // phone-only menu (the button and panel are hidden on desktop)
@@ -31,9 +33,15 @@ export default function Header() {
 
   useEffect(() => {
     let raf = 0;
+    let lastY = window.scrollY;
     const read = () => {
       raf = 0;
-      setScrolled(window.scrollY > 40);
+      const y = window.scrollY;
+      setScrolled(y > 40);
+      if (y < 80) setTucked(false);
+      else if (y > lastY + 6) setTucked(true);
+      else if (y < lastY - 6) setTucked(false);
+      if (Math.abs(y - lastY) > 6) lastY = y;
       // whichever section sits under the header decides the text colour
       const probe = 40;
       const els = document.querySelectorAll<HTMLElement>("[data-header]");
@@ -62,7 +70,7 @@ export default function Header() {
 
   return (
     <motion.header
-      className={`header${scrolled ? " is-scrolled" : ""}${light ? " is-light" : ""}${open ? " is-open" : ""}`}
+      className={`header${scrolled ? " is-scrolled" : ""}${tucked && !open ? " is-tucked" : ""}${light ? " is-light" : ""}${open ? " is-open" : ""}`}
       initial={{ y: -30, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}

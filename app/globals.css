@@ -1602,7 +1602,8 @@ a {
   color: rgba(0, 0, 0, 0.45);
 }
 .footer__field:focus-within {
-  outline: 2px solid var(--tx-treen);
+  /* blue like every other focus ring: treen on this grey is too faint to see */
+  outline: 2px solid var(--tx-blue);
   outline-offset: 1px;
 }
 .footer__field .pill {

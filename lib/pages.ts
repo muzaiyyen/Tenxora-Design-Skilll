@@ -9,19 +9,15 @@ export const why = {
   h1: "Why Tenxora",
   tagline: "AI-assisted delivery. Human accountability.",
   intro: "Build a better way to operate, with the right mix of software, AI and people.",
-  body: "", // PENDING: hero paragraph
   steps: [
     { n: "01", tag: "Understand", heading: "Start with the work.", body: "" },
     { n: "02", tag: "Build", heading: "Let software do more.", body: "" },
     { n: "03", tag: "Review", heading: "Keep people responsible.", body: "" },
     { n: "04", tag: "Improve", heading: "Make the next step clear.", body: "" },
   ],
-  odoo: { heading: "Odoo today. A broader service model ahead.", body: "" }, // PENDING: body
-  // "A practical working relationship." was removed at the user's request (2026-11-12)
-  actions: [
-    { label: "Discuss your operation →", href: links.contact },
-    { label: "Explore Odoo services", href: links.odoo },
-  ],
+  odoo: { heading: "Odoo today. A broader service model ahead.", body: "" }, // the live page has no paragraph here (19 Nov reference)
+  // "A practical working relationship." was removed at the user's request (2026-11-12).
+  // No buttons here: the 19 Nov copy reference has none on this page.
   company: {
     heading: "Company details",
     rows: [

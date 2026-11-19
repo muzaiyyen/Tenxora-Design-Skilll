@@ -11,7 +11,8 @@ import Share from "./Share";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 const c = blog.closing;
-const idOf = (t: string) => t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+// same ids as the live post's headings (apostrophes dropped, not turned into dashes)
+const idOf = (t: string) => t.toLowerCase().replace(/[’']/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
 function Rich({ segs }: { segs: Seg[] }) {
   return (
@@ -39,6 +40,8 @@ function Body({ blocks }: { blocks: Block[] }) {
           <h2 key={i} id={idOf(b.h2)}>
             {b.h2}
           </h2>
+        ) : "h3" in b ? (
+          <h3 key={i}>{b.h3}</h3>
         ) : "ul" in b ? (
           <ul key={i}>
             {b.ul.map((li, j) => (
@@ -47,6 +50,35 @@ function Body({ blocks }: { blocks: Block[] }) {
               </li>
             ))}
           </ul>
+        ) : "table" in b ? (
+          <div key={i} className="prose__table">
+            <table>
+              <thead>
+                <tr>
+                  {b.table.head.map((h) => (
+                    <th key={h} scope="col">
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {b.table.rows.map((r, j) => (
+                  <tr key={j}>
+                    {r.map((c, k) => (k === 0 ? <th key={k} scope="row">{c}</th> : <td key={k}>{c}</td>))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : "cta" in b ? (
+          <section key={i} className="prose__cta">
+            <h2 id={idOf(b.cta.h2)}>{b.cta.h2}</h2>
+            <p>{b.cta.p}</p>
+            <a href={b.cta.link.href} className="pill pill--green glass">
+              <span style={{ position: "relative", zIndex: 2 }}>{b.cta.link.label}</span>
+            </a>
+          </section>
         ) : (
           <p key={i}>
             <Rich segs={b.p} />
@@ -60,7 +92,7 @@ function Body({ blocks }: { blocks: Block[] }) {
 export default function Article({ slug }: { slug: string }) {
   const post = blog.posts.find((p) => slugOf(p.href) === slug)!;
   const blocks = articles[slug];
-  const heads = blocks.flatMap((b) => ("h2" in b ? [b.h2] : []));
+  const heads = blocks.flatMap((b) => ("h2" in b ? [b.h2] : "cta" in b ? [b.cta.h2] : []));
   const related = blog.posts
     .filter((p) => p !== post && p.topics.some((t) => post.topics.includes(t)))
     .slice(0, 3);

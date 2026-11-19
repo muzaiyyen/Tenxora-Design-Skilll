@@ -4536,7 +4536,8 @@ html[data-a11y-cursor] :is(a, button, [role="switch"], [role="radio"], label, in
   border-radius: 16px;
   background: rgba(0, 0, 0, 0.035);
 }
-.doc__sub h3 {
+.doc__sub h3,
+.doc__sub .doc__subh {
   margin: 0;
   font-weight: 500;
   font-size: max(15px, calc(18 * var(--u)));
@@ -5356,5 +5357,148 @@ html[data-a11y-cursor] :is(a, button, [role="switch"], [role="radio"], label, in
   }
   .roi__ctas {
     padding: 4px 4px 6px;
+  }
+}
+.doc__abody {
+  max-width: 62ch;
+  padding: 0 12px;
+}
+.doc__abody .doc__p {
+  margin: 0 auto;
+}
+.doc__card .doc__p + .doc__p,
+.doc__step .doc__p + .doc__p,
+.doc__offer .doc__p + .doc__p {
+  margin-top: 10px;
+}
+.doc__p a,
+.doc__ul a,
+.doc__ol a {
+  color: #000;
+  text-decoration: underline;
+  text-decoration-color: var(--tx-treen);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+/* 19 Nov copy fill: plain step lines, fine print, hero note, multi-line headings */
+.doc__h--pre {
+  white-space: pre-line;
+}
+.doc__sh--plain {
+  font-size: max(17px, calc(22 * var(--u)));
+  line-height: 1.3;
+}
+.doc__sh--plain span {
+  color: rgba(0, 0, 0, 0.62);
+}
+.doc__ul--offer {
+  margin-bottom: 4px;
+}
+.doc__fine {
+  max-width: 78ch;
+  margin: 0 auto;
+  padding: calc(8 * var(--u)) 12px;
+  text-align: center;
+}
+.doc__fine .doc__p {
+  max-width: none;
+  margin: 0;
+  font-size: 15px;
+  color: rgba(0, 0, 0, 0.6);
+}
+.doc__fine .doc__p + .doc__p {
+  margin-top: 10px;
+}
+.doc__fine--left {
+  margin: 0;
+  padding: calc(16 * var(--u)) calc(12 * var(--u)) 0;
+  text-align: left;
+}
+.doc__form > .doc__p,
+.doc__pform > .doc__p {
+  margin: 0;
+}
+.doc__note a,
+.doc__fallback a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.phero__note {
+  width: fit-content;
+  max-width: min(calc(684 * var(--u)), 100%);
+  margin: calc(22 * var(--u)) auto 0;
+  padding: 10px 16px;
+  border-radius: 18px;
+  background: rgba(0, 40, 110, 0.32);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  font-size: 15px;
+  line-height: 1.45;
+  color: #fff;
+}
+.phero__note a {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+/* blog post: H3 questions, comparison table, in-article call to action (19 Nov) */
+.prose h3 {
+  margin: 1.4em 0 0.4em;
+  font-weight: 500;
+  font-size: max(19px, calc(24 * var(--u)));
+  line-height: 1.25;
+  color: #000;
+}
+.prose__table {
+  max-width: none;
+  margin: 0 0 1.2em;
+  overflow-x: auto;
+  border-radius: 16px;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+.prose__table table {
+  width: 100%;
+  min-width: 620px;
+  border-collapse: collapse;
+  font-size: 15px;
+  line-height: 1.45;
+}
+.prose__table th,
+.prose__table td {
+  padding: 12px 14px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+}
+.prose__table thead th {
+  background: rgba(0, 0, 0, 0.035);
+  font-weight: 500;
+  color: #000;
+}
+.prose__table tbody tr:last-child > * {
+  border-bottom: 0;
+}
+.prose__table tbody th {
+  font-weight: 500;
+  color: #000;
+}
+.prose__cta {
+  margin: 1.9em 0 0.4em;
+  padding: calc(32 * var(--u)) calc(32 * var(--u)) calc(28 * var(--u));
+  border-radius: 18px;
+  background: rgba(8, 232, 140, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(8, 232, 140, 0.35);
+}
+.prose__cta h2 {
+  margin-top: 0;
+}
+.prose__cta p {
+  margin: 0 0 18px;
+}
+@media (max-width: 760px) {
+  .prose__cta {
+    padding: 20px 18px;
   }
 }

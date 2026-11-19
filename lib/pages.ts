@@ -30,12 +30,20 @@ export const why = {
   },
 };
 
-// Blog post bodies. Text is copied exactly from the live post; segments are plain text, bold ({ b }) or links ({ a, href }).
+// Blog post bodies, word for word from the live post (19 Nov copy reference). Segments are plain text,
+// bold ({ b }) or links ({ a, href }). On WordPress, posts render their own content through the post template.
 export type Seg = string | { b: string } | { a: string; href: string };
-export type Block = { p: Seg[] } | { h2: string } | { ul: Seg[][] };
+export type Block =
+  | { p: Seg[] }
+  | { h2: string }
+  | { h3: string }
+  | { ul: Seg[][] }
+  | { table: { head: string[]; rows: string[][] } }
+  | { cta: { h2: string; p: string; link: { label: string; href: string } } };
 
+const T26 = "https://tenxora.services/2026/";
+const call = "https://calendly.com/contact-tenxora/odoo-introduction";
 // Only posts with a body here get a page in this build; the rest of the cards link to the live posts.
-// PENDING: this body stops where the user's screenshot did (before "How much time does each role need?").
 export const articles: Record<string, Block[]> = {
   "odoo-implementation-team-time": [
     {
@@ -46,23 +54,93 @@ export const articles: Record<string, Block[]> = {
     {
       p: [
         "This is a follow-up to ",
-        // PENDING: the exact URL of this post (not in the blog listing read on 2026-11-12); points at the blog for now
-        { a: "How Long Does an Odoo Implementation Take?", href: "https://tenxora.services/blog/" },
+        { a: "How Long Does an Odoo Implementation Take?", href: `${T26}11/02/how-long-does-odoo-implementation-take/` },
         " The calendar date depends heavily on one thing your partner cannot supply: your own people’s time.",
       ],
     },
     { h2: "Who on my team needs to be involved?" },
-    {
-      p: [
-        "Most Odoo projects need three groups from your side. Small businesses often combine roles, but none of them can be skipped.",
-      ],
-    },
+    { p: ["Most Odoo projects need three groups from your side. Small businesses often combine roles, but none of them can be skipped."] },
     {
       ul: [
         [{ b: "Project lead (single point of contact):" }, " makes decisions, chases answers internally and signs off each stage. Odoo’s guide says this person should have authority to decide on their own."],
         [{ b: "Key users:" }, " one per area, such as sales, stock, purchasing and accounts. They explain how work really happens, test the setup and later train colleagues."],
         [{ b: "End users:" }, " everyone who will use Odoo daily. They need time to practise their own tasks before go-live."],
         [{ b: "Owner or senior manager:" }, " settles disputes between departments and approves scope changes."],
+      ],
+    },
+    { h2: "How much time does each role need?" },
+    { p: ["Published figures vary by project size and vendor, so treat these as planning guides, not fixed rules."] },
+    {
+      table: {
+        head: ["Role", "When", "Published estimate", "Main work"],
+        rows: [
+          ["Project lead", "Whole project", "At least 2 full days a week (Odoo); about 70% of working time (APplus)", "Decisions, coordination, sign-offs"],
+          ["Key users", "Build and testing", "About 50% of working time (APplus)", "Workshops, testing, feedback"],
+          ["Key users", "Go-live period", "About 70% of working time (APplus)", "Training colleagues, support, acceptance"],
+          ["End users", "Before go-live", "No standard figure; plan practice time per person", "Training on their own tasks"],
+        ],
+      },
+    },
+    { p: ["Odoo’s guide also puts the customer in charge of exporting data from the old system and training its own users once the system works. Those tasks land on your staff, not the partner."] },
+    { h2: "Where does my team’s time actually go?" },
+    {
+      ul: [
+        [{ b: "Discovery workshops:" }, " explaining current processes, exceptions and approval rules."],
+        [{ b: "Decisions:" }, " agreeing how one process should work when departments disagree."],
+        [{ b: "Data preparation:" }, " exporting, cleaning and checking customers, products, stock and opening balances."],
+        [{ b: "Testing:" }, " running real transactions in a test copy and recording what breaks."],
+        [{ b: "Training:" }, " learning the system, then teaching colleagues."],
+        [{ b: "Go-live and the weeks after:" }, " checking the first real invoices, stock moves and bank entries."],
+      ],
+    },
+    { h2: "What happens if my team can’t give that time?" },
+    {
+      p: [
+        "The project waits. A partner can configure Odoo quickly, but it cannot decide your approval rules, clean your product list or accept test results for you. That waiting time is one of the main reasons ",
+        { a: "Odoo implementations run over schedule", href: `${T26}11/10/why-odoo-projects-run-over-schedule/` },
+        ".",
+      ],
+    },
+    {
+      ul: [
+        ["Questions sit unanswered, so configuration stalls."],
+        ["Testing is rushed, so problems appear after go-live."],
+        ["Staff are not trained, so they return to Excel. See ", { a: "how to get staff to use a new ERP instead of Excel", href: `${T26}11/04/get-staff-to-use-erp-instead-of-excel/` }, "."],
+      ],
+    },
+    { p: ["APplus also notes that companies often underestimate the internal time required. A date set without counting it is a guess."] },
+    { h2: "How do I free up time without stopping the business?" },
+    {
+      ul: [
+        ["Name the project lead and key users before kick-off, and tell them in writing what share of their week goes to the project."],
+        ["Move part of their routine work to others, or hire temporary help, for the busiest weeks."],
+        ["Avoid peak periods such as month-end, year-end closing or your busiest sales season for testing and go-live."],
+        ["Ask your partner for a calendar of workshops, test cycles and training sessions, with the people needed for each."],
+        ["Phase the rollout so one team carries the heavy load at a time."],
+        ["Review progress weekly and adjust the plan if your team’s availability changes."],
+      ],
+    },
+    {
+      cta: {
+        h2: "Plan the people side before you fix a go-live date",
+        p: "We map your operations, list who is needed for each step and build a schedule your team can actually keep, so your business keeps running while it moves onto Odoo.",
+        link: { label: "Book a call →", href: call },
+      },
+    },
+    { h2: "FAQ" },
+    { h3: "Can my Odoo partner do this work instead of my staff?" },
+    { p: ["A partner can take on configuration, data imports and much of the training. It cannot make your business decisions or confirm that results match how you operate. Those need someone from your side with authority."] },
+    { h3: "Does a small business need less staff time?" },
+    { p: ["Fewer people are involved, but each one usually carries more roles. In a small company the owner is often the project lead and a key user at once, so protect that time carefully."] },
+    { h3: "When is my team’s workload highest?" },
+    { p: ["Usually during testing and the weeks around go-live. APplus estimates key users rise from about 50% to about 70% of their time when the system goes live, because they train and support colleagues."] },
+    { p: ["Related service: ", { a: "Odoo Implementation", href: "https://tenxora.services/odoo-services/implementation/" }] },
+    {
+      p: [
+        "Sources: ",
+        { a: "Odoo – Odoo Online Implementation guide", href: "https://odoo-users.readthedocs.io/en/latest/getting_started/documentation.html" },
+        ", ",
+        { a: "APplus (Asseco) – How long does an ERP implementation really take?", href: "https://www.applus-erp.de/en/knowledge/project-management/blog-erp-project-duration/" },
       ],
     },
   ],
@@ -158,33 +236,64 @@ export const odooServices = {
       n: "03",
       kicker: "Understand the method",
       title: "AI-assisted implementation",
-      body: "",
+      body: "See where AI and code can prepare work, what a human checks and which decisions remain with your business.",
       link: { label: "See the review process →", href: "https://tenxora.services/odoo-services/ai-assisted-implementation/" },
     },
     {
       n: "04",
       kicker: "Improve an existing system",
       title: "Integrations and improvements",
-      body: "",
+      body: "Discuss a disconnected tool, repetitive task or configuration gap. We assess the interface, edition, hosting and maintenance needs before proposing integration or custom work.",
       link: { label: "Describe your improvement →", href: links.contact },
     },
   ],
-  // the rest of the live page (read 2026-11-13); paragraph bodies PENDING
+  // the rest of the live page, word for word from the 19 Nov copy reference
   more: [
-    { kind: "text", heading: "Start with one business problem" },
-    { kind: "text", heading: "What we agree before delivery" },
-    { kind: "text", heading: "What does an Odoo project cost?" },
-    { kind: "feature", heading: "Check the partner evidence", links: [{ label: "Tenxora (Private) Limited as a Ready partner", href: "https://www.odoo.com/partners/tenxora-private-limited-14366535" }] },
-    { kind: "feature", heading: "Explore the delivery approach", cta: { label: "Explore AI-assisted Odoo delivery →", href: "https://odoo.tenxora.services/" } },
-    { kind: "actions", heading: "Bring the right context to the first discussion", actions: [{ label: "Discuss your Odoo project →", href: links.contact }, { label: footer.email, href: `mailto:${footer.email}` }] },
+    {
+      kind: "text",
+      heading: "Start with one business problem",
+      body: "You do not need a complete ERP specification to enquire. Tell us which process is difficult today, who uses it and what a successful result would look like. If the requirements are uncertain, a separately scoped paid discovery engagement can establish the implementation plan before you commit to a wider rollout.",
+    },
+    {
+      kind: "text",
+      heading: "What we agree before delivery",
+      list: [
+        "The applications, workflows and measurable acceptance checks in scope.",
+        "Your Odoo version, edition and hosting, plus any technical restrictions.",
+        "Data preparation, access, testing and approval responsibilities.",
+        "Milestones, price, licensing and hosting assumptions, and handover or support arrangements.",
+      ],
+    },
+    {
+      kind: "text",
+      heading: "What does an Odoo project cost?",
+      body: "The cost depends on process complexity, data quality, integrations, custom changes and the help your users need. Licensing, hosting and implementation services are separate cost categories. We propose scope and commercial terms after reviewing your requirements; there is no published fixed price or universal delivery time.",
+    },
+    {
+      kind: "feature",
+      heading: "Check the partner evidence",
+      body: "The official Odoo directory lists [Tenxora (Private) Limited as a Ready partner](https://www.odoo.com/partners/tenxora-private-limited-14366535). This credential belongs to the company named in that listing. Your proposal will identify the contracting entity, delivery responsibilities and applicable terms.",
+    },
+    {
+      kind: "feature",
+      heading: "Explore the delivery approach",
+      body: "Our separate Odoo portal introduces AI-assisted delivery. An exploration or discovery step is not a completed implementation. Service scope, environment compatibility and production changes need assessment and approval.",
+      cta: { label: "Explore AI-assisted Odoo delivery →", href: "https://odoo.tenxora.services/" },
+    },
+    {
+      kind: "actions",
+      heading: "Bring the right context to the first discussion",
+      body: "Share your current system, Odoo version if known, key workflow, team size and desired timing. Use a short example without sensitive customer data or credentials.",
+      actions: [{ label: "Discuss your Odoo project →", href: links.contact }, { label: footer.email, href: `mailto:${footer.email}` }],
+    },
     {
       kind: "cards",
       heading: "Explore your next Odoo step",
       items: [
-        { heading: "Connect your systems", link: { label: "Odoo integrations →", href: "https://tenxora.services/odoo-services/integration/" } },
-        { heading: "Move business data", link: { label: "Odoo data migration →", href: "https://tenxora.services/odoo-services/migration/" } },
-        { heading: "Adapt a workflow", link: { label: "Odoo customization →", href: "https://tenxora.services/odoo-services/customization/" } },
-        { heading: "Understand the budget", link: { label: "Implementation cost →", href: "https://tenxora.services/odoo-services/implementation-cost/" } },
+        { heading: "Connect your systems", body: "Map data flows, exceptions and reconciliation.", link: { label: "Odoo integrations →", href: "https://tenxora.services/odoo-services/integration/" } },
+        { heading: "Move business data", body: "Plan trial imports, validation and cutover.", link: { label: "Odoo data migration →", href: "https://tenxora.services/odoo-services/migration/" } },
+        { heading: "Adapt a workflow", body: "Compare standard configuration, Studio and reviewed code.", link: { label: "Odoo customization →", href: "https://tenxora.services/odoo-services/customization/" } },
+        { heading: "Understand the budget", body: "Separate cost categories and define a scoped estimate.", link: { label: "Implementation cost →", href: "https://tenxora.services/odoo-services/implementation-cost/" } },
       ],
     },
   ] as Sec[],

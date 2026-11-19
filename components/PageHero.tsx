@@ -14,12 +14,14 @@ export default function PageHero({
   lead,
   body,
   actions,
+  note,
 }: {
   label?: string;
   title: string;
   lead?: string;
   body?: React.ReactNode;
   actions?: React.ReactNode;
+  note?: React.ReactNode;
 }) {
   const ref = useRef<HTMLElement>(null);
   const phone = useMedia("(max-width: 760px)");
@@ -85,6 +87,11 @@ export default function PageHero({
             transition={{ type: "spring", stiffness: 140, damping: 18, delay: 1 }}
           >
             {actions}
+          </motion.div>
+        )}
+        {note && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, ease, delay: 1.1 }}>
+            {note}
           </motion.div>
         )}
       </motion.div>

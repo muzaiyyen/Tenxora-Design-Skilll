@@ -90,7 +90,8 @@ export default function OdooServices() {
         </div>
       </section>
 
-      <RoiCalculator />
+      {/* New copy, not on the live page: left out of the WordPress build until Bilal signs it off. */}
+      {process.env.NEXT_PUBLIC_WP_SLOTS !== "1" && <RoiCalculator />}
 
       <section className="section on-white doc doc--next" data-header="light">
         <div className="wrap">

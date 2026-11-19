@@ -1,0 +1,14 @@
+const { chromium } = require('playwright');
+(async()=>{const b=await chromium.launch();const p=await b.newPage();
+await p.route('https://checkout.example/**',r=>r.fulfill({body:'STRIPE-HANDOFF'}));
+await p.goto('http://localhost:3411/partners/pricing/',{waitUntil:'networkidle'});await p.waitForTimeout(2000);
+await p.click('[data-tx-slot] button[type=submit]');await p.waitForTimeout(500);
+const blocked=p.url().includes('pricing');
+await p.selectOption('[data-tx-slot] select','Starter block');await p.check('[data-tx-slot] input[name=terms]');
+await Promise.all([p.waitForURL(/checkout\.example/),p.click('[data-tx-slot] button[type=submit]')]);
+console.log('terms required blocks submit:',blocked,'| handoff URL:',p.url());
+const c=await b.newPage();let posted='';c.on('request',r=>{if(r.method()==='POST')posted=r.url()});
+await c.goto('http://localhost:3411/contactus/',{waitUntil:'networkidle'});await c.waitForTimeout(2000);
+await c.fill('[data-tx-slot] input[name=name]','Test');await c.check('[data-tx-slot] input[type=checkbox]');
+await c.click('[data-tx-slot] button[type=submit]');await c.waitForTimeout(800);console.log('contact posts to:',posted);
+await b.close();})();

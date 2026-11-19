@@ -17,6 +17,7 @@ if ( ! is_readable( $tenxora_file ) ) {
 $tenxora_html = file_get_contents( $tenxora_file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 $tenxora_html = preg_replace( '#<title>.*?</title>#s', '', $tenxora_html, 1 );
 $tenxora_html = preg_replace( '#<link rel="icon"[^>]*>#', '', $tenxora_html );
+$tenxora_html = preg_replace( '#<meta name="description"[^>]*>#', '', $tenxora_html ); // The SEO layer prints the description.
 
 add_action(
 	'wp_enqueue_scripts',

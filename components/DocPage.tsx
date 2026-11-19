@@ -10,6 +10,15 @@ import { route } from "@/lib/route";
 import Rich, { inline } from "./Rich";
 
 const ease = [0.22, 1, 0.36, 1] as const;
+
+// WordPress build (NEXT_PUBLIC_WP_SLOTS=1): every form and the booking calendar become an empty slot that the
+// page template fills with the live site's own working form or embed, so submissions, Stripe checkout and the
+// calendar keep running through the existing WordPress integrations. React leaves dangerouslySetInnerHTML
+// children alone when it hydrates, so the injected markup survives.
+const WP_SLOTS = process.env.NEXT_PUBLIC_WP_SLOTS === "1";
+function Slot({ name, className }: { name: string; className?: string }) {
+  return <div className={className} data-tx-slot={name} dangerouslySetInnerHTML={{ __html: "" }} suppressHydrationWarning />;
+}
 const ext = (href: string) => /^https?:/.test(href) && !href.includes("tenxora.services/") ? { target: "_blank", rel: "noopener" } : {};
 
 const Arrow = () => (
@@ -138,8 +147,14 @@ function Steps({ s }: { s: Extract<Sec, { kind: "steps" }> }) {
 }
 
 function Form() {
+  if (WP_SLOTS)
+    return (
+      <motion.div className="wcard doc__form doc__form--live" {...rise(1)}>
+        <Slot name="contact-form" />
+      </motion.div>
+    );
   return (
-    <motion.form className="wcard doc__form" {...rise(1)} onSubmit={(e) => e.preventDefault()} aria-label="Enquiry form" data-tx-slot="contact-form">
+    <motion.form className="wcard doc__form" {...rise(1)} onSubmit={(e) => e.preventDefault()} aria-label="Enquiry form">
       <p className="doc__note">{f.required}</p>
       <label className="doc__field">
         <span>{f.name}</span>
@@ -261,9 +276,13 @@ function Block({ s, i }: { s: Sec; i: number }) {
         <motion.section className="wcard doc__embed" {...rise(0)}>
           <h2 className="doc__h">{s.heading}</h2>
           <Rich text={s.body} />
-          <div className="doc__frame">
-            <iframe src={`${s.src}?hide_gdpr_banner=1`} title={s.title} loading="lazy" />
-          </div>
+          {WP_SLOTS ? (
+            <Slot name="booking-calendar" className="doc__frame" />
+          ) : (
+            <div className="doc__frame">
+              <iframe src={`${s.src}?hide_gdpr_banner=1`} title={s.title} loading="lazy" />
+            </div>
+          )}
           <p className="doc__fallback">
             {s.fallbackLead && <>{s.fallbackLead} </>}
             <a href={s.fallback.href} target="_blank" rel="noopener">
@@ -384,6 +403,24 @@ function Block({ s, i }: { s: Sec; i: number }) {
         </motion.section>
       );
     case "pform":
+      if (WP_SLOTS)
+        return (
+          <motion.section className="wcard doc__form doc__pform doc__form--live" id={s.id} {...rise(0)}>
+            <h2 className="doc__h">{s.heading}</h2>
+            <Rich text={s.body} />
+            <Slot name={s.id ?? "form"} />
+            {s.note && <Rich text={s.note} className="doc__note" />}
+            {s.links && (
+              <div className="doc__pills doc__pills--left">
+                {s.links.map((l) => (
+                  <a key={l.href} href={route(l.href)} className="doc__textlink">
+                    {l.label} <span aria-hidden>→</span>
+                  </a>
+                ))}
+              </div>
+            )}
+          </motion.section>
+        );
       return (
         <motion.form className="wcard doc__form doc__pform" id={s.id} {...rise(0)} onSubmit={(e) => e.preventDefault()} aria-label={s.heading}>
           <h2 className="doc__h">{s.heading}</h2>

@@ -4,8 +4,11 @@ import Providers from "@/components/Providers";
 
 export const metadata: Metadata = {
   title: "AI-Assisted Business Services | Human Review | Tenxora",
+  // On WordPress the SEO layer prints the description; a second one from here would duplicate it.
   description:
-    "AI-assisted business services with initial work by AI and code, human review and customer approval. Odoo implementation, consulting and integrations available today.",
+    process.env.NEXT_PUBLIC_WP_SLOTS === "1"
+      ? undefined
+      : "AI-assisted business services with initial work by AI and code, human review and customer approval. Odoo implementation, consulting and integrations available today.",
   metadataBase: new URL("https://tenxora.services"),
 };
 

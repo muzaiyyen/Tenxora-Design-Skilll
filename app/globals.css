@@ -5119,3 +5119,241 @@ html[data-a11y-cursor] :is(a, button, [role="switch"], [role="radio"], label, in
     transition: opacity 0.2s linear;
   }
 }
+
+/* ROI calculator on Odoo Services (2026-11-19) */
+.roi__sheet {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: stretch;
+}
+.roi__inputs {
+  padding: calc(40 * var(--u));
+  display: flex;
+  flex-direction: column;
+}
+.roi__h {
+  margin-top: calc(10 * var(--u));
+}
+.roi__fields {
+  margin-top: calc(32 * var(--u));
+  display: grid;
+  gap: calc(26 * var(--u));
+}
+.roi__field {
+  display: grid;
+  gap: 12px;
+  font-size: max(15px, calc(17 * var(--u)));
+  color: rgba(0, 0, 0, 0.75);
+}
+.roi__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+}
+.roi__val {
+  flex: none;
+  min-width: 4.5em;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.05);
+  color: #000;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.roi__field input[type="range"] {
+  --p: 50%;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 28px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.roi__field input[type="range"]::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--tx-treen) var(--p), rgba(0, 0, 0, 0.08) var(--p));
+}
+.roi__field input[type="range"]::-moz-range-track {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.08);
+}
+.roi__field input[type="range"]::-moz-range-progress {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--tx-treen);
+}
+.roi__field input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 28px;
+  height: 28px;
+  margin-top: -10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 0 0 1px rgba(0, 0, 0, 0.08),
+    0 6px 16px rgba(10, 50, 110, 0.25);
+  transition: transform 0.25s var(--ease);
+}
+.roi__field input[type="range"]::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.08),
+    0 6px 16px rgba(10, 50, 110, 0.25);
+}
+.roi__field input[type="range"]:active::-webkit-slider-thumb {
+  transform: scale(1.18);
+}
+.roi__field input[type="range"]:focus-visible {
+  outline: none;
+}
+.roi__field input[type="range"]:focus-visible::-webkit-slider-thumb {
+  box-shadow:
+    0 0 0 3px var(--tx-treen),
+    0 6px 16px rgba(10, 50, 110, 0.25);
+}
+
+.roi__result {
+  position: relative;
+  overflow: hidden;
+  padding: calc(16 * var(--u));
+  border-radius: calc(31.533 * var(--u));
+  background: var(--bar-dark);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: calc(12 * var(--u));
+  isolation: isolate;
+}
+.roi__result::before {
+  content: "";
+  position: absolute;
+  inset: -30% -20% auto auto;
+  width: 70%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(8, 232, 140, 0.45), transparent 65%);
+  filter: blur(20px);
+  z-index: -1;
+  transition: background 0.6s var(--ease);
+}
+.roi__result.is-neg::before {
+  background: radial-gradient(circle, rgba(var(--tx-alert-rgb), 0.4), transparent 65%);
+}
+.roi__big {
+  flex: 1;
+  justify-content: center;
+  padding: calc(28 * var(--u)) calc(24 * var(--u)) calc(20 * var(--u));
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(14 * var(--u));
+}
+.roi__label {
+  font-size: max(15px, calc(18 * var(--u)));
+  color: rgba(255, 255, 255, 0.7);
+}
+.roi__num {
+  font-size: max(46px, calc(96 * var(--u)));
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+  color: var(--tx-treen);
+  font-variant-numeric: tabular-nums;
+  font-variation-settings: "ROND" 100;
+}
+.roi__result.is-neg .roi__num {
+  color: var(--tx-alert);
+}
+.roi__pill {
+  position: relative;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+}
+.roi__stats {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: calc(12 * var(--u));
+}
+.roi__stat {
+  margin: 0;
+  padding: calc(22 * var(--u));
+  border-radius: calc((31.533 - 16) * var(--u));
+  background: rgba(255, 255, 255, 0.94);
+  color: #000;
+}
+.roi__stat dt {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.6);
+}
+.roi__stat dd {
+  margin: 8px 0 0;
+  font-size: max(22px, calc(34 * var(--u)));
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  font-variation-settings: "ROND" 100;
+}
+.roi__note {
+  margin: 0;
+  padding: 0 calc(24 * var(--u));
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+}
+.roi__ctas {
+  padding: calc(8 * var(--u)) calc(16 * var(--u)) calc(16 * var(--u));
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.roi .roi__ctas .pill--ghost {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.14);
+}
+@media (max-width: 1100px) {
+  .roi__sheet {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 760px) {
+  .roi__inputs {
+    padding: 22px 20px;
+    border-radius: 26px;
+  }
+  .roi__fields {
+    gap: 20px;
+  }
+  .roi__result {
+    padding: 10px;
+    gap: 10px;
+    border-radius: 26px;
+  }
+  .roi__big {
+    padding: 18px 12px 8px;
+  }
+  .roi__stats {
+    gap: 8px;
+  }
+  .roi__stat {
+    padding: 14px;
+    border-radius: 16px;
+  }
+  .roi__note {
+    padding: 0 12px;
+  }
+  .roi__ctas {
+    padding: 4px 4px 6px;
+  }
+}

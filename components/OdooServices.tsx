@@ -5,6 +5,7 @@ import { odooServices as o } from "@/lib/pages";
 import PageHero from "./PageHero";
 import { DocSections } from "./DocPage";
 import SkyFooter from "./SkyFooter";
+import RoiCalculator from "./RoiCalculator";
 import Magnetic from "./Magnetic";
 import { AiArt, Bars, ChartArt, ChecklistArt, listBars } from "./Skeleton";
 import { route } from "@/lib/route";
@@ -88,6 +89,8 @@ export default function OdooServices() {
           </ul>
         </div>
       </section>
+
+      <RoiCalculator />
 
       <section className="section on-white doc doc--next" data-header="light">
         <div className="wrap">
